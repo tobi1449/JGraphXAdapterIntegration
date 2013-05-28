@@ -1,4 +1,4 @@
-package de.konsteirama;
+package de.konsteirama.implementation;
 
 public class DrawingLibraryInterface {
 
