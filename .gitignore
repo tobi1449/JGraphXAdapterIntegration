@@ -9,6 +9,7 @@
 .classpath
 .project
 .settings/
+.checkstyle
 
 # Intellij
 .idea/
