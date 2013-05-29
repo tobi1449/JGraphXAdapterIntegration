@@ -110,23 +110,23 @@ public class JGraphXAdapter<V, E> extends mxGraph implements GraphListener<V, E>
      */
 
     @Override
-    public void vertexAdded(GraphVertexChangeEvent<V> e) {
+	public final void vertexAdded(GraphVertexChangeEvent<V> e) {
         addJGraphTVertex(e.getVertex());
     }
 
     @Override
-    public void vertexRemoved(GraphVertexChangeEvent<V> e) {
+	public final void vertexRemoved(GraphVertexChangeEvent<V> e) {
         mxCell cell = vertexToCellMap.remove(e.getVertex());
         removeCells(new Object[] { cell } );
     }
 
     @Override
-    public void edgeAdded(GraphEdgeChangeEvent<V, E> e) {
+	public final void edgeAdded(GraphEdgeChangeEvent<V, E> e) {
         addJGraphTEdge(e.getEdge());
     }
 
     @Override
-    public void edgeRemoved(GraphEdgeChangeEvent<V, E> e) {
+	public final void edgeRemoved(GraphEdgeChangeEvent<V, E> e) {
         mxCell cell = edgeToCellMap.remove(e.getEdge());
         removeCells(new Object[] { cell } );
     }
