@@ -1,5 +1,19 @@
 package de.konsteirama.implementation;
 
-public class DrawingLibraryInterface {
+import org.jgrapht.ListenableGraph;
+
+import javax.swing.*;
+
+public interface DrawingLibraryInterface {
+
+    void Export(Object format, String path);
+
+    Object[] getAvailableExportFormats();
+
+    GraphEventInterface getGraphEventInterface();
+
+    GraphManipulationInterface getGraphManipulationInterface();
+
+    JComponent getPanel(ListenableGraph<Object, Object> graph);
 
 }
