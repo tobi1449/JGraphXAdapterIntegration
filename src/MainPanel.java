@@ -4,8 +4,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import ISGCI.KonTabbedPane;
-import ISGCI.KonToolBar;
+import de.konsteirama.isgci.KonTabbedPane;
+import de.konsteirama.isgci.KonToolBar;
+
 
 /**
  * Main window for testing the JGraphXAdapter implementation as well as the

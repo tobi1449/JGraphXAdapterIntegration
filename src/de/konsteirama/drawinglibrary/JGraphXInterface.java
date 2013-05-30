@@ -1,9 +1,10 @@
-package DrawingLibrary;
+package de.konsteirama.drawinglibrary;
 
 
-import JGraphXAdapter.JGraphXAdapter;
 
 import com.mxgraph.swing.mxGraphComponent;
+
+import de.konsteirama.jgraphxadapter.JGraphXAdapter;
 
 
 import org.jgrapht.ListenableGraph;

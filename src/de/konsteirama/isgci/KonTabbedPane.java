@@ -1,4 +1,4 @@
-package ISGCI;
+package de.konsteirama.isgci;
 
 import javax.swing.JTabbedPane;
 
@@ -6,11 +6,12 @@ import org.jgrapht.ListenableGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.ListenableDirectedGraph;
 
-import JGraphXAdapter.JGraphXAdapter;
 
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
 import com.mxgraph.swing.mxGraphComponent;
+
+import de.konsteirama.jgraphxadapter.JGraphXAdapter;
 
 public class KonTabbedPane extends JTabbedPane {
 

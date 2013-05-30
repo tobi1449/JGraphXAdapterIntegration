@@ -1,4 +1,4 @@
-package DrawingLibrary;
+package de.konsteirama.drawinglibrary;
 
 /**
  * Created with IntelliJ IDEA.

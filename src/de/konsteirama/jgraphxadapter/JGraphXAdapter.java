@@ -1,4 +1,4 @@
-package JGraphXAdapter;
+package de.konsteirama.jgraphxadapter;
 
 import java.util.HashMap;
 

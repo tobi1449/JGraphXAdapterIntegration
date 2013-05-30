@@ -10,9 +10,10 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.ListenableDirectedGraph;
 import org.junit.Test;
 
-import JGraphXAdapter.JGraphXAdapter;
 
 import com.mxgraph.model.mxCell;
+
+import de.konsteirama.jgraphxadapter.JGraphXAdapter;
 
 /**
  * Test methods for the class JGraphXAdapter.

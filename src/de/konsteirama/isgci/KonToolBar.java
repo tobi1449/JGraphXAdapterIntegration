@@ -1,4 +1,4 @@
-package ISGCI;
+package de.konsteirama.isgci;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 
