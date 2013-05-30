@@ -1,4 +1,4 @@
-package de.konsteirama.implementation;
+package DrawingLibrary;
 
 import java.awt.event.MouseAdapter;
 

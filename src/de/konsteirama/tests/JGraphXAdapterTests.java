@@ -4,12 +4,13 @@ import static org.junit.Assert.fail;
 
 import java.util.HashMap;
 
-import de.konsteirama.implementation.JGraphXAdapter;
 
 import org.jgrapht.ListenableGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.ListenableDirectedGraph;
 import org.junit.Test;
+
+import JGraphXAdapter.JGraphXAdapter;
 
 import com.mxgraph.model.mxCell;
 

@@ -1,11 +1,11 @@
-package de.konsteirama.implementation;
-
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+
+import ISGCI.KonTabbedPane;
+import ISGCI.KonToolBar;
 
 /**
  * Main window for testing the JGraphXAdapter implementation as well as the

@@ -1,10 +1,12 @@
-package de.konsteirama.implementation;
+package ISGCI;
 
 import javax.swing.JTabbedPane;
 
 import org.jgrapht.ListenableGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.ListenableDirectedGraph;
+
+import JGraphXAdapter.JGraphXAdapter;
 
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
