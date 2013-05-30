@@ -12,6 +12,11 @@ public class KonToolBar extends JToolBar {
 
 	public KonToolBar() {
 		
+		// set basic layout
+		setFloatable(false);
+		setRollover(true);
+		
+		// add some button
 	    JButton button = new JButton("Hello, world!");
 	    add(button);
 	}
