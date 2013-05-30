@@ -20,7 +20,11 @@ import javax.swing.*;
 public class JGraphXInterface implements DrawingLibraryInterface {
 
     mxGraphComponent graphComponent;
-
+    /* */
+    GraphManipulation graphManipulation;
+    /* */
+    GraphEvent graphEvent;
+    
     public JGraphXInterface() {
         graphComponent = new mxGraphComponent(null);
     }
@@ -37,12 +41,13 @@ public class JGraphXInterface implements DrawingLibraryInterface {
 
     @Override
     public GraphEventInterface getGraphEventInterface() {
-        return null;
+        return graphEvent;
     }
 
     @Override
     public GraphManipulationInterface getGraphManipulationInterface() {
-        return null;
+        return graphManipulation;
+  
     }
 
     @Override
