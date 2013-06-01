@@ -36,7 +36,9 @@ public class KonToolBar extends JToolBar implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource().equals(exportButton)) {
-            this.panel.getTabPane().getActiveGraphDrawing();
+            this.panel.getTabPane().getActiveGraphDrawing().Export(new Object[0], "");
+            
+            System.out.println("Export Button pressed !");
         }
     }
 }
