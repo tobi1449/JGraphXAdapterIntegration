@@ -14,6 +14,6 @@ public interface DrawingLibraryInterface {
 
     GraphManipulationInterface getGraphManipulationInterface();
 
-    JComponent getPanel(ListenableGraph<Object, Object> graph);
+    JComponent getPanel();
     
 }
