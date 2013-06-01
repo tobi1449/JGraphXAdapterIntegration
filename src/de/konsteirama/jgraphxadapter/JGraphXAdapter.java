@@ -49,7 +49,7 @@ public class JGraphXAdapter<V, E> extends mxGraph implements GraphListener<V, E>
      * METHODS
      */
 
-    public void addJGraphTVertex(V vertex)
+    private void addJGraphTVertex(V vertex)
     {
 
         getModel().beginUpdate();
@@ -69,7 +69,7 @@ public class JGraphXAdapter<V, E> extends mxGraph implements GraphListener<V, E>
         }
     }
 
-    public void addJGraphTEdge(E edge)
+    private void addJGraphTEdge(E edge)
     {
 
         getModel().beginUpdate();
