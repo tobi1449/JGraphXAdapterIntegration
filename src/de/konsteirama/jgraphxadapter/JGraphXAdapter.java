@@ -7,6 +7,10 @@ import org.jgrapht.ListenableGraph;
 import org.jgrapht.event.GraphEdgeChangeEvent;
 import org.jgrapht.event.GraphListener;
 import org.jgrapht.event.GraphVertexChangeEvent;
+import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultListenableGraph;
+import org.jgrapht.graph.ListenableDirectedGraph;
 
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
@@ -32,7 +36,11 @@ public class JGraphXAdapter<V, E> extends mxGraph implements GraphListener<V, E>
     public JGraphXAdapter(final ListenableGraph<V, E> graphT)
     {
         super();
-    this.graphT = graphT;
+        if(graphT == null) {
+        	throw new IllegalArgumentException();
+        } else {
+            this.graphT = graphT;
+        }
         graphT.addGraphListener(this);
         insertJGraphT(graphT);
     }
