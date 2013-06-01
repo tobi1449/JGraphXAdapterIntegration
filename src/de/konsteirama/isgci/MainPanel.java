@@ -1,11 +1,10 @@
+package de.konsteirama.isgci;
 import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import de.konsteirama.isgci.KonTabbedPane;
-import de.konsteirama.isgci.KonToolBar;
 
 
 /**
@@ -21,7 +20,16 @@ public class MainPanel extends JPanel {
 	 * Serial Version UID so eclipse shuts up.
 	 */
 	private static final long serialVersionUID = -4699101759449965895L;
-
+	/**
+	 * The Pane, that holds all available tabs .
+	 */
+	private KonTabbedPane tabPane;
+    
+	/**
+     * The Toolbar of the MainFrame.
+     */	
+	private KonToolBar toolbar;
+	
 	/**
 	 * Starts a new MainPanel.
 	 * 
@@ -47,15 +55,19 @@ public class MainPanel extends JPanel {
 	}
 
 	/**
-	 * Initializes a new MainPanel with the JGraphXAdapter implementation.
+	 * Initializes a new MainPanel with the JGraph implementation.
 	 */
 	public MainPanel() {
 		super(new BorderLayout());
 
-		KonTabbedPane tabPane = new KonTabbedPane();
-		KonToolBar toolbar = new KonToolBar();
+		tabPane = new KonTabbedPane();
+		toolbar = new KonToolBar(this);
 
-		add(toolbar, BorderLayout.PAGE_START);
-		add(tabPane, BorderLayout.CENTER);
+		this.add(toolbar, BorderLayout.PAGE_START);
+		this.add(tabPane, BorderLayout.CENTER);
+	}
+	
+	public KonTabbedPane getTabPane() {
+	    return tabPane;
 	}
 }

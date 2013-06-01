@@ -32,7 +32,7 @@ public class JGraphXAdapter<V, E> extends mxGraph implements GraphListener<V, E>
     public JGraphXAdapter(final ListenableGraph<V, E> graphT)
     {
         super();
-    this.graphT = graphT;
+        this.graphT = graphT;
         graphT.addGraphListener(this);
         insertJGraphT(graphT);
     }

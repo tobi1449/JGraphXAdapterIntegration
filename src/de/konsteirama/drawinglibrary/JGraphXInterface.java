@@ -2,6 +2,12 @@ package de.konsteirama.drawinglibrary;
 
 
 
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 import com.mxgraph.swing.mxGraphComponent;
 
 import de.konsteirama.jgraphxadapter.JGraphXAdapter;
@@ -9,6 +15,7 @@ import de.konsteirama.jgraphxadapter.JGraphXAdapter;
 
 import org.jgrapht.ListenableGraph;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 /**
@@ -20,9 +27,9 @@ import javax.swing.*;
 public class JGraphXInterface implements DrawingLibraryInterface {
 
     mxGraphComponent graphComponent;
-    /* */
+
     GraphManipulation graphManipulation;
-    /* */
+
     GraphEvent graphEvent;
     
     public JGraphXInterface() {
@@ -31,7 +38,17 @@ public class JGraphXInterface implements DrawingLibraryInterface {
 
     @Override
     public void Export(Object format, String path) {
-
+        Dimension d = graphComponent.getGraphControl().getSize();
+        BufferedImage image = new BufferedImage(d.width, d.height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = image.createGraphics();
+        graphComponent.getGraphControl().paint(g);
+        final File outputfile = new File("test.png");
+        try {
+            ImageIO.write(image, "png", outputfile);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override
