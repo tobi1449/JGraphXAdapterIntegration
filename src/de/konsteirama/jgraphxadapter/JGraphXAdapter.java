@@ -33,6 +33,7 @@ public class JGraphXAdapter<V, E> extends mxGraph implements GraphListener<V, E>
     {
         super();
         this.graphT = graphT;
+        this.setAutoSizeCells(true);
         graphT.addGraphListener(this);
         insertJGraphT(graphT);
     }
@@ -51,9 +52,12 @@ public class JGraphXAdapter<V, E> extends mxGraph implements GraphListener<V, E>
             mxCell cell = new mxCell(vertex);
             cell.setVertex(true);
             cell.setId(null);
+            cell.setGeometry(new mxGeometry());
+            cell.getGeometry().setRelative(true);
             addCell(cell, defaultParent);
             vertexToCellMap.put(vertex, cell);
             cellToVertexMap.put(cell, vertex);
+            updateCellSize(cell);
         } 
     finally
     {

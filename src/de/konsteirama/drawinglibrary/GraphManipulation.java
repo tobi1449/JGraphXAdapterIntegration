@@ -1,6 +1,15 @@
 package de.konsteirama.drawinglibrary;
 
+import com.mxgraph.swing.mxGraphComponent;
+
 public class GraphManipulation implements GraphManipulationInterface {
+
+    mxGraphComponent graphComponent;
+
+    public GraphManipulation(mxGraphComponent graphComponent)
+    {
+        this.graphComponent = graphComponent;
+    }
 
 	@Override
 	public boolean canRedo() {
