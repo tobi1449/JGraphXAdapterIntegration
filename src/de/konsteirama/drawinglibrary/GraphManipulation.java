@@ -20,7 +20,8 @@ public class GraphManipulation implements GraphManipulationInterface {
      * Constructor of the class. Creates an instance of the
      * GraphManipulation class that operates on a given
      * graphComponent.
-     * @param graphComponent
+     * @param graphComponent : a JGRaphX graphComponent, shown on the
+     * panel
      */
     public GraphManipulation(mxGraphComponent graphComponent) {
         this.graphComponent = graphComponent;
@@ -46,6 +47,7 @@ public class GraphManipulation implements GraphManipulationInterface {
 
 	/**
 	 * Centers the view of the panel on the selected node.
+	 * @param node : a node of the graph
 	 */
 	@Override
 	public void centerNode(Object node) {
@@ -54,6 +56,8 @@ public class GraphManipulation implements GraphManipulationInterface {
 
 	/**
 	 * Colors a given node in a given color.
+	 * @param node : a node of the graph
+	 * @param color : a color-parameter  
 	 */
 	@Override
 	public void colorNode(Object node, Object color) {
@@ -63,6 +67,8 @@ public class GraphManipulation implements GraphManipulationInterface {
 	/**
 	 * Marks the edge between two given nodes by adding a small grey 
 	 * arrow and coloring the edge.
+	 * @param node1 : node where the edge starts
+	 * @param node2 : node where the edge ends
 	 */
 	@Override
 	public void markEdge(Object node1, Object node2) {
@@ -88,6 +94,7 @@ public class GraphManipulation implements GraphManipulationInterface {
 	/**
 	 * Removes the given node from the graph. Removal only effects
 	 * the JGraphX-graph.
+	 * @param node : a JGraphX-graph node object
 	 */
 	@Override
 	public void removeNode(Object node) {
@@ -97,6 +104,8 @@ public class GraphManipulation implements GraphManipulationInterface {
 	/**
 	 * Alters the attribute name of a given node by replacing it
 	 * by a given new name. Renaming only effects the JGraphX-graph.
+	 * @param node : a node of the graph
+	 * @param newName : the name the node is given
 	 */
 	@Override
 	public void renameNode(Object node, String newName) {
@@ -125,6 +134,7 @@ public class GraphManipulation implements GraphManipulationInterface {
 	 * graph is too big for the panel only a 
 	 * section of the whole graph will be shown. This method zooms
 	 * to the center of the panel.
+	 * @param factor : a double that gives the zoom-factor
 	 */
 	@Override
 	public void zoom(double factor) {
@@ -133,6 +143,9 @@ public class GraphManipulation implements GraphManipulationInterface {
 
 	/**
 	 * Zooms the panel to the given factor, centering on the given coordinates.
+	 * @param factor :  a double that gives the zoom-factor 
+	 * @param centerx : x-coordinate of the point zoom centers on
+	 * @param centery : y-coordinate of the point zoom centers on
 	 */
 	@Override
 	public void zoom(double factor, double centerx, double centery) {
