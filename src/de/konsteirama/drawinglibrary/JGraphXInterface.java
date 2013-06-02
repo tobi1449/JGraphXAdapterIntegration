@@ -1,6 +1,7 @@
 package de.konsteirama.drawinglibrary;
 
-import java.io.StringWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
@@ -75,23 +76,23 @@ public class JGraphXInterface implements DrawingLibraryInterface {
         if (format == "ps") {
 
         } else if (format == "svg") {
-
+               
         } else if (format == "graphml") {
-            GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<String, DefaultEdge>();
-            
+            // Creates a new GraphMLExporter and gets the JGraphT-graph
+            GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<String, DefaultEdge>();  
             ListenableGraph g = this.graph.getJGraph();
             
-            StringWriter w = new StringWriter();
-            
             try {
+                // Creates a new Filewriter and exports the graph under the given path
+                FileWriter w = new FileWriter(path);
                 exporter.export(w, g);
+            } catch (IOException e) {
+                System.out.println("Enter a valid path !");
             } catch (TransformerConfigurationException e) {
                 e.printStackTrace();
             } catch (SAXException e) {
                 e.printStackTrace();
             }
-            
-            System.out.println(w.toString());
         }
     }
 
