@@ -1,12 +1,6 @@
 package de.konsteirama.drawinglibrary;
 
-
-
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.StringWriter;
 
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
@@ -14,19 +8,17 @@ import com.mxgraph.swing.mxGraphComponent;
 
 import de.konsteirama.jgraphxadapter.JGraphXAdapter;
 
-
-import org.jgrapht.ListenableGraph;
+import org.jgrapht.*;
+import org.jgrapht.ext.GraphMLExporter;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.ListenableDirectedGraph;
+import org.xml.sax.SAXException;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.xml.transform.TransformerConfigurationException;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Tobias
- * Date: 30.05.13
- * Time: 17:59
+ * Created with IntelliJ IDEA. User: Tobias Date: 30.05.13 Time: 17:59
  */
 public class JGraphXInterface implements DrawingLibraryInterface {
 
@@ -35,12 +27,12 @@ public class JGraphXInterface implements DrawingLibraryInterface {
     GraphManipulation graphManipulation;
 
     GraphEvent graphEvent;
-    
+
     /**
      * The instance of DrawingLibraryInterface.
      */
     private JGraphXAdapter<String, DefaultEdge> graph;
-    
+
     public JGraphXInterface() {
         // create a JGraphT graph
         ListenableGraph<String, DefaultEdge> g = new ListenableDirectedGraph<String, DefaultEdge>(
@@ -71,28 +63,44 @@ public class JGraphXInterface implements DrawingLibraryInterface {
             }
         }
         graph.getModel().endUpdate();
-        
+
         graphComponent = new mxGraphComponent(graph);
     }
 
+    /**
+     * Exports the current graph.
+     */
     @Override
-    public void Export(Object format, String path) {
-        Dimension d = graphComponent.getGraphControl().getSize();
-        BufferedImage image = new BufferedImage(d.width, d.height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = image.createGraphics();
-        graphComponent.getGraphControl().paint(g);
-        final File outputfile = new File("test.png");
-        try {
-            ImageIO.write(image, "png", outputfile);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+    public final void Export(String format, String path) {
+        if (format == "ps") {
+
+        } else if (format == "svg") {
+
+        } else if (format == "graphml") {
+            GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<String, DefaultEdge>();
+            
+            ListenableGraph g = this.graph.getJGraph();
+            
+            StringWriter w = new StringWriter();
+            
+            try {
+                exporter.export(w, g);
+            } catch (TransformerConfigurationException e) {
+                e.printStackTrace();
+            } catch (SAXException e) {
+                e.printStackTrace();
+            }
+            
+            System.out.println(w.toString());
         }
     }
 
+    /**
+     * Returns an Array of all currently implemented export formats.
+     */
     @Override
-    public Object[] getAvailableExportFormats() {
-        return new Object[0];  //To change body of implemented methods use File | Settings | File Templates.
+    public String[] getAvailableExportFormats() {
+        return new String[] {"ps", "svg", "graphml"};
     }
 
     @Override
@@ -103,7 +111,7 @@ public class JGraphXInterface implements DrawingLibraryInterface {
     @Override
     public GraphManipulationInterface getGraphManipulationInterface() {
         return graphManipulation;
-  
+
     }
 
     @Override

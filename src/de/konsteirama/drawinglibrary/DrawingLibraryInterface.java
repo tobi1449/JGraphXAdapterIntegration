@@ -6,9 +6,9 @@ import javax.swing.*;
 
 public interface DrawingLibraryInterface {
 
-    void Export(Object format, String path);
+    void Export(String format, String path);
 
-    Object[] getAvailableExportFormats();
+    String[] getAvailableExportFormats();
 
     GraphEventInterface getGraphEventInterface();
 

@@ -147,5 +147,9 @@ public class JGraphXAdapter<V, E> extends mxGraph implements GraphListener<V, E>
         }
 
     }
+    
+    public ListenableGraph<V, E> getJGraph() {
+        return this.graphT;
+    }
 }
 
