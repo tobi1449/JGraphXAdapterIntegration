@@ -15,7 +15,7 @@ import com.mxgraph.view.mxGraph;
 public class JGraphXAdapter<V, E> extends mxGraph implements
         GraphListener<V, E> {
 
-    private ListenableGraph<V, E> graphT;
+    private Graph<V, E> graphT;
 
     private HashMap<V, mxCell> vertexToCellMap = new HashMap<V, mxCell>();
 
@@ -30,14 +30,26 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
      */
 
     public JGraphXAdapter(final ListenableGraph<V, E> graphT) {
+        // call normal constructor with graph class
+        this((Graph<V, E>) graphT);
+        
+        graphT.addGraphListener(this);
+    }
+    
+    public JGraphXAdapter(final Graph<V, E> graphT) {
         super();
+        
+        // Don't accept null as jgrapht graph
         if (graphT == null) {
             throw new IllegalArgumentException();
         } else {
             this.graphT = graphT;
         }
-        graphT.addGraphListener(this);
+        
+        // generate the drawing
         insertJGraphT(graphT);
+        
+        setAutoSizeCells(true);
     }
 
     /*
@@ -95,12 +107,19 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
         getModel().beginUpdate();
 
         try {
-            mxCell cell = new mxCell(vertex);
-            cell.setVertex(true);
-            cell.setId(null);
-            addCell(cell, defaultParent);
+            // create a new JGraphX vertex at position 0
+            mxCell cell = (mxCell) insertVertex(defaultParent, null, vertex, 
+                                                0, 0, 0, 0);
+            
+            // Set geometry and size
+            cell.setGeometry(new mxGeometry());
+            cell.getGeometry().setRelative(true);
+            updateCellSize(cell);
+            
+            // Save reference between vertex and cell
             vertexToCellMap.put(vertex, cell);
             cellToVertexMap.put(cell, vertex);
+            
         } finally {
             getModel().endUpdate();
         }
@@ -111,17 +130,33 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
         getModel().beginUpdate();
 
         try {
-            V source = graphT.getEdgeSource(edge);
-            V target = graphT.getEdgeTarget(edge);
-            mxCell cell = new mxCell(edge);
-            cell.setEdge(true);
-            cell.setId(null);
+            // find vertices of edge
+            V sourceVertex = graphT.getEdgeSource(edge);
+            V targetVertex = graphT.getEdgeTarget(edge);
+            
+            // if the one of the vertices is not drawn, don't draw the edge
+            if (!(vertexToCellMap.containsKey(sourceVertex) 
+               && vertexToCellMap.containsKey(targetVertex))) {
+                return;
+            }
+            
+            // get mxCells
+            Object sourceCell = vertexToCellMap.get(sourceVertex);
+            Object targetCell = vertexToCellMap.get(targetVertex);
+            
+            // add edge between mxcells
+            mxCell cell = (mxCell) insertEdge(defaultParent, null, 
+                    edge, sourceCell, targetCell);
+            
+            // set geometry and size
             cell.setGeometry(new mxGeometry());
             cell.getGeometry().setRelative(true);
-            addEdge(cell, defaultParent, vertexToCellMap.get(source),
-                    vertexToCellMap.get(target), null);
+            updateCellSize(cell);
+            
+            // Save reference between vertex and cell
             edgeToCellMap.put(edge, cell);
             cellToEdgeMap.put(cell, edge);
+            
         } finally {
             getModel().endUpdate();
         }
@@ -130,17 +165,12 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
     
     private void insertJGraphT(Graph<V, E> graphT) {
         
-        getModel().beginUpdate();
-        try {
-            for (V vertex : graphT.vertexSet()) {
-                addJGraphTVertex(vertex);
-            }
-            
-            for (E edge : graphT.edgeSet()) {
-                addJGraphTEdge(edge);
-            }
-        } finally {
-            getModel().endUpdate();
+        for (V vertex : graphT.vertexSet()) {
+            addJGraphTVertex(vertex);
+        }
+
+        for (E edge : graphT.edgeSet()) {
+            addJGraphTEdge(edge);
         }
 
     }
