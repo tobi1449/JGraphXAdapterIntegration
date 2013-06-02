@@ -7,7 +7,11 @@ package de.konsteirama.drawinglibrary;
  * Time: 17:51
  */
 public interface GraphManipulationInterface {
-
+/**
+ * returns a boolean, denoting whether the related graph is able to perform a 
+ * redo operation.
+ * @return
+ */
     public boolean canRedo();
 
     public boolean canUndo();
