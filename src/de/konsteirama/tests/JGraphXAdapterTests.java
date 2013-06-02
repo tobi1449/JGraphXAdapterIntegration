@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Random;
 import java.util.Set;
 
 import org.jgrapht.ListenableGraph;
@@ -147,6 +149,42 @@ public class JGraphXAdapterTests {
         }
     }
 
+    
+    /**
+     * Tests the JGraphXAdapter with 100.000 nodes and 100.000 edges.
+     */
+    @Test
+    public final void loadTest() {
+        final int maxVertices = 100000;
+        final int maxEdges = 100000;
+
+        ListenableGraph<Integer, DefaultEdge> jGraphT 
+            = new ListenableDirectedGraph<Integer, DefaultEdge>(
+                        DefaultEdge.class);
+
+        for (int i = 0; i < maxVertices; i++) {
+            jGraphT.addVertex(i);
+        }
+
+        for (int i = 0; i < maxEdges; i++) {
+            jGraphT.addEdge(i, (i + 1) % jGraphT.vertexSet().size());
+        }
+
+        JGraphXAdapter<Integer, DefaultEdge> graphX = null;
+
+        try {
+            graphX = new JGraphXAdapter<Integer, DefaultEdge>(jGraphT);
+        } catch (Exception e) {
+            fail("Unexpected error while creating JgraphXAdapter with"
+                    + maxVertices + " vertices and " + maxEdges + " Edges");
+        }
+
+        testMapping(graphX);
+
+    }
+    
+    // ========================Helper Methods===============================
+    
     /**
      * Tests the mapping of the graph for consistency. Mapping includes: -
      * getCellToEdgeMap - getEdgeToCellMap - getCellToVertexMap -
