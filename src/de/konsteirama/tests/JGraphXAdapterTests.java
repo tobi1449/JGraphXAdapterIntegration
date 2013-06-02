@@ -6,8 +6,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Random;
 import java.util.Set;
 
 import org.jgrapht.ListenableGraph;
@@ -151,12 +149,12 @@ public class JGraphXAdapterTests {
 
     
     /**
-     * Tests the JGraphXAdapter with 100.000 nodes and 100.000 edges.
+     * Tests the JGraphXAdapter with 1.000 nodes and 1.000 edges.
      */
     @Test
     public final void loadTest() {
-        final int maxVertices = 100000;
-        final int maxEdges = 100000;
+        final int maxVertices = 1000;
+        final int maxEdges = 1000;
 
         ListenableGraph<Integer, DefaultEdge> jGraphT 
             = new ListenableDirectedGraph<Integer, DefaultEdge>(
