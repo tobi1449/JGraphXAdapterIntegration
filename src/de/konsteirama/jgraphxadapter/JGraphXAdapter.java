@@ -12,23 +12,54 @@ import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
 import com.mxgraph.view.mxGraph;
 
+/**
+ * Adapter to draw a JGraphT graph with the JGraphX drawing library.
+ * @author JeanYves Tinevez
+ *
+ * @param <V> Vertex
+ * @param <E> Edge
+ */
 public class JGraphXAdapter<V, E> extends mxGraph implements
         GraphListener<V, E> {
 
+	/**
+	 * The graph to be drawn.
+	 * Has vertices "V" and edges "E".
+	 */
     private Graph<V, E> graphT;
 
+    /**
+     * Hashmap, that maps the JGraphT-Vertices onto JGraphX-mxCells.
+     * {@link #cellToVertexMap} is for the opposite direction.
+     */
     private HashMap<V, mxCell> vertexToCellMap = new HashMap<V, mxCell>();
 
+    /**
+     * Hashmap, that maps the JGraphT-Edges onto JGraphX-mxCells.
+     * {@link #cellToEdgeMap} is for the opposite direction.
+     */
     private HashMap<E, mxCell> edgeToCellMap = new HashMap<E, mxCell>();
 
+    /**
+     * Hashmap, that maps the JGraphX-mxCells onto JGraphT-Edges.
+     * {@link #edgeToCellMap} is for the opposite direction.
+     */
     private HashMap<mxCell, V> cellToVertexMap = new HashMap<mxCell, V>();
 
+    /**
+     * Hashmap, that maps the JGraphX-mxCells onto JGraphT-Vertices.
+     * {@link #vertexToCellMap} is for the opposite direction.
+     */
     private HashMap<mxCell, E> cellToEdgeMap = new HashMap<mxCell, E>();
 
     /*
      * CONSTRUCTOR
      */
 
+    /**
+     * Constructs and draws a new ListenableGraph.
+     * @param graphT casted to graph
+     */
     public JGraphXAdapter(final ListenableGraph<V, E> graphT) {
         // call normal constructor with graph class
         this((Graph<V, E>) graphT);
@@ -36,6 +67,11 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
         graphT.addGraphListener(this);
     }
     
+    /**
+     * Constructs and draws a new graph.
+     * @param graphT is a graph
+     * @throws IllegalArgumentException if {@link #graphT} is null
+     */
     public JGraphXAdapter(final Graph<V, E> graphT) {
         super();
         
@@ -56,18 +92,34 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
      * METHODS
      */
 
+    /**
+     * Returns Hashmap which maps the vertices onto their visualization mxCells.
+     * @return {@link #vertexToCellMap}
+     */
     public HashMap<V, mxCell> getVertexToCellMap() {
         return vertexToCellMap;
     }
 
+    /**
+     * Returns Hashmap which maps the edges onto their visualization mxCells.
+     * @return {@link #edgeToCellMap}
+     */
     public HashMap<E, mxCell> getEdgeToCellMap() {
         return edgeToCellMap;
     }
 
+    /**
+     * Returns Hashmap which maps the visualization mxCells onto their edges.
+     * @return {@link #cellToEdgeMap}
+     */
     public HashMap<mxCell, E> getCellToEdgeMap() {
         return cellToEdgeMap;
     }
 
+    /**
+     * Returns Hashmap which maps the visualization mxCells onto their vertices.
+     * @return {@link #cellToVertexMap}
+     */
     public HashMap<mxCell, V> getCellToVertexMap() {
         return cellToVertexMap;
     }
@@ -102,6 +154,11 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
      * PRIVATE METHODS
      */
 
+    /**
+     * Draws a new vertex into the graph.
+     * 
+     * @param vertex vertex to be added to the graph
+     */
     private void addJGraphTVertex(V vertex) {
 
         getModel().beginUpdate();
@@ -125,6 +182,12 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
         }
     }
 
+    /**
+     * Draws a new egde into the graph.
+     * 
+     * @param edge edge to be added to the graph. Source and target
+     *  vertices are needed.
+     */
     private void addJGraphTEdge(E edge) {
 
         getModel().beginUpdate();
@@ -162,7 +225,11 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
         }
     }
     
-    
+    /**
+     * Draws a given graph with all its vertices and edges.
+     * 
+     * @param graphT the graph to be added to the existing graph.
+     */
     private void insertJGraphT(Graph<V, E> graphT) {
         
         for (V vertex : graphT.vertexSet()) {
