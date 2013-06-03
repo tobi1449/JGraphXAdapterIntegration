@@ -184,13 +184,12 @@ public class JGraphXAdapterTests {
     }
     
     /**
-     * Tests if JGraphXAdapter works with not-listenable Graphs 
+     * Tests if JGraphXAdapter works with not-listenable Graphs.
      */
     @Test
-    public final void notListenableTest(){
-    	Graph<String, String> jGraphT 
-    		= new DefaultDirectedGraph<String, String>(String.class);
-    	
+    public final void notListenableTest() {
+        Graph<String, String> jGraphT 
+            = new DefaultDirectedGraph<String, String>(String.class);
         // fill graph with data
         String v1 = "Vertex 1";
         String v2 = "Vertex 2";
@@ -261,10 +260,11 @@ public class JGraphXAdapterTests {
         jGraphT.addVertex(v3);
         jGraphT.addVertex(v4);
 
-        /*	edge1 is added 3 times with different source/target vertices
-        	it should only add it once.
-        	A new edge is added with source-target combination already in the 
-        	graph it should not be added to the graph. */
+        /*
+         * edge1 is added 3 times with different source/target vertices it
+         * should only add it once. A new edge is added with source-target
+         * combination already in the graph it should not be added to the graph.
+         */
         final int expectedEdges = 3;
         jGraphT.addEdge(v1, v2, edge1);
         jGraphT.addEdge(v1, v2, new DefaultEdge());

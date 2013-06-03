@@ -13,6 +13,15 @@ import com.mxgraph.view.mxGraph;
 
 /**
  * Adapter to draw a JGraphT graph with the JGraphX drawing library.
+ * 
+ * Known Bugs: If this class is used with String-Edges, please note 
+ * that there is a bug with the method JgraphT.addEdge(vertex1, vertex2); 
+ * The edge will be created with an empty String "" as value and 
+ * saved (in JGraphT as well as in this class), which results in the 
+ * edge not saving correctly. So, if you're using Strings as Edgeclass 
+ * please use the method addEdge(vertex1, vertex2, "Edgename"); 
+ * with a unique edgename.
+ * 
  * @author Base: JeanYves Tinevez
  * @author Improvements: KonSteiRaMa
  *
@@ -74,8 +83,12 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
     }
     
     /**
-     * Constructs and draws a new graph. Throws an IllegalArgumentException
-     * if the parameter is null.
+     * Constructs and draws a new mxGraph from a jGraphT graph. Changes on 
+     * the jgraphT graph will not edit this mxGraph any further; use the 
+     * constructor with the ListenableGraph parameter instead or use this 
+     * graph as a normal mxGraph.
+     * 
+     * Throws an IllegalArgumentException if the parameter is null.
      * @param graph is a graph
      */
     public JGraphXAdapter(final Graph<V, E> graph) {
