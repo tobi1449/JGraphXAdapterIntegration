@@ -12,97 +12,116 @@ import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
 import com.mxgraph.view.mxGraph;
 
-public class JGraphXAdapter<V, E> extends mxGraph implements GraphListener<V, E>
-{
+/**
+ * Adapter to draw a JGraphT graph with the JGraphX drawing library.
+ * @author JeanYves Tinevez
+ *
+ * @param <V> Vertex
+ * @param <E> Edge
+ */
+public class JGraphXAdapter<V, E> extends mxGraph implements
+        GraphListener<V, E> {
 
-    private ListenableGraph<V, E> graphT;
+	/**
+	 * The graph to be drawn.
+	 * Has vertices "V" and edges "E".
+	 */
+    private Graph<V, E> graphT;
 
-    private HashMap<V, mxCell>  vertexToCellMap     = new HashMap<V, mxCell>();
+    /**
+     * Hashmap, that maps the JGraphT-Vertices onto JGraphX-mxCells.
+     * {@link #cellToVertexMap} is for the opposite direction.
+     */
+    private HashMap<V, mxCell> vertexToCellMap = new HashMap<V, mxCell>();
 
-    private HashMap<E, mxCell>  edgeToCellMap       = new HashMap<E, mxCell>();
+    /**
+     * Hashmap, that maps the JGraphT-Edges onto JGraphX-mxCells.
+     * {@link #cellToEdgeMap} is for the opposite direction.
+     */
+    private HashMap<E, mxCell> edgeToCellMap = new HashMap<E, mxCell>();
 
-    private HashMap<mxCell, V>  cellToVertexMap     = new HashMap<mxCell, V>();
+    /**
+     * Hashmap, that maps the JGraphX-mxCells onto JGraphT-Edges.
+     * {@link #edgeToCellMap} is for the opposite direction.
+     */
+    private HashMap<mxCell, V> cellToVertexMap = new HashMap<mxCell, V>();
 
-    private HashMap<mxCell, E>  cellToEdgeMap       = new HashMap<mxCell, E>();
+    /**
+     * Hashmap, that maps the JGraphX-mxCells onto JGraphT-Vertices.
+     * {@link #vertexToCellMap} is for the opposite direction.
+     */
+    private HashMap<mxCell, E> cellToEdgeMap = new HashMap<mxCell, E>();
 
     /*
      * CONSTRUCTOR
      */
 
-    public JGraphXAdapter(final ListenableGraph<V, E> graphT)
-    {
-        super();
-    this.graphT = graphT;
+    /**
+     * Constructs and draws a new ListenableGraph.
+     * @param graphT casted to graph
+     */
+    public JGraphXAdapter(final ListenableGraph<V, E> graphT) {
+        // call normal constructor with graph class
+        this((Graph<V, E>) graphT);
+        
         graphT.addGraphListener(this);
+    }
+    
+    /**
+     * Constructs and draws a new graph.
+     * @param graphT is a graph
+     * @throws IllegalArgumentException if {@link #graphT} is null
+     */
+    public JGraphXAdapter(final Graph<V, E> graphT) {
+        super();
+        
+        // Don't accept null as jgrapht graph
+        if (graphT == null) {
+            throw new IllegalArgumentException();
+        } else {
+            this.graphT = graphT;
+        }
+        
+        // generate the drawing
         insertJGraphT(graphT);
+        
+        setAutoSizeCells(true);
     }
 
     /*
      * METHODS
      */
 
-    public void addJGraphTVertex(V vertex)
-    {
-
-        getModel().beginUpdate();
-
-        try
-        {
-            mxCell cell = new mxCell(vertex);
-            cell.setVertex(true);
-            cell.setId(null);
-            addCell(cell, defaultParent);
-            vertexToCellMap.put(vertex, cell);
-            cellToVertexMap.put(cell, vertex);
-        } 
-    finally
-    {
-            getModel().endUpdate();
-        }
-    }
-
-    public void addJGraphTEdge(E edge)
-    {
-
-        getModel().beginUpdate();
-
-        try
-        {
-            V source = graphT.getEdgeSource(edge);
-            V target = graphT.getEdgeTarget(edge);              
-            mxCell cell = new mxCell(edge);
-            cell.setEdge(true);
-            cell.setId(null);
-            cell.setGeometry(new mxGeometry());
-            cell.getGeometry().setRelative(true);
-            addEdge(cell, defaultParent, vertexToCellMap.get(source),  vertexToCellMap.get(target), null);
-            edgeToCellMap.put(edge, cell);
-            cellToEdgeMap.put(cell, edge);
-        }
-        finally
-        {
-            getModel().endUpdate();
-        }
-    }
-
-    public HashMap<V, mxCell> getVertexToCellMap()
-    {
+    /**
+     * Returns Hashmap which maps the vertices onto their visualization mxCells.
+     * @return {@link #vertexToCellMap}
+     */
+    public HashMap<V, mxCell> getVertexToCellMap() {
         return vertexToCellMap;
-}
+    }
 
-    public HashMap<E, mxCell> getEdgeToCellMap()
-    {
+    /**
+     * Returns Hashmap which maps the edges onto their visualization mxCells.
+     * @return {@link #edgeToCellMap}
+     */
+    public HashMap<E, mxCell> getEdgeToCellMap() {
         return edgeToCellMap;
     }
 
-    public HashMap<mxCell, E> getCellToEdgeMap()
-    {
+    /**
+     * Returns Hashmap which maps the visualization mxCells onto their edges.
+     * @return {@link #cellToEdgeMap}
+     */
+    public HashMap<mxCell, E> getCellToEdgeMap() {
         return cellToEdgeMap;
     }
 
-    public HashMap<mxCell, V> getCellToVertexMap()
-{
-    return cellToVertexMap;
+    /**
+     * Returns Hashmap which maps the visualization mxCells onto their vertices.
+     * @return {@link #cellToVertexMap}
+     */
+    public HashMap<mxCell, V> getCellToVertexMap() {
+        return cellToVertexMap;
     }
 
     /*
@@ -110,42 +129,116 @@ public class JGraphXAdapter<V, E> extends mxGraph implements GraphListener<V, E>
      */
 
     @Override
-	public final void vertexAdded(GraphVertexChangeEvent<V> e) {
+    public final void vertexAdded(GraphVertexChangeEvent<V> e) {
         addJGraphTVertex(e.getVertex());
     }
 
     @Override
-	public final void vertexRemoved(GraphVertexChangeEvent<V> e) {
+    public final void vertexRemoved(GraphVertexChangeEvent<V> e) {
         mxCell cell = vertexToCellMap.remove(e.getVertex());
-        removeCells(new Object[] { cell } );
+        removeCells(new Object[] { cell });
     }
 
     @Override
-	public final void edgeAdded(GraphEdgeChangeEvent<V, E> e) {
+    public final void edgeAdded(GraphEdgeChangeEvent<V, E> e) {
         addJGraphTEdge(e.getEdge());
     }
 
     @Override
-	public final void edgeRemoved(GraphEdgeChangeEvent<V, E> e) {
+    public final void edgeRemoved(GraphEdgeChangeEvent<V, E> e) {
         mxCell cell = edgeToCellMap.remove(e.getEdge());
-        removeCells(new Object[] { cell } );
+        removeCells(new Object[] { cell });
     }
 
     /*
      * PRIVATE METHODS
      */
 
-    private void insertJGraphT(Graph<V, E> graphT) {        
+    /**
+     * Draws a new vertex into the graph.
+     * 
+     * @param vertex vertex to be added to the graph
+     */
+    private void addJGraphTVertex(V vertex) {
+
         getModel().beginUpdate();
+
         try {
-            for (V vertex : graphT.vertexSet())
-                addJGraphTVertex(vertex);
-            for (E edge : graphT.edgeSet())
-                addJGraphTEdge(edge);
+            // create a new JGraphX vertex at position 0
+            mxCell cell = (mxCell) insertVertex(defaultParent, null, vertex, 
+                                                0, 0, 0, 0);
+            
+            // Set geometry and size
+            cell.setGeometry(new mxGeometry());
+            cell.getGeometry().setRelative(true);
+            updateCellSize(cell);
+            
+            // Save reference between vertex and cell
+            vertexToCellMap.put(vertex, cell);
+            cellToVertexMap.put(cell, vertex);
+            
         } finally {
             getModel().endUpdate();
+        }
+    }
+
+    /**
+     * Draws a new egde into the graph.
+     * 
+     * @param edge edge to be added to the graph. Source and target
+     *  vertices are needed.
+     */
+    private void addJGraphTEdge(E edge) {
+
+        getModel().beginUpdate();
+
+        try {
+            // find vertices of edge
+            V sourceVertex = graphT.getEdgeSource(edge);
+            V targetVertex = graphT.getEdgeTarget(edge);
+            
+            // if the one of the vertices is not drawn, don't draw the edge
+            if (!(vertexToCellMap.containsKey(sourceVertex) 
+               && vertexToCellMap.containsKey(targetVertex))) {
+                return;
+            }
+            
+            // get mxCells
+            Object sourceCell = vertexToCellMap.get(sourceVertex);
+            Object targetCell = vertexToCellMap.get(targetVertex);
+            
+            // add edge between mxcells
+            mxCell cell = (mxCell) insertEdge(defaultParent, null, 
+                    edge, sourceCell, targetCell);
+            
+            // set geometry and size
+            cell.setGeometry(new mxGeometry());
+            cell.getGeometry().setRelative(true);
+            updateCellSize(cell);
+            
+            // Save reference between vertex and cell
+            edgeToCellMap.put(edge, cell);
+            cellToEdgeMap.put(cell, edge);
+            
+        } finally {
+            getModel().endUpdate();
+        }
+    }
+    
+    /**
+     * Draws a given graph with all its vertices and edges.
+     * 
+     * @param graphT the graph to be added to the existing graph.
+     */
+    private void insertJGraphT(Graph<V, E> graphT) {
+        
+        for (V vertex : graphT.vertexSet()) {
+            addJGraphTVertex(vertex);
+        }
+
+        for (E edge : graphT.edgeSet()) {
+            addJGraphTEdge(edge);
         }
 
     }
 }
-
