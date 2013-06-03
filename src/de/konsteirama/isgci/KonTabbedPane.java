@@ -7,6 +7,7 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.ListenableDirectedGraph;
 
 
+import com.mxgraph.layout.mxCompactTreeLayout;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGeometry;
 import com.mxgraph.swing.mxGraphComponent;
@@ -60,5 +61,11 @@ public class KonTabbedPane extends JTabbedPane {
 		graph = new JGraphXAdapter<String, DefaultEdge>(g);
 		graphComponent = new mxGraphComponent(graph);
 		addTab("Second Tab", graphComponent);
+		
+		
+		 mxCompactTreeLayout layout = new mxCompactTreeLayout(graph);
+	                layout.setEdgeRouting(false);
+	                layout.setLevelDistance(30);
+	                layout.execute(graph.getDefaultParent());
 	}
 }

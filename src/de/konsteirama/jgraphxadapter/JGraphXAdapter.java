@@ -168,9 +168,7 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
             mxCell cell = (mxCell) insertVertex(defaultParent, null, vertex, 
                                                 0, 0, 0, 0);
             
-            // Set geometry and size
-            cell.setGeometry(new mxGeometry());
-            cell.getGeometry().setRelative(true);
+            // update cell size so cell isn't "above" graph
             updateCellSize(cell);
             
             // Save reference between vertex and cell
@@ -211,9 +209,7 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
             mxCell cell = (mxCell) insertEdge(defaultParent, null, 
                     edge, sourceCell, targetCell);
             
-            // set geometry and size
-            cell.setGeometry(new mxGeometry());
-            cell.getGeometry().setRelative(true);
+            // update cell size so cell isn't "above" graph
             updateCellSize(cell);
             
             // Save reference between vertex and cell
