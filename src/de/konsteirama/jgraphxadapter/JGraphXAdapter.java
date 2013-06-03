@@ -1,5 +1,6 @@
 package de.konsteirama.jgraphxadapter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.jgrapht.Graph;
@@ -161,6 +162,29 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
     public final void vertexRemoved(final GraphVertexChangeEvent<V> e) {
         mxCell cell = vertexToCellMap.remove(e.getVertex());
         removeCells(new Object[] { cell });
+        
+        // remove vertex from hashmaps
+        cellToVertexMap.remove(cell);
+        vertexToCellMap.remove(e.getVertex());
+        
+        // remove all edges that connected to the vertex
+        ArrayList<E> removedEdges = new ArrayList<E>();
+        
+        // first, generate a list of all edges that have to be deleted
+        // so we don't change the cellToEdgeMap.values by deleting while
+        // iterating
+        // we have to iterate over this because the graphT has already
+        // deleted the vertex and edges so we can't query what the edges were
+        for (E edge : cellToEdgeMap.values()) {
+            if (!graphT.edgeSet().contains(edge)) {
+                removedEdges.add(edge);
+            }
+        }
+        
+        // then delete all entries of the previously generated list
+        for (E edge : removedEdges) {
+            removeEdge(edge);
+        }
     }
 
     @Override
@@ -170,16 +194,32 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
 
     @Override
     public final void edgeRemoved(final GraphEdgeChangeEvent<V, E> e) {
-        mxCell cell = edgeToCellMap.remove(e.getEdge());
-        removeCells(new Object[] { cell });
+        removeEdge(e.getEdge());
     }
     
     
     
-    
+   
 
     //                     Private Methods
     // ================================================================
+    
+    /**
+     * Removes a jgrapht edge and its visual representation from this graph
+     * completely.
+     * 
+     * @param edge
+     *            The edge that will be removed
+     */
+    private void removeEdge(final E edge) {
+        mxCell cell = edgeToCellMap.remove(edge);
+        removeCells(new Object[] { cell });
+        
+        // remove edge from hashmaps
+        cellToEdgeMap.remove(cell);
+        edgeToCellMap.remove(edge);
+    }
+    
     
     /**
      * Draws a new vertex into the graph.

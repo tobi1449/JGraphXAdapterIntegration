@@ -103,12 +103,13 @@ public class JGraphXAdapterTests {
         jGraphT.addVertex(v3);
         jGraphT.addVertex(v4);
 
-        final int expectedEdges = 5;
         jGraphT.addEdge(v1, v2, "Edge 1");
         jGraphT.addEdge(v1, v3, "Edge 2");
         jGraphT.addEdge(v1, v4, "Edge 3");
         jGraphT.addEdge(v2, v3, "Edge 4");
         jGraphT.addEdge(v3, v4, "Edge 5");
+        
+        int expectedEdges = jGraphT.edgeSet().size();
 
         testMapping(graphX);
         
@@ -129,6 +130,33 @@ public class JGraphXAdapterTests {
         
         edgesCount = graphX.getEdgeToCellMap().keySet().size();
         Assert.assertEquals(expectedEdges, edgesCount);
+        
+        
+        // remove some data from the jgraphT graph
+       jGraphT.removeVertex(v4);
+       jGraphT.removeVertex(v3);
+       
+       jGraphT.removeEdge(v1, v2);
+       
+       int expectedEdgesAfterRemove = jGraphT.edgeSet().size();
+       
+        // test if all values are in the jgraphx graph
+        expectedArray = new Object[] {v1, v2};
+        Arrays.sort(expectedArray);
+        
+        realArray = graphX.getCellToVertexMap().values().toArray(); 
+        Arrays.sort(realArray);
+        Assert.assertArrayEquals(expectedArray, realArray);
+        
+        realArray = graphX.getVertexToCellMap().keySet().toArray();
+        Arrays.sort(realArray);
+        Assert.assertArrayEquals(expectedArray, realArray);
+        
+        edgesCount = graphX.getCellToEdgeMap().values().size();
+        Assert.assertEquals(expectedEdgesAfterRemove, edgesCount);
+        
+        edgesCount = graphX.getEdgeToCellMap().keySet().size();
+        Assert.assertEquals(expectedEdgesAfterRemove, edgesCount);
     }
     
     
