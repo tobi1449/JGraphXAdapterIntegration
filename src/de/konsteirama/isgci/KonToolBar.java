@@ -18,34 +18,37 @@ public class KonToolBar extends JToolBar implements ActionListener {
      */
     private JButton exportButton;
     private MainPanel panel;
-    
+
     public KonToolBar(MainPanel panel) {
-		this.panel = panel;
-        
-		// set basic layout
-		setFloatable(false);
-		setRollover(true);
-		
-		// add some buttons
-	    exportButton = new JButton("Export");
-	    exportButton.addActionListener(this);
-	        
-	    this.add(exportButton);
-	}
+        this.panel = panel;
+
+        // set basic layout
+        setFloatable(false);
+        setRollover(true);
+
+        // add some buttons
+        exportButton = new JButton("Export");
+        exportButton.addActionListener(this);
+
+        this.add(exportButton);
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource().equals(exportButton)) {
-            this.panel.getTabPane().getActiveGraphDrawing().export("graphml", "test.graphml");
-            
-            String[] formats = this.panel.getTabPane().getActiveGraphDrawing().getAvailableExportFormats();
-            
+        if (e.getSource().equals(exportButton)) {
+            this.panel.getTabPane().getActiveGraphDrawing()
+                    .export("svg", "test.svg");
+
+            String[] formats = this.panel.getTabPane().getActiveGraphDrawing()
+                    .getAvailableExportFormats();
+
             System.out.println("Export Button pressed !");
-            
+
             System.out.print("Formats: ");
             for (int i = 0; i < formats.length; i++) {
                 System.out.print(formats[i] + " ");
             }
+            
             System.out.println();
         }
     }

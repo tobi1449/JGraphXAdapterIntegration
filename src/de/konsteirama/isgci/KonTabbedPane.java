@@ -6,6 +6,7 @@ import javax.swing.JTabbedPane;
 
 import de.konsteirama.drawinglibrary.DrawingLibraryInterface;
 import de.konsteirama.drawinglibrary.JGraphXInterface;
+
 import org.jgrapht.ListenableGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.ListenableDirectedGraph;
