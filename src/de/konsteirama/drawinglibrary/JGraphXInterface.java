@@ -2,6 +2,8 @@ package de.konsteirama.drawinglibrary;
 
 import com.mxgraph.swing.mxGraphComponent;
 import de.konsteirama.jgraphxadapter.JGraphXAdapter;
+
+import org.jgrapht.Graph;
 import org.jgrapht.ListenableGraph;
 import org.jgrapht.ext.GraphMLExporter;
 import org.jgrapht.graph.DefaultEdge;
@@ -26,7 +28,7 @@ public class JGraphXInterface implements DrawingLibraryInterface {
 
     private GraphEvent graphEvent;
 
-    private JGraphXAdapter<String, DefaultEdge> graph;
+    private JGraphXAdapter<String, DefaultEdge> graphAdapter;
 
     /**
      * The instance of DrawingLibraryInterface.
@@ -34,10 +36,10 @@ public class JGraphXInterface implements DrawingLibraryInterface {
     public JGraphXInterface(ListenableGraph<String, DefaultEdge> g) {
 
         //Convert to JGraphT-Graph
-        graph = new JGraphXAdapter<String, DefaultEdge>(g);
+        graphAdapter = new JGraphXAdapter<String, DefaultEdge>(g);
 
         //Create the mxGraphComponent used to draw the graph
-        graphComponent = new mxGraphComponent(graph);
+        graphComponent = new mxGraphComponent(graphAdapter);
 
         graphManipulation = new GraphManipulation(graphComponent);
         graphEvent = new GraphEvent(graphComponent);
@@ -55,7 +57,7 @@ public class JGraphXInterface implements DrawingLibraryInterface {
         } else if (format == "graphml") {
             // Creates a new GraphMLExporter and gets the JGraphT-graph
             GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<String, DefaultEdge>();
-            ListenableGraph g = this.graph.getJGraph();
+            Graph g = this.graphAdapter.getGraph();
 
             try {
                 // Creates a new Filewriter and exports the graph under the given path
