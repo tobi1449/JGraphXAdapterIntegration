@@ -1,6 +1,8 @@
 package de.konsteirama.drawinglibrary;
 
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
+import com.mxgraph.model.mxGraphModel;
+import com.mxgraph.model.mxIGraphModel;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxEvent;
 import com.mxgraph.util.mxEventObject;
@@ -8,6 +10,7 @@ import com.mxgraph.util.mxEventSource.mxIEventListener;
 import com.mxgraph.util.mxUndoManager;
 import com.mxgraph.util.mxUndoableEdit;
 import com.mxgraph.view.mxGraph;
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 /**
  * This class implements the GraphManipulationInterface. It handles
@@ -58,10 +61,11 @@ public class GraphManipulation implements GraphManipulationInterface {
 	/**
 	 * Returns a boolean denoting whether the calling graph is able to perform a
 	 * redo-operation.
-	 * @return if falase then there was no undoable action perormed earlier
+	 * @return if false then there was no undoable action perormed earlier
 	 */
 	@Override
 	public boolean canRedo() {
+		
 		return undoManager.canRedo();
 	}
 
@@ -141,12 +145,18 @@ public class GraphManipulation implements GraphManipulationInterface {
 	 * Removes the given node from the graph. Removal only effects the
 	 * JGraphX-graph.
 	 * 
-	 * @param node
-	 *            : a JGraphX-graph node object
+	 * @param node : a JGraphX-graph node object
 	 */
 	@Override
 	public void removeNode(Object node) {
-
+      mxGraph graph = graphComponent.getGraph();
+	  Array[] nodes = new Array[1];
+      node = nodes[0];
+		graph.getModel().beginUpdate();
+		
+		graph.removeCells(nodes, true);
+		
+		graph.getModel().endUpdate();
 	}
 
 	/**
@@ -160,6 +170,10 @@ public class GraphManipulation implements GraphManipulationInterface {
 	 */
 	@Override
 	public void renameNode(Object node, String newName) {
+		mxGraph graph = graphComponent.getGraph();
+		String name= newName;
+		Object renamedNode= node;
+		
 
 	}
 
@@ -169,6 +183,7 @@ public class GraphManipulation implements GraphManipulationInterface {
 	 */
 	@Override
 	public void resetLayout() {
+		mxGraph graph = graphComponent.getGraph();
 
 	}
 
