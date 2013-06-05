@@ -13,30 +13,17 @@ import com.mxgraph.view.mxGraph;
 
 import de.konsteirama.jgraphxadapter.JGraphXAdapter;
 
-import org.apache.batik.transcoder.TranscoderException;
-import org.apache.batik.transcoder.TranscoderInput;
-import org.apache.batik.transcoder.TranscoderOutput;
-import org.apache.fop.render.ps.EPSTranscoder;
 import org.jgrapht.Graph;
 import org.jgrapht.ListenableGraph;
 import org.jgrapht.ext.GraphMLExporter;
 import org.jgrapht.graph.DefaultEdge;
-import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import javax.swing.JComponent;
 import javax.xml.transform.TransformerConfigurationException;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.MalformedURLException;
 
 /**
  * Created with IntelliJ IDEA. User: Tobias Date: 30.05.13 Time: 17:59
@@ -90,17 +77,17 @@ public class JGraphXInterface implements DrawingLibraryInterface {
     }
 
     /**
-     * Exports the canvas as an eps under the given path,
-     * by converting an existing .svg representation of it.
+     * Exports the canvas as an eps under the given path, by converting an
+     * existing .svg representation of it.
      * 
      * @param path
      *            The path where the .eps file will be saved to
      */
     private void exportEPS(final String path) {
-        // Creates the .svg file
-        String temp = "temp.svg";
+        // Creates the .svg file 
+        /*String temp = "temp.svg";
         exportSVG(temp);
-        
+
         // Create the transcoder and set some settings
         EPSTranscoder transcoder = new EPSTranscoder();
 
@@ -134,10 +121,10 @@ public class JGraphXInterface implements DrawingLibraryInterface {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
         // Deletes the temp svg file
         File file = new File(temp);
-        file.delete();
+        file.delete();*/
     }
 
     /**
@@ -169,8 +156,7 @@ public class JGraphXInterface implements DrawingLibraryInterface {
             e.printStackTrace();
         }
     }
-    
-    
+
     /**
      * Exports the canvas as an GraphML under the given path.
      * 
