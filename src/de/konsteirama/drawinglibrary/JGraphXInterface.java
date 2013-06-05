@@ -22,9 +22,14 @@ import org.jgrapht.ext.GraphMLExporter;
 import org.jgrapht.graph.DefaultEdge;
 import org.xml.sax.SAXException;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.xml.transform.TransformerConfigurationException;
+
+import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -157,6 +162,10 @@ public class JGraphXInterface implements DrawingLibraryInterface {
             exportSVG(path);
         } else if (format == "graphml") {
             exportGraphML(path);
+        } else if (format == "jpg") {
+            exportJPG(path);
+        } else if (format == "png") {
+            exportPNG(path);
         }
     }
 
@@ -267,6 +276,54 @@ public class JGraphXInterface implements DrawingLibraryInterface {
         } catch (TransformerConfigurationException e) {
             e.printStackTrace();
         } catch (SAXException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Exports the canvas as an jpg under the given path.
+     * 
+     * @param path
+     *            The path where the .jpg file will be saved to
+     */
+    private void exportJPG(final String path) {
+        Dimension d = graphComponent.getGraphControl().getSize();
+        
+        BufferedImage image = new BufferedImage(d.width, d.height,
+                BufferedImage.TYPE_INT_ARGB);
+        
+        Graphics2D g = image.createGraphics();
+        graphComponent.getGraphControl().paint(g);
+        
+        final File outputfile = new File(path);
+
+        try {
+            ImageIO.write(image, "jpg", outputfile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Exports the canvas as an PNG under the given path.
+     * 
+     * @param path
+     *            The path where the .png file will be saved to
+     */
+    private void exportPNG(final String path) {
+        Dimension d = graphComponent.getGraphControl().getSize();
+        
+        BufferedImage image = new BufferedImage(d.width, d.height,
+                BufferedImage.TYPE_INT_ARGB);
+        
+        Graphics2D g = image.createGraphics();
+        graphComponent.getGraphControl().paint(g);
+        
+        final File outputfile = new File(path);
+
+        try {
+            ImageIO.write(image, "png", outputfile);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
