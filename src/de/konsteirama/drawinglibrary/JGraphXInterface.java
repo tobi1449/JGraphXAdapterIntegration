@@ -2,7 +2,7 @@ package de.konsteirama.drawinglibrary;
 
 import com.mxgraph.canvas.mxICanvas;
 import com.mxgraph.canvas.mxSvgCanvas;
-import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
+import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxCellRenderer;
 import com.mxgraph.util.mxCellRenderer.CanvasFactory;
@@ -10,7 +10,6 @@ import com.mxgraph.util.mxDomUtils;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.util.mxXmlUtils;
 import com.mxgraph.view.mxGraph;
-
 import de.konsteirama.jgraphxadapter.JGraphXAdapter;
 
 import org.apache.batik.transcoder.TranscoderException;
@@ -23,8 +22,9 @@ import org.jgrapht.ext.GraphMLExporter;
 import org.jgrapht.graph.DefaultEdge;
 import org.xml.sax.SAXException;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 import javax.xml.transform.TransformerConfigurationException;
+import java.awt.event.MouseEvent;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -48,22 +48,97 @@ public class JGraphXInterface implements DrawingLibraryInterface {
     private JGraphXAdapter<String, DefaultEdge> graphAdapter;
 
     /**
-     * The instance of DrawingLibraryInterface.
+     * The constructor for JGraphXInterface.
+     *
+     * @param g JGraphT graph to draw
      */
     public JGraphXInterface(ListenableGraph<String, DefaultEdge> g) {
 
         // Convert to JGraphT-Graph
-        graphAdapter = new JGraphXAdapter<String, DefaultEdge>(g);
-
-        // Applys a hierarchical layout to the given graph
-        mxHierarchicalLayout layout = new mxHierarchicalLayout(graphAdapter);
-        layout.execute(graphAdapter.getDefaultParent());
+        graphAdapter = createNewAdapter(g);
 
         // Create the mxGraphComponent used to draw the graph
-        graphComponent = new mxGraphComponent(graphAdapter);
+        // Also overrides the default behavior of JGraphX panning
+        // implementation so the users are not required to hold down shift
+        // and ctrl
+        graphComponent = new mxGraphComponent(graphAdapter) {
+            @Override
+            public boolean isPanningEvent(MouseEvent event) {
+                if (event == null) {
+                    return false;
+                }
 
-        graphManipulation = new GraphManipulation(graphComponent);
+                mxCell cell = (mxCell) getCellAt(event.getX(),
+                        event.getY());
+
+                if (!getBounds().contains(event.getPoint())) {
+                    return false;
+                }
+
+                return cell == null || cell.isEdge();
+            }
+        };
+
+        graphManipulation = new GraphManipulation(graphComponent,
+                graphAdapter);
         graphEvent = new GraphEvent(graphComponent);
+
+        graphComponent.setWheelScrollingEnabled(false);
+        graphEvent.registerMouseAdapter(
+                new InternalMouseAdapter(graphComponent));
+
+        graphManipulation.reapplyHierarchicalLayout();
+
+        applyCustomGraphSettings();
+
+    }
+
+    /**
+     * Creates a new JGraphXAdapter form the given Graph with edge selection
+     * and movement disabled.
+     *
+     * @param g JGraphT graph
+     * @return JGraphXAdapter
+     */
+    private JGraphXAdapter<String, DefaultEdge> createNewAdapter(
+            ListenableGraph<String, DefaultEdge> g) {
+        return new JGraphXAdapter<String, DefaultEdge>(g) {
+            @Override
+            public boolean isCellSelectable(Object cell) {
+                if (model.isEdge(cell)) {
+                    return false;
+                }
+                return super.isCellSelectable(cell);
+            }
+
+            @Override
+            public boolean isCellMovable(Object cell) {
+                if (model.isEdge(cell)) {
+                    return false;
+                }
+                return super.isCellMovable(cell);
+            }
+        };
+    }
+
+
+    /**
+     * Applies some custom settings to the graph.
+     */
+    private void applyCustomGraphSettings() {
+
+        graphAdapter.setKeepEdgesInBackground(true);
+        graphAdapter.setAllowDanglingEdges(false);
+        graphAdapter.setAllowLoops(false);
+        graphAdapter.setCellsDeletable(false);
+        graphAdapter.setCellsDisconnectable(false);
+        graphAdapter.setCellsBendable(false);
+        graphAdapter.setCellsCloneable(false);
+        graphAdapter.setCellsEditable(false);
+        graphAdapter.setCellsResizable(false);
+        graphAdapter.setVertexLabelsMovable(false);
+        graphAdapter.setConnectableEdges(false);
+        graphAdapter.setAutoSizeCells(true);
     }
 
     /**
@@ -223,6 +298,12 @@ public class JGraphXInterface implements DrawingLibraryInterface {
 
     @Override
     public final void setGraph(final ListenableGraph<String, DefaultEdge> g) {
-        graphComponent.setGraph(new JGraphXAdapter<String, DefaultEdge>(g));
+
+        graphAdapter = new JGraphXAdapter<String, DefaultEdge>(g);
+        graphComponent.setGraph(graphAdapter);
+
+        applyCustomGraphSettings();
+
+        graphManipulation.reapplyHierarchicalLayout();
     }
 }
