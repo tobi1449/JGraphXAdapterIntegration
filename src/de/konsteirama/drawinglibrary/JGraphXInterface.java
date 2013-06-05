@@ -13,6 +13,10 @@ import com.mxgraph.view.mxGraph;
 
 import de.konsteirama.jgraphxadapter.JGraphXAdapter;
 
+import org.apache.batik.transcoder.TranscoderException;
+import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.fop.render.ps.EPSTranscoder;
 import org.jgrapht.Graph;
 import org.jgrapht.ListenableGraph;
 import org.jgrapht.ext.GraphMLExporter;
@@ -22,8 +26,13 @@ import org.xml.sax.SAXException;
 import javax.swing.JComponent;
 import javax.xml.transform.TransformerConfigurationException;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
 
 /**
  * Created with IntelliJ IDEA. User: Tobias Date: 30.05.13 Time: 17:59
@@ -85,7 +94,7 @@ public class JGraphXInterface implements DrawingLibraryInterface {
      */
     private void exportEPS(final String path) {
         // Creates the .svg file 
-        /*String temp = "temp.svg";
+        String temp = "temp.svg";
         exportSVG(temp);
 
         // Create the transcoder and set some settings
@@ -124,7 +133,7 @@ public class JGraphXInterface implements DrawingLibraryInterface {
 
         // Deletes the temp svg file
         File file = new File(temp);
-        file.delete();*/
+        file.delete();
     }
 
     /**
