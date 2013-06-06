@@ -37,7 +37,7 @@ public class KonToolBar extends JToolBar implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(exportButton)) {
             this.panel.getTabPane().getActiveGraphDrawing()
-                    .export("png", "test.png");
+                    .export("eps", "test.eps");
 
             String[] formats = this.panel.getTabPane().getActiveGraphDrawing()
                     .getAvailableExportFormats();

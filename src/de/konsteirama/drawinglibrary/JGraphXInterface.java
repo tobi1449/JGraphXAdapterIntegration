@@ -186,8 +186,8 @@ public class JGraphXInterface implements DrawingLibraryInterface {
 
         transcoder.addTranscodingHint(
                 EPSTranscoder.KEY_PIXEL_UNIT_TO_MILLIMETER, 1.0f);
-        transcoder.addTranscodingHint(EPSTranscoder.KEY_MAX_HEIGHT, 2048f);
-        transcoder.addTranscodingHint(EPSTranscoder.KEY_MAX_WIDTH, 2048f);
+        transcoder.addTranscodingHint(EPSTranscoder.KEY_MAX_HEIGHT, 16384f);
+        transcoder.addTranscodingHint(EPSTranscoder.KEY_MAX_WIDTH, 16384f);
 
         String svgURI;
         try {
