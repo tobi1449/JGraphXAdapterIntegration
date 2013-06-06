@@ -2,6 +2,7 @@ package de.konsteirama.drawinglibrary;
 
 import com.mxgraph.canvas.mxICanvas;
 import com.mxgraph.canvas.mxSvgCanvas;
+import com.mxgraph.io.mxGraphMlCodec;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxCellRenderer;
@@ -10,6 +11,7 @@ import com.mxgraph.util.mxDomUtils;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.util.mxXmlUtils;
 import com.mxgraph.view.mxGraph;
+
 import de.konsteirama.jgraphxadapter.JGraphXAdapter;
 
 import org.apache.batik.transcoder.TranscoderException;
@@ -20,11 +22,19 @@ import org.jgrapht.Graph;
 import org.jgrapht.ListenableGraph;
 import org.jgrapht.ext.GraphMLExporter;
 import org.jgrapht.graph.DefaultEdge;
+import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -37,6 +47,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.StringWriter;
 import java.net.MalformedURLException;
 
 /**
@@ -54,8 +65,9 @@ public class JGraphXInterface implements DrawingLibraryInterface {
 
     /**
      * The constructor for JGraphXInterface.
-     *
-     * @param g JGraphT graph to draw
+     * 
+     * @param g
+     *            JGraphT graph to draw
      */
     public JGraphXInterface(ListenableGraph<String, DefaultEdge> g) {
 
@@ -73,8 +85,7 @@ public class JGraphXInterface implements DrawingLibraryInterface {
                     return false;
                 }
 
-                mxCell cell = (mxCell) getCellAt(event.getX(),
-                        event.getY());
+                mxCell cell = (mxCell) getCellAt(event.getX(), event.getY());
 
                 if (!getBounds().contains(event.getPoint())) {
                     return false;
@@ -84,13 +95,12 @@ public class JGraphXInterface implements DrawingLibraryInterface {
             }
         };
 
-        graphManipulation = new GraphManipulation(graphComponent,
-                graphAdapter);
+        graphManipulation = new GraphManipulation(graphComponent, graphAdapter);
         graphEvent = new GraphEvent(graphComponent);
 
         graphComponent.setWheelScrollingEnabled(false);
-        graphEvent.registerMouseAdapter(
-                new InternalMouseAdapter(graphComponent));
+        graphEvent
+                .registerMouseAdapter(new InternalMouseAdapter(graphComponent));
 
         graphManipulation.reapplyHierarchicalLayout();
 
@@ -99,10 +109,11 @@ public class JGraphXInterface implements DrawingLibraryInterface {
     }
 
     /**
-     * Creates a new JGraphXAdapter form the given Graph with edge selection
-     * and movement disabled.
-     *
-     * @param g JGraphT graph
+     * Creates a new JGraphXAdapter form the given Graph with edge selection and
+     * movement disabled.
+     * 
+     * @param g
+     *            JGraphT graph
      * @return JGraphXAdapter
      */
     private JGraphXAdapter<String, DefaultEdge> createNewAdapter(
@@ -125,7 +136,6 @@ public class JGraphXInterface implements DrawingLibraryInterface {
             }
         };
     }
-
 
     /**
      * Applies some custom settings to the graph.
@@ -177,7 +187,7 @@ public class JGraphXInterface implements DrawingLibraryInterface {
      *            The path where the .eps file will be saved to
      */
     private void exportEPS(final String path) {
-        // Creates the .svg file 
+        // Creates the .svg file
         String temp = "temp.svg";
         exportSVG(temp);
 
@@ -279,7 +289,7 @@ public class JGraphXInterface implements DrawingLibraryInterface {
             e.printStackTrace();
         }
     }
-    
+
     /**
      * Exports the canvas as an jpg under the given path.
      * 
@@ -288,13 +298,19 @@ public class JGraphXInterface implements DrawingLibraryInterface {
      */
     private void exportJPG(final String path) {
         Dimension d = graphComponent.getGraphControl().getSize();
-        
+
+        // For testing purposes, if no Panel exists 
+        if (d.width == 0 || d.height == 0) {
+            d.width = 1;
+            d.height = 1;
+        }  
+            
         BufferedImage image = new BufferedImage(d.width, d.height,
                 BufferedImage.TYPE_INT_ARGB);
-        
+
         Graphics2D g = image.createGraphics();
         graphComponent.getGraphControl().paint(g);
-        
+
         final File outputfile = new File(path);
 
         try {
@@ -312,13 +328,19 @@ public class JGraphXInterface implements DrawingLibraryInterface {
      */
     private void exportPNG(final String path) {
         Dimension d = graphComponent.getGraphControl().getSize();
+
+        // For testing purposes, if no Panel exists 
+        if (d.width == 0 || d.height == 0) {
+            d.width = 1;
+            d.height = 1;
+        }    
         
         BufferedImage image = new BufferedImage(d.width, d.height,
                 BufferedImage.TYPE_INT_ARGB);
-        
+
         Graphics2D g = image.createGraphics();
         graphComponent.getGraphControl().paint(g);
-        
+
         final File outputfile = new File(path);
 
         try {

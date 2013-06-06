@@ -15,7 +15,7 @@ import org.jgrapht.graph.ListenableDirectedGraph;
  * Represents the TabbedPane, beneath the Toolbar.
  * 
  * @author highyield
- *
+ * 
  */
 public class KonTabbedPane extends JTabbedPane {
 
@@ -25,11 +25,11 @@ public class KonTabbedPane extends JTabbedPane {
     private static final long serialVersionUID = -6438063674744178339L;
 
     /**
-     * A ArrayList of all currently available JGraphXInterfaces
-     * connected via a Tab.
+     * A ArrayList of all currently available JGraphXInterfaces connected via a
+     * Tab.
      */
     private ArrayList<JGraphXInterface> graphInterfaces;
-    
+
     /**
      * The constructor of KonTabbedPane.
      * 
@@ -46,24 +46,23 @@ public class KonTabbedPane extends JTabbedPane {
          */
         JGraphXInterface graphInterface = new JGraphXInterface(graph);
         graphInterfaces.add(graphInterface);
-        
+
         // Adds the graph to the tab and adds the tab to the pane
         add(graphInterface.getPanel());
         addTab("First Tab", graphInterface.getPanel());
-        
+
         /*
          * Adds a tab
          */
         graphInterface = new JGraphXInterface(graph);
         graphInterfaces.add(graphInterface);
-        
+
         // Adds the graph to the tab and adds the tab to the pane
         add(graphInterface.getPanel());
-        addTab("Second Tab", graphInterface.getPanel());  
+        addTab("Second Tab", graphInterface.getPanel());
     }
 
-    private ListenableGraph<String, DefaultEdge> CreateTestGraph()
-    {
+    private ListenableGraph<String, DefaultEdge> CreateTestGraph() {
         ListenableGraph<String, DefaultEdge> g = new ListenableDirectedGraph<String, DefaultEdge>(
                 DefaultEdge.class);
 
@@ -80,16 +79,16 @@ public class KonTabbedPane extends JTabbedPane {
 
         return g;
     }
-    
+
     /**
-     * Returns the current DrawingLibraryInterface 
-     * referenced by the current active tab.
+     * Returns the current DrawingLibraryInterface referenced by the current
+     * active tab.
      * 
      * @return an instance of DrawingLibraryInterface
      */
     public final DrawingLibraryInterface getActiveGraphDrawing() {
         int selectedIndex = this.getSelectedIndex();
-                
+
         return this.graphInterfaces.get(selectedIndex);
     }
 }
