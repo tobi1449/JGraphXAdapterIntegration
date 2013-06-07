@@ -16,7 +16,7 @@ import org.jgrapht.graph.ListenableDirectedGraph;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.mxgraph.model.mxCell;
+import com.mxgraph.model.mxICell;
 
 import de.konsteirama.jgraphxadapter.JGraphXAdapter;
 
@@ -341,8 +341,8 @@ public class JGraphXAdapterTests {
     private <V, E> void testMapping(final JGraphXAdapter<V, E> graph) {
 
         // Edges
-        HashMap<mxCell, E> cellToEdgeMap = graph.getCellToEdgeMap();
-        HashMap<E, mxCell> edgeToCellMap = graph.getEdgeToCellMap();
+        HashMap<mxICell, E> cellToEdgeMap = graph.getCellToEdgeMap();
+        HashMap<E, mxICell> edgeToCellMap = graph.getEdgeToCellMap();
 
         // Test for null
         if (cellToEdgeMap == null) {
@@ -365,8 +365,8 @@ public class JGraphXAdapterTests {
         }
 
         // Vertices
-        HashMap<mxCell, V> cellToVertexMap = graph.getCellToVertexMap();
-        HashMap<V, mxCell> vertexToCellMap = graph.getVertexToCellMap();
+        HashMap<mxICell, V> cellToVertexMap = graph.getCellToVertexMap();
+        HashMap<V, mxICell> vertexToCellMap = graph.getVertexToCellMap();
 
         // Test for null
         if (cellToVertexMap == null) {

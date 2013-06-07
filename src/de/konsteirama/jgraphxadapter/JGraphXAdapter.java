@@ -47,28 +47,28 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
     private Graph<V, E> graphT;
 
     /**
-     * Maps the JGraphT-Vertices onto JGraphX-mxCells. {@link #cellToVertexMap}
+     * Maps the JGraphT-Vertices onto JGraphX-mxICells. {@link #cellToVertexMap}
      * is for the opposite direction.
      */
-    private HashMap<V, mxCell> vertexToCellMap = new HashMap<V, mxCell>();
+    private HashMap<V, mxICell> vertexToCellMap = new HashMap<V, mxICell>();
 
     /**
-     * Maps the JGraphT-Edges onto JGraphX-mxCells.
+     * Maps the JGraphT-Edges onto JGraphX-mxICells.
      * {@link #cellToEdgeMap} is for the opposite direction.
      */
-    private HashMap<E, mxCell> edgeToCellMap = new HashMap<E, mxCell>();
+    private HashMap<E, mxICell> edgeToCellMap = new HashMap<E, mxICell>();
 
     /**
-     * Maps the JGraphX-mxCells onto JGraphT-Edges.
+     * Maps the JGraphX-mxICells onto JGraphT-Edges.
      * {@link #edgeToCellMap} is for the opposite direction.
      */
-    private HashMap<mxCell, V> cellToVertexMap = new HashMap<mxCell, V>();
+    private HashMap<mxICell, V> cellToVertexMap = new HashMap<mxICell, V>();
 
     /**
-     * Maps the JGraphX-mxCells onto JGraphT-Vertices.
+     * Maps the JGraphX-mxICells onto JGraphT-Vertices.
      * {@link #vertexToCellMap} is for the opposite direction.
      */
-    private HashMap<mxCell, E> cellToEdgeMap = new HashMap<mxCell, E>();
+    private HashMap<mxICell, E> cellToEdgeMap = new HashMap<mxICell, E>();
 
     /**
      * Provides a way to add JGraphT vertices if the MxListener is active.
@@ -141,34 +141,36 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
     // ----------------------------------------------------------------
     
     /**
-     * Returns Hashmap which maps the vertices onto their visualization mxCells.
+     * Returns Hashmap which maps the vertices onto their 
+     * visualization mxICells.
      * @return {@link #vertexToCellMap}
      */
-    public HashMap<V, mxCell> getVertexToCellMap() {
+    public HashMap<V, mxICell> getVertexToCellMap() {
         return vertexToCellMap;
     }
 
     /**
-     * Returns Hashmap which maps the edges onto their visualization mxCells.
+     * Returns Hashmap which maps the edges onto their visualization mxICells.
      * @return {@link #edgeToCellMap}
      */
-    public HashMap<E, mxCell> getEdgeToCellMap() {
+    public HashMap<E, mxICell> getEdgeToCellMap() {
         return edgeToCellMap;
     }
 
     /**
-     * Returns Hashmap which maps the visualization mxCells onto their edges.
+     * Returns Hashmap which maps the visualization mxICells onto their edges.
      * @return {@link #cellToEdgeMap}
      */
-    public HashMap<mxCell, E> getCellToEdgeMap() {
+    public HashMap<mxICell, E> getCellToEdgeMap() {
         return cellToEdgeMap;
     }
 
     /**
-     * Returns Hashmap which maps the visualization mxCells onto their vertices.
+     * Returns Hashmap which maps the visualization mxICells 
+     * onto their vertices.
      * @return {@link #cellToVertexMap}
      */
-    public HashMap<mxCell, V> getCellToVertexMap() {
+    public HashMap<mxICell, V> getCellToVertexMap() {
         return cellToVertexMap;
     }
     
@@ -196,7 +198,7 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
             return;
         }
         
-        mxCell cell = vertexToCellMap.remove(e.getVertex());
+        mxICell cell = vertexToCellMap.remove(e.getVertex());
         removeCells(new Object[] { cell });
         
         // remove vertex from hashmaps
@@ -381,17 +383,9 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
      *          The cell that was updated
      */
     private void changeCell(mxCell changedCell) {
-        // has nothing to do with apple
-        mxICell iTarget = changedCell.getTarget();
-        mxICell iSource = changedCell.getSource();
         
-        // TODO: find out if we can change the hashmaps to mxicells
-        if (!(iTarget instanceof mxCell && iSource instanceof mxCell)) {
-            return;
-        }
-
-        mxCell target = (mxCell) iTarget;
-        mxCell source = (mxCell) iSource;
+        mxICell target = changedCell.getTarget();
+        mxICell source = changedCell.getSource();
         
         // Cell was "created"
         if (!cellToEdgeMap.containsKey(changedCell)
@@ -457,7 +451,7 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
      *            The edge that will be removed
      */
     private void removeEdge(E edge) {
-        mxCell cell = edgeToCellMap.remove(edge);
+        mxICell cell = edgeToCellMap.remove(edge);
         removeCells(new Object[] { cell });
         
         // remove edge from hashmaps
@@ -477,7 +471,7 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
 
         try {
             // create a new JGraphX vertex at position 0
-            mxCell cell = (mxCell) insertVertex(defaultParent, null, vertex, 
+            mxICell cell = (mxICell) insertVertex(defaultParent, null, vertex, 
                                                 0, 0, 0, 0);
             
             // update cell size so cell isn't "above" graph
@@ -513,12 +507,12 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
                 return;
             }
             
-            // get mxCells
+            // get mxICells
             Object sourceCell = vertexToCellMap.get(sourceVertex);
             Object targetCell = vertexToCellMap.get(targetVertex);
             
-            // add edge between mxcells
-            mxCell cell = (mxCell) insertEdge(defaultParent, null, 
+            // add edge between mxICells
+            mxICell cell = (mxICell) insertEdge(defaultParent, null, 
                     edge, sourceCell, targetCell);
             
             // update cell size so cell isn't "above" graph
