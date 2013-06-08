@@ -1,15 +1,13 @@
 package de.konsteirama.isgci;
 
-import java.util.ArrayList;
-
-import javax.swing.JTabbedPane;
-
 import de.konsteirama.drawinglibrary.DrawingLibraryInterface;
 import de.konsteirama.drawinglibrary.JGraphXInterface;
-
-import org.jgrapht.ListenableGraph;
+import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.ListenableDirectedGraph;
+
+import javax.swing.JTabbedPane;
+import java.util.ArrayList;
 
 /**
  * Represents the TabbedPane, beneath the Toolbar.
@@ -39,12 +37,13 @@ public class KonTabbedPane extends JTabbedPane {
         // Initialize the ArrayList
         graphInterfaces = new ArrayList<JGraphXInterface>();
 
-        ListenableGraph<String, DefaultEdge> graph = CreateTestGraph();
+        DirectedGraph<String, DefaultEdge> graph = CreateTestGraph();
 
         /*
          * Adds a tab
          */
-        JGraphXInterface graphInterface = new JGraphXInterface(graph);
+        JGraphXInterface graphInterface = new JGraphXInterface<String,
+                DefaultEdge>(graph);
         graphInterfaces.add(graphInterface);
 
         // Adds the graph to the tab and adds the tab to the pane
@@ -54,7 +53,7 @@ public class KonTabbedPane extends JTabbedPane {
         /*
          * Adds a tab
          */
-        graphInterface = new JGraphXInterface(graph);
+        graphInterface = new JGraphXInterface<String, DefaultEdge>(graph);
         graphInterfaces.add(graphInterface);
 
         // Adds the graph to the tab and adds the tab to the pane
@@ -62,8 +61,9 @@ public class KonTabbedPane extends JTabbedPane {
         addTab("Second Tab", graphInterface.getPanel());
     }
 
-    private ListenableGraph<String, DefaultEdge> CreateTestGraph() {
-        ListenableGraph<String, DefaultEdge> g = new ListenableDirectedGraph<String, DefaultEdge>(
+    private DirectedGraph<String, DefaultEdge> CreateTestGraph(){
+        ListenableDirectedGraph<String, DefaultEdge> g = new
+                ListenableDirectedGraph<String, DefaultEdge>(
                 DefaultEdge.class);
 
         // add some sample data (graph manipulated via JGraphT)

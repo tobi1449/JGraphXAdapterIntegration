@@ -31,7 +31,7 @@ public class JGraphXAdapterTests {
      */
     @Test
     public final void genericTest() {
-        ListenableGraph<String, DefaultEdge> jGraphT 
+        ListenableGraph<String, DefaultEdge> jGraphT
          = new ListenableDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
 
         // fill graph with data
@@ -82,7 +82,7 @@ public class JGraphXAdapterTests {
      */
     @Test
     public final void listenerTest() {
-        ListenableGraph<String, String> jGraphT 
+        ListenableGraph<String, String> jGraphT
             = new ListenableDirectedGraph<String, String>(String.class);
         
         JGraphXAdapter<String, String> graphX 
@@ -156,7 +156,7 @@ public class JGraphXAdapterTests {
         final int maxVertices = 1000;
         final int maxEdges = 1000;
 
-        ListenableGraph<Integer, DefaultEdge> jGraphT 
+        ListenableGraph<Integer, DefaultEdge> jGraphT
             = new ListenableDirectedGraph<Integer, DefaultEdge>(
                         DefaultEdge.class);
 

@@ -1,21 +1,19 @@
 package de.konsteirama.tests;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-
-import org.jgrapht.ListenableGraph;
+import de.konsteirama.drawinglibrary.JGraphXInterface;
+import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.ListenableDirectedGraph;
 import org.junit.Assert;
 import org.junit.Test;
-
 import sun.awt.image.FileImageSource;
 import sun.awt.image.ImageFormatException;
 import sun.awt.image.JPEGImageDecoder;
 import sun.awt.image.PNGImageDecoder;
 
-import de.konsteirama.drawinglibrary.JGraphXInterface;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 /**
  * Test methods for the class JGraphXInterface.
@@ -30,7 +28,8 @@ public class JGraphXInterfaceTests {
     @Test
     public final void exportTest() {
         // create a new graph
-        ListenableGraph<String, DefaultEdge> jGraphT = new ListenableDirectedGraph<String, DefaultEdge>(
+        DirectedGraph<String, DefaultEdge> jGraphT = new
+                ListenableDirectedGraph<String, DefaultEdge>(
                 DefaultEdge.class);
 
         // fill graph with data
@@ -100,7 +99,8 @@ public class JGraphXInterfaceTests {
     @Test
     public final void testValidJPG() {
         // create a new graph
-        ListenableGraph<String, DefaultEdge> jGraphT = new ListenableDirectedGraph<String, DefaultEdge>(
+        DirectedGraph<String, DefaultEdge> jGraphT = new
+                ListenableDirectedGraph<String, DefaultEdge>(
                 DefaultEdge.class);
 
         // fill graph with data
@@ -137,7 +137,8 @@ public class JGraphXInterfaceTests {
     @Test
     public final void testValidPNG() {
         // create a new graph
-        ListenableGraph<String, DefaultEdge> jGraphT = new ListenableDirectedGraph<String, DefaultEdge>(
+        DirectedGraph<String, DefaultEdge> jGraphT = new
+                ListenableDirectedGraph<String, DefaultEdge>(
                 DefaultEdge.class);
 
         // fill graph with data

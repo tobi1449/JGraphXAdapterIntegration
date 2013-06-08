@@ -9,9 +9,8 @@ import com.mxgraph.util.mxUndoManager;
 import com.mxgraph.util.mxUndoableEdit;
 import com.mxgraph.view.mxGraph;
 import de.konsteirama.jgraphxadapter.JGraphXAdapter;
-import org.jgrapht.graph.DefaultEdge;
 
-import java.awt.*;
+import java.awt.Color;
 
 /**
  * This class implements the GraphManipulationInterface. It handles
@@ -20,12 +19,13 @@ import java.awt.*;
  *
  * @author Natascha
  */
-public class GraphManipulation implements GraphManipulationInterface {
+public class GraphManipulation<V,E> implements GraphManipulationInterface<V,
+        E> {
 
     /**
      * Adapter holding the current graph in JgraphX and JGraphT data structure.
      */
-    private JGraphXAdapter<String, DefaultEdge> graphAdapter;
+    private JGraphXAdapter<V,E> graphAdapter;
 
     /**
      * GraphComponent is the panel the graph is drawn in.
@@ -44,7 +44,7 @@ public class GraphManipulation implements GraphManipulationInterface {
      * @param graphComponent : a JGRaphX graphComponent, shown on the panel
      */
     public GraphManipulation(mxGraphComponent graphComponent,
-                             JGraphXAdapter<String, DefaultEdge> graphXAdapter) {
+                             JGraphXAdapter<V,E> graphXAdapter) {
         this.graphComponent = graphComponent;
         this.graphAdapter = graphXAdapter;
 
@@ -90,7 +90,7 @@ public class GraphManipulation implements GraphManipulationInterface {
      * @param node : a node of the graph
      */
     @Override
-    public void centerNode(Object node) {
+    public void centerNode(V node) {
 
     }
 
@@ -101,7 +101,7 @@ public class GraphManipulation implements GraphManipulationInterface {
      * @param color : a color-parameter
      */
     @Override
-    public void colorNode(Object node, Color color) {
+    public void colorNode(V node, Color color) {
 
     }
 
@@ -113,7 +113,7 @@ public class GraphManipulation implements GraphManipulationInterface {
      * @param node2 : node where the edge ends
      */
     @Override
-    public void markEdge(Object node1, Object node2) {
+    public void markEdge(V node1, V node2) {
 
     }
 
@@ -149,7 +149,7 @@ public class GraphManipulation implements GraphManipulationInterface {
      * @param node : a JGraphX-graph node object
      */
     @Override
-    public void removeNode(Object node) {
+    public void removeNode(V node) {
 
     }
 
@@ -161,7 +161,7 @@ public class GraphManipulation implements GraphManipulationInterface {
      * @param newName : the name the node is given
      */
     @Override
-    public void renameNode(Object node, String newName) {
+    public void renameNode(V node, String newName) {
 
     }
 

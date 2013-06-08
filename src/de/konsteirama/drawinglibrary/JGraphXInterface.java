@@ -2,7 +2,6 @@ package de.konsteirama.drawinglibrary;
 
 import com.mxgraph.canvas.mxICanvas;
 import com.mxgraph.canvas.mxSvgCanvas;
-import com.mxgraph.io.mxGraphMlCodec;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxCellRenderer;
@@ -11,65 +10,44 @@ import com.mxgraph.util.mxDomUtils;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.util.mxXmlUtils;
 import com.mxgraph.view.mxGraph;
-
 import de.konsteirama.jgraphxadapter.JGraphXAdapter;
-
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.fop.render.ps.EPSTranscoder;
+import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
-import org.jgrapht.ListenableGraph;
 import org.jgrapht.ext.GraphMLExporter;
-import org.jgrapht.graph.DefaultEdge;
-import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
+import javax.swing.JComponent;
 import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.StringWriter;
 import java.net.MalformedURLException;
 
-/**
- * Created with IntelliJ IDEA. User: Tobias Date: 30.05.13 Time: 17:59
- */
-public class JGraphXInterface implements DrawingLibraryInterface {
+public class JGraphXInterface<V, E> implements DrawingLibraryInterface {
 
     private mxGraphComponent graphComponent;
-
     private GraphManipulation graphManipulation;
-
     private GraphEvent graphEvent;
-
-    private JGraphXAdapter<String, DefaultEdge> graphAdapter;
+    private JGraphXAdapter<V, E> graphAdapter;
 
     /**
      * The constructor for JGraphXInterface.
-     * 
-     * @param g
-     *            JGraphT graph to draw
+     *
+     * @param g JGraphT graph to draw
      */
-    public JGraphXInterface(ListenableGraph<String, DefaultEdge> g) {
+    public JGraphXInterface(DirectedGraph<V, E> g) {
 
         // Convert to JGraphT-Graph
         graphAdapter = createNewAdapter(g);
@@ -87,10 +65,6 @@ public class JGraphXInterface implements DrawingLibraryInterface {
 
                 mxCell cell = (mxCell) getCellAt(event.getX(), event.getY());
 
-                if (!getBounds().contains(event.getPoint())) {
-                    return false;
-                }
-
                 return cell == null || cell.isEdge();
             }
         };
@@ -99,8 +73,8 @@ public class JGraphXInterface implements DrawingLibraryInterface {
         graphEvent = new GraphEvent(graphComponent);
 
         graphComponent.setWheelScrollingEnabled(false);
-        graphEvent
-                .registerMouseAdapter(new InternalMouseAdapter(graphComponent));
+        graphEvent.registerMouseAdapter(
+                new InternalMouseAdapter(graphComponent));
 
         graphManipulation.reapplyHierarchicalLayout();
 
@@ -111,14 +85,13 @@ public class JGraphXInterface implements DrawingLibraryInterface {
     /**
      * Creates a new JGraphXAdapter form the given Graph with edge selection and
      * movement disabled.
-     * 
-     * @param g
-     *            JGraphT graph
+     *
+     * @param g JGraphT graph
      * @return JGraphXAdapter
      */
-    private JGraphXAdapter<String, DefaultEdge> createNewAdapter(
-            ListenableGraph<String, DefaultEdge> g) {
-        return new JGraphXAdapter<String, DefaultEdge>(g) {
+    private JGraphXAdapter<V, E> createNewAdapter(
+            DirectedGraph<V, E> g) {
+        return new JGraphXAdapter<V, E>(g) {
             @Override
             public boolean isCellSelectable(Object cell) {
                 if (model.isEdge(cell)) {
@@ -158,11 +131,9 @@ public class JGraphXInterface implements DrawingLibraryInterface {
 
     /**
      * Exports the current graph.
-     * 
-     * @param format
-     *            The actual format (.ps, .svg, .graphml)
-     * @param path
-     *            The path where the graph will be exported to
+     *
+     * @param format The actual format (.ps, .svg, .graphml)
+     * @param path   The path where the graph will be exported to
      */
     @Override
     public final void export(final String format, final String path) {
@@ -182,9 +153,8 @@ public class JGraphXInterface implements DrawingLibraryInterface {
     /**
      * Exports the canvas as an eps under the given path, by converting an
      * existing .svg representation of it.
-     * 
-     * @param path
-     *            The path where the .eps file will be saved to
+     *
+     * @param path The path where the .eps file will be saved to
      */
     private void exportEPS(final String path) {
         // Creates the .svg file
@@ -232,9 +202,8 @@ public class JGraphXInterface implements DrawingLibraryInterface {
 
     /**
      * Exports the canvas as an svg under the given path.
-     * 
-     * @param path
-     *            The path where the .svg file will be saved to
+     *
+     * @param path The path where the .svg file will be saved to
      */
     private void exportSVG(final String path) {
         // Creates a new SVGCanvas and converts internal graph to svg
@@ -242,7 +211,7 @@ public class JGraphXInterface implements DrawingLibraryInterface {
                 (mxGraph) this.graphAdapter, null, 1, null,
                 new CanvasFactory() {
                     public mxICanvas createCanvas(final int width,
-                            final int height) {
+                                                  final int height) {
                         mxSvgCanvas canvas = new mxSvgCanvas(mxDomUtils
                                 .createSvgDocument(width, height));
                         canvas.setEmbedded(true);
@@ -262,14 +231,13 @@ public class JGraphXInterface implements DrawingLibraryInterface {
 
     /**
      * Exports the canvas as an GraphML under the given path.
-     * 
-     * @param path
-     *            The path where the .graphml file will be saved to
+     *
+     * @param path The path where the .graphml file will be saved to
      */
     private void exportGraphML(final String path) {
         // Creates a new GraphMLExporter and gets the JGraphT-graph
-        GraphMLExporter<String, DefaultEdge> exporter = new GraphMLExporter<String, DefaultEdge>();
-        Graph<String, DefaultEdge> g = this.graphAdapter.getGraph();
+        GraphMLExporter<V, E> exporter = new GraphMLExporter<V, E>();
+        Graph<V, E> g = this.graphAdapter.getGraph();
 
         /*
          * FileWriter could throw an IOException, GraphMLExporter
@@ -292,9 +260,8 @@ public class JGraphXInterface implements DrawingLibraryInterface {
 
     /**
      * Exports the canvas as an jpg under the given path.
-     * 
-     * @param path
-     *            The path where the .jpg file will be saved to
+     *
+     * @param path The path where the .jpg file will be saved to
      */
     private void exportJPG(final String path) {
         Dimension d = graphComponent.getGraphControl().getSize();
@@ -303,8 +270,8 @@ public class JGraphXInterface implements DrawingLibraryInterface {
         if (d.width == 0 || d.height == 0) {
             d.width = 1;
             d.height = 1;
-        }  
-            
+        }
+
         BufferedImage image = new BufferedImage(d.width, d.height,
                 BufferedImage.TYPE_INT_ARGB);
 
@@ -322,9 +289,8 @@ public class JGraphXInterface implements DrawingLibraryInterface {
 
     /**
      * Exports the canvas as an PNG under the given path.
-     * 
-     * @param path
-     *            The path where the .png file will be saved to
+     *
+     * @param path The path where the .png file will be saved to
      */
     private void exportPNG(final String path) {
         Dimension d = graphComponent.getGraphControl().getSize();
@@ -333,8 +299,8 @@ public class JGraphXInterface implements DrawingLibraryInterface {
         if (d.width == 0 || d.height == 0) {
             d.width = 1;
             d.height = 1;
-        }    
-        
+        }
+
         BufferedImage image = new BufferedImage(d.width, d.height,
                 BufferedImage.TYPE_INT_ARGB);
 
@@ -352,12 +318,12 @@ public class JGraphXInterface implements DrawingLibraryInterface {
 
     /**
      * Returns an Array of all currently implemented export formats.
-     * 
+     *
      * @return An array of String with the formats
      */
     @Override
     public final String[] getAvailableExportFormats() {
-        return new String[] { "ps", "svg", "graphml" };
+        return new String[]{"ps", "svg", "graphml"};
     }
 
     @Override
@@ -376,9 +342,9 @@ public class JGraphXInterface implements DrawingLibraryInterface {
     }
 
     @Override
-    public final void setGraph(final ListenableGraph<String, DefaultEdge> g) {
+    public void setGraph(DirectedGraph g) {
 
-        graphAdapter = new JGraphXAdapter<String, DefaultEdge>(g);
+        graphAdapter = createNewAdapter(g);
         graphComponent.setGraph(graphAdapter);
 
         applyCustomGraphSettings();

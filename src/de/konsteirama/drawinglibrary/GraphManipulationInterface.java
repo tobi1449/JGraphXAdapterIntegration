@@ -1,11 +1,11 @@
 package de.konsteirama.drawinglibrary;
 
-import java.awt.*;
+import java.awt.Color;
 
-public interface GraphManipulationInterface {
+public interface GraphManipulationInterface<V, E> {
     /**
-     * returns a boolean, denoting whether the related graph is able to perform a
-     * redo operation.
+     * returns a boolean, denoting whether the related graph is able to perform
+     * a redo operation.
      *
      * @return
      */
@@ -13,19 +13,19 @@ public interface GraphManipulationInterface {
 
     boolean canUndo();
 
-    void centerNode(Object node);
+    void centerNode(V node);
 
-    void colorNode(Object node, Color color);
+    void colorNode(V node, Color color);
 
-    void markEdge(Object node1, Object node2);
+    void markEdge(V node1, V node2);
 
     void reapplyHierarchicalLayout();
 
     void redo();
 
-    void removeNode(Object node);
+    void removeNode(V node);
 
-    void renameNode(Object node, String newName);
+    void renameNode(V node, String newName);
 
     void resetLayout();
 
