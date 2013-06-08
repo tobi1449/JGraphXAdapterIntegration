@@ -1,10 +1,8 @@
 package de.konsteirama.tests;
 
-import java.awt.BorderLayout;
 import java.io.File;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 import org.jgrapht.ListenableGraph;
 import org.jgrapht.graph.DefaultEdge;
@@ -12,9 +10,12 @@ import org.jgrapht.graph.ListenableDirectedGraph;
 import org.junit.Assert;
 import org.junit.Test;
 
+import sun.awt.image.FileImageSource;
+import sun.awt.image.ImageFormatException;
+import sun.awt.image.JPEGImageDecoder;
+import sun.awt.image.PNGImageDecoder;
+
 import de.konsteirama.drawinglibrary.JGraphXInterface;
-import de.konsteirama.isgci.KonTabbedPane;
-import de.konsteirama.isgci.KonToolBar;
 
 /**
  * Test methods for the class JGraphXInterface.
@@ -91,5 +92,79 @@ public class JGraphXInterfaceTests {
         Assert.assertEquals(true, file.exists());
 
         file.delete();
+    }
+    
+    /**
+     * Tests if an exported jpg is valid.
+     */
+    @Test
+    public final void testValidJPG() {
+        // create a new graph
+        ListenableGraph<String, DefaultEdge> jGraphT = new ListenableDirectedGraph<String, DefaultEdge>(
+                DefaultEdge.class);
+
+        // fill graph with data
+        String v1 = "Vertex 1";
+        String v2 = "Vertex 2";
+
+        jGraphT.addVertex(v1);
+        jGraphT.addVertex(v2);
+
+        jGraphT.addEdge(v1, v2);
+
+        // create the canvas
+        JGraphXInterface jgraphx = new JGraphXInterface(jGraphT); 
+        
+        jgraphx.export("jpg", "test.jpg");
+
+        File file = new File("test.jpg");
+        
+        try {
+            JPEGImageDecoder decoder = new JPEGImageDecoder(new FileImageSource("test.jpg") ,new FileInputStream("test.jpg"));
+            decoder.produceImage();
+        } catch (IOException e) {
+            Assert.fail("Unexpected IOException");
+        } catch (ImageFormatException e) {
+            Assert.fail("Unexpected ImageFormatException");
+        }
+
+        file.delete();   
+    }
+    
+    /**
+     * Tests if an exported png is valid.
+     */
+    @Test
+    public final void testValidPNG() {
+        // create a new graph
+        ListenableGraph<String, DefaultEdge> jGraphT = new ListenableDirectedGraph<String, DefaultEdge>(
+                DefaultEdge.class);
+
+        // fill graph with data
+        String v1 = "Vertex 1";
+        String v2 = "Vertex 2";
+
+        jGraphT.addVertex(v1);
+        jGraphT.addVertex(v2);
+
+        jGraphT.addEdge(v1, v2);
+
+        // create the canvas
+        JGraphXInterface jgraphx = new JGraphXInterface(jGraphT); 
+        
+        jgraphx.export("png", "test.png");
+
+        File file = new File("test.png");
+        
+        try {
+            PNGImageDecoder decoder = new PNGImageDecoder(new FileImageSource("test.png") ,new FileInputStream("test.png"));
+            decoder.produceImage();
+        } catch (IOException e) {
+            Assert.fail("Unexpected IOException");
+        } catch (ImageFormatException e) {
+            Assert.fail("Unexpected ImageFormatException");
+        }
+
+        file.delete();   
     }
 }
