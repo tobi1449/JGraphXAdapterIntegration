@@ -4,17 +4,25 @@ import com.mxgraph.swing.mxGraphComponent;
 
 import java.awt.event.MouseAdapter;
 
+/**
+ * Implementation of the GraphEventInterface.
+ */
 public class GraphEvent implements GraphEventInterface {
 
-    mxGraphComponent graphComponent;
+    private mxGraphComponent graphComponent;
 
-    public GraphEvent(mxGraphComponent graphComponent)
-    {
+    protected GraphEvent(mxGraphComponent graphComponent) {
         this.graphComponent = graphComponent;
     }
 
-	@Override
-	public void registerMouseAdapter(MouseAdapter adapter) {
-
-	}
+    /**
+     * Register a MouseAdapter to receive events from the graph panel.
+     *
+     * @param adapter MouseAdapter
+     */
+    @Override
+    public void registerMouseAdapter(MouseAdapter adapter) {
+        graphComponent.addMouseListener(adapter);
+        graphComponent.getGraphControl().addMouseListener(adapter);
+    }
 }

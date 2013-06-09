@@ -1,40 +1,37 @@
 package de.konsteirama.drawinglibrary;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Tobias
- * Date: 30.05.13
- * Time: 17:51
- */
-public interface GraphManipulationInterface {
-/**
- * returns a boolean, denoting whether the related graph is able to perform a 
- * redo operation.
- * @return
- */
-    public boolean canRedo();
+import java.awt.Color;
 
-    public boolean canUndo();
+public interface GraphManipulationInterface<V, E> {
+    /**
+     * returns a boolean, denoting whether the related graph is able to perform
+     * a redo operation.
+     *
+     * @return
+     */
+    boolean canRedo();
 
-    public void centerNode(Object node);
+    boolean canUndo();
 
-    public void colorNode(Object node, Object color);
+    void centerNode(V node);
 
-    public void markEdge(Object node1, Object node2);
+    void colorNode(V node, Color color);
 
-    public void reapplyHierarchicalLayout();
+    void markEdge(V node1, V node2);
 
-    public void redo();
+    void reapplyHierarchicalLayout();
 
-    public void removeNode(Object node);
+    void redo();
 
-    public void renameNode(Object node, String newName);
+    void removeNode(V node);
 
-    public void resetLayout();
+    void renameNode(V node, String newName);
 
-    public void undo();
+    void resetLayout();
 
-    public void zoom(double factor);
+    void undo();
 
-    public void zoom(double factor, double centerx, double centery);
+    void zoom(double factor);
+
+    void zoom(double factor, double centerx, double centery);
 }

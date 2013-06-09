@@ -1,14 +1,13 @@
 package de.konsteirama.drawinglibrary;
 
-import org.jgrapht.ListenableGraph;
-import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.DirectedGraph;
 
 import javax.swing.JComponent;
 
 /**
  * Interface for interaction with a graph drawing library.
  */
-public interface DrawingLibraryInterface {
+public interface DrawingLibraryInterface<V,E> {
 
     /**
      * Export the currently drawn graph to the path using the specified format.
@@ -45,6 +44,6 @@ public interface DrawingLibraryInterface {
      * Set a new graph which should be drawn.
      * @param g The new graph
      */
-    void setGraph(ListenableGraph<String, DefaultEdge> g);
+    void setGraph(DirectedGraph<V,E> g);
     
 }

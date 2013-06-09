@@ -9,7 +9,6 @@ import org.jgrapht.event.GraphListener;
 import org.jgrapht.event.GraphVertexChangeEvent;
 
 import com.mxgraph.model.mxCell;
-import com.mxgraph.model.mxGeometry;
 import com.mxgraph.view.mxGraph;
 
 /**
@@ -180,9 +179,6 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
             mxCell cell = (mxCell) insertVertex(defaultParent, null, vertex, 0,
                     0, 0, 0);
 
-            // Set geometry and size
-            cell.setGeometry(new mxGeometry());
-            cell.getGeometry().setRelative(true);
             updateCellSize(cell);
 
             // Save reference between vertex and cell
@@ -224,9 +220,6 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
             mxCell cell = (mxCell) insertEdge(defaultParent, null, edge,
                     sourceCell, targetCell);
 
-            // set geometry and size
-            cell.setGeometry(new mxGeometry());
-            cell.getGeometry().setRelative(true);
             updateCellSize(cell);
 
             // Save reference between vertex and cell

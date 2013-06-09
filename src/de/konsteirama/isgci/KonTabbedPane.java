@@ -1,21 +1,19 @@
 package de.konsteirama.isgci;
 
-import java.util.ArrayList;
-
-import javax.swing.JTabbedPane;
-
 import de.konsteirama.drawinglibrary.DrawingLibraryInterface;
 import de.konsteirama.drawinglibrary.JGraphXInterface;
-
-import org.jgrapht.ListenableGraph;
+import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.ListenableDirectedGraph;
+
+import javax.swing.JTabbedPane;
+import java.util.ArrayList;
 
 /**
  * Represents the TabbedPane, beneath the Toolbar.
  * 
  * @author highyield
- *
+ * 
  */
 public class KonTabbedPane extends JTabbedPane {
 
@@ -25,11 +23,11 @@ public class KonTabbedPane extends JTabbedPane {
     private static final long serialVersionUID = -6438063674744178339L;
 
     /**
-     * A ArrayList of all currently available JGraphXInterfaces
-     * connected via a Tab.
+     * A ArrayList of all currently available JGraphXInterfaces connected via a
+     * Tab.
      */
     private ArrayList<JGraphXInterface> graphInterfaces;
-    
+
     /**
      * The constructor of KonTabbedPane.
      * 
@@ -39,32 +37,33 @@ public class KonTabbedPane extends JTabbedPane {
         // Initialize the ArrayList
         graphInterfaces = new ArrayList<JGraphXInterface>();
 
-        ListenableGraph<String, DefaultEdge> graph = CreateTestGraph();
+        DirectedGraph<String, DefaultEdge> graph = CreateTestGraph();
 
         /*
          * Adds a tab
          */
-        JGraphXInterface graphInterface = new JGraphXInterface(graph);
+        JGraphXInterface graphInterface = new JGraphXInterface<String,
+                DefaultEdge>(graph);
         graphInterfaces.add(graphInterface);
-        
+
         // Adds the graph to the tab and adds the tab to the pane
         add(graphInterface.getPanel());
         addTab("First Tab", graphInterface.getPanel());
-        
+
         /*
          * Adds a tab
          */
-        graphInterface = new JGraphXInterface(graph);
+        graphInterface = new JGraphXInterface<String, DefaultEdge>(graph);
         graphInterfaces.add(graphInterface);
-        
+
         // Adds the graph to the tab and adds the tab to the pane
         add(graphInterface.getPanel());
-        addTab("Second Tab", graphInterface.getPanel());  
+        addTab("Second Tab", graphInterface.getPanel());
     }
 
-    private ListenableGraph<String, DefaultEdge> CreateTestGraph()
-    {
-        ListenableGraph<String, DefaultEdge> g = new ListenableDirectedGraph<String, DefaultEdge>(
+    private DirectedGraph<String, DefaultEdge> CreateTestGraph(){
+        ListenableDirectedGraph<String, DefaultEdge> g = new
+                ListenableDirectedGraph<String, DefaultEdge>(
                 DefaultEdge.class);
 
         // add some sample data (graph manipulated via JGraphT)
@@ -80,16 +79,16 @@ public class KonTabbedPane extends JTabbedPane {
 
         return g;
     }
-    
+
     /**
-     * Returns the current DrawingLibraryInterface 
-     * referenced by the current active tab.
+     * Returns the current DrawingLibraryInterface referenced by the current
+     * active tab.
      * 
      * @return an instance of DrawingLibraryInterface
      */
     public final DrawingLibraryInterface getActiveGraphDrawing() {
         int selectedIndex = this.getSelectedIndex();
-                
+
         return this.graphInterfaces.get(selectedIndex);
     }
 }
