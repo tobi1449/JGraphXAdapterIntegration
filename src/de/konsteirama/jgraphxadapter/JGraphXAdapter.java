@@ -301,3 +301,5 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
 
     }
 }
+
+//End JGraphXAdapter.java
