@@ -5,26 +5,35 @@ import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxEvent;
 import com.mxgraph.util.mxEventObject;
 import com.mxgraph.util.mxEventSource.mxIEventListener;
+import com.mxgraph.util.mxResources;
 import com.mxgraph.util.mxUndoManager;
 import com.mxgraph.util.mxUndoableEdit;
 import com.mxgraph.view.mxGraph;
+import com.mxgraph.view.mxGraphView;
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
+
 import de.konsteirama.jgraphxadapter.JGraphXAdapter;
 import java.awt.Color;
+
+import org.jgrapht.Graph;
+
 
 /**
  * This class implements the GraphManipulationInterface. It handles
  * manipulations that are done on the JGraphX-graph that is viewed on the panel.
  * Manipulation will be done by the user.
- *
  * @author Natascha
+ *
+ * @param <V> : vertices of the graph
+ * @param <E> : edges of the graph
  */
-public class GraphManipulation<V,E> implements GraphManipulationInterface<V,
-        E> {
+public class GraphManipulation<V, E> 
+             implements GraphManipulationInterface<V, E> {
 
     /**
      * Adapter holding the current graph in JgraphX and JGraphT data structure.
      */
-    private JGraphXAdapter<V,E> graphAdapter;
+    private JGraphXAdapter<V, E> graphAdapter;
 
     /**
      * GraphComponent is the panel the graph is drawn in.
@@ -32,7 +41,7 @@ public class GraphManipulation<V,E> implements GraphManipulationInterface<V,
     private mxGraphComponent graphComponent;
 
     /**
-     * manages the undo-operations on the calling graph
+     * Manages the undo-operations on the calling graph.
      */
     private mxUndoManager undoManager;
 
@@ -41,9 +50,11 @@ public class GraphManipulation<V,E> implements GraphManipulationInterface<V,
      * class that operates on a given graphComponent.
      *
      * @param graphComponent : a JGRaphX graphComponent, shown on the panel
+     * 
+     * @param graphXAdapter : 
      */
     public GraphManipulation(mxGraphComponent graphComponent,
-                             JGraphXAdapter<V,E> graphXAdapter) {
+                             JGraphXAdapter<V, E> graphXAdapter) {
         this.graphComponent = graphComponent;
         this.graphAdapter = graphXAdapter;
 
@@ -67,7 +78,7 @@ public class GraphManipulation<V,E> implements GraphManipulationInterface<V,
      * Returns a boolean denoting whether the calling graph is able to perform a
      * redo-operation.
      *
-     * @return if falase then there was no undoable action perormed earlier
+     * @return if falase then there was no undoable action performed earlier
      */
     @Override
     public boolean canRedo() {
@@ -77,6 +88,8 @@ public class GraphManipulation<V,E> implements GraphManipulationInterface<V,
     /**
      * Returns a boolean denoting whether the calling graph is able to perform
      * an undo-operation.
+     * 
+     * @return if true then there is an action that can be undone
      */
     @Override
     public boolean canUndo() {
@@ -90,6 +103,13 @@ public class GraphManipulation<V,E> implements GraphManipulationInterface<V,
      */
     @Override
     public void centerNode(V node) {
+        mxGraph graph = graphComponent.getGraph();
+        
+       graph.getModel().beginUpdate();
+       
+       graphComponent.scrollCellToVisible(node, true);
+       
+       graph.getModel().endUpdate();
 
     }
 
@@ -149,6 +169,17 @@ public class GraphManipulation<V,E> implements GraphManipulationInterface<V,
      */
     @Override
     public void removeNode(V node) {
+        
+        mxGraph graph = graphComponent.getGraph();
+        
+        Object[] cells = new Object[1];
+        cells[0] = node;
+        
+        graph.getModel().beginUpdate();
+
+        graph.removeCells(cells, true);
+
+        graph.getModel().endUpdate();
 
     }
 
@@ -161,7 +192,7 @@ public class GraphManipulation<V,E> implements GraphManipulationInterface<V,
      */
     @Override
     public void renameNode(V node, String newName) {
-
+        
     }
 
     /**
@@ -170,7 +201,11 @@ public class GraphManipulation<V,E> implements GraphManipulationInterface<V,
      */
     @Override
     public void resetLayout() {
-
+        
+        Graph<V, E> graphT = graphAdapter.getGraph();
+        
+        JGraphXAdapter<V, E> newGraphAdapter = new JGraphXAdapter<V, E>(graphT);
+        
     }
 
     /**
@@ -191,6 +226,22 @@ public class GraphManipulation<V,E> implements GraphManipulationInterface<V,
      */
     @Override
     public void zoom(double factor) {
+        // could be that we have to use the Betrag of factor
+        if (factor != graphComponent.getZoomFactor()) {
+            graphComponent.setZoomFactor(factor);
+        }
+        
+        if (!graphComponent.isCenterZoom()) {
+          graphComponent.setCenterZoom(true); 
+        }
+        
+        //factor isn't a good measure ask if it could be changed
+        if (factor < 0) {
+        graphComponent.zoomIn(); 
+        }
+        else {
+        graphComponent.zoomOut();
+        }
 
     }
 
