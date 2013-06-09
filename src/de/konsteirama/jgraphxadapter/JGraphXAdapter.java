@@ -5,41 +5,32 @@ import java.util.HashMap;
 
 import org.jgrapht.Graph;
 import org.jgrapht.ListenableGraph;
-import org.jgrapht.VertexFactory;
 import org.jgrapht.event.GraphEdgeChangeEvent;
 import org.jgrapht.event.GraphListener;
 import org.jgrapht.event.GraphVertexChangeEvent;
 
 import com.mxgraph.model.mxCell;
-import com.mxgraph.model.mxICell;
-import com.mxgraph.util.mxEvent;
-import com.mxgraph.util.mxEventObject;
-import com.mxgraph.util.mxEventSource.mxIEventListener;
 import com.mxgraph.view.mxGraph;
 
 /**
- * Adapter to draw a JGraphT graph with the JGraphX drawing library. Implements
- * a GraphListener to react to changes in the JGraphT-graph if a listenablegraph
- * is available. This class also has an optional (toggleable) JGraphX listener,
- * to send changes on the JGraphX-graph to the JGraphT graph if you so desire.
+ * Adapter to draw a JGraphT graph with the JGraphX drawing library.
  * 
- * Known Bugs: If this class is used with String-Edges, please note that there
- * is a bug with the method JgraphT.addEdge(vertex1, vertex2); The edge will be
- * created with an empty String "" as value and saved (in JGraphT as well as in
- * this class), which results in the edge not saving correctly. So, if you're
- * using Strings as Edgeclass please use the method addEdge(vertex1, vertex2,
- * "Edgename"); with a unique edgename.
+ * Known Bugs: If this class is used with String-Edges, please note 
+ * that there is a bug with the method JgraphT.addEdge(vertex1, vertex2); 
+ * The edge will be created with an empty String "" as value and 
+ * saved (in JGraphT as well as in this class), which results in the 
+ * edge not saving correctly. So, if you're using Strings as Edgeclass 
+ * please use the method addEdge(vertex1, vertex2, "Edgename"); 
+ * with a unique edgename.
  * 
  * @author Original: JeanYves Tinevez
  * @author Improvements: KonSteiRaMa
- * 
- * @param <V>
- *            Vertex
- * @param <E>
- *            Edge
+ *
+ * @param <V> Vertex
+ * @param <E> Edge
  */
 public class JGraphXAdapter<V, E> extends mxGraph implements
-        GraphListener<V, E>, mxIEventListener {
+        GraphListener<V, E> {
 
     /**
      * The graph to be drawn. Has vertices "V" and edges "E".
@@ -70,26 +61,11 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
      */
     private HashMap<mxICell, E> cellToEdgeMap = new HashMap<mxICell, E>();
 
-    /**
-     * Provides a way to add JGraphT vertices if the MxListener is active.
-     */
-    private VertexFactory<V> vertexFactory;
     
-    /**
-     * Saves whether or not the mxIEventListener is currently attached
-     * to this object. 
-     */
-    private boolean isMxListenerActivated;
     
-    /**
-     * Disables jgrapht graph change events from being handled by this
-     * GraphListener implementation while the jgraphx listener is
-     * adding/removing nodes/edges to prevent an infinite loop.
-     */
-    private boolean isMxListenerInProgress;
     
     //                        Constructors
-    // ----------------------------------------------------------------
+    // ================================================================
     
     /**
      * Constructs and draws a new ListenableGraph. If the graph changes
@@ -129,16 +105,13 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
         insertJGraphT(graph);
         
         setAutoSizeCells(true);
-        
-        // TODO delete
-        activateMxListener();
     }
 
 
     
    
     //                            Getter
-    // ----------------------------------------------------------------
+    // ================================================================
     
     /**
      * Returns Hashmap which maps the vertices onto their 
@@ -174,29 +147,18 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
         return cellToVertexMap;
     }
     
-    /**
-     * Returns the JGraphT graph upon which the graph is visualized.
-     * @return {@link #graphT}
-     */
-    public Graph<V, E> getGraph() {
-        return graphT;
-    }
+    
 
     //                     GraphListener Interface
-    // ----------------------------------------------------------------
+    // ================================================================
     
     @Override
     public void vertexAdded(GraphVertexChangeEvent<V> e) {
-        if (!isMxListenerInProgress) {
-            addJGraphTVertex(e.getVertex());
-        }
+        addJGraphTVertex(e.getVertex());
     }
 
     @Override
     public void vertexRemoved(GraphVertexChangeEvent<V> e) {
-        if (isMxListenerInProgress) {
-            return;
-        }
         
         mxICell cell = vertexToCellMap.remove(e.getVertex());
         removeCells(new Object[] { cell });
@@ -227,221 +189,20 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
 
     @Override
     public void edgeAdded(GraphEdgeChangeEvent<V, E> e) {
-        if (!isMxListenerInProgress) {
-            addJGraphTEdge(e.getEdge());
-        }
+        addJGraphTEdge(e.getEdge());
     }
 
     @Override
     public void edgeRemoved(GraphEdgeChangeEvent<V, E> e) {
-        if (!isMxListenerInProgress) {
-            removeEdge(e.getEdge());
-        }
+        removeEdge(e.getEdge());
     }
     
     
-    
-    //                        mxIEventListener
-    // ----------------------------------------------------------------
-    
-    /**
-     * Sets the vertexfactory to the parameter. This is needed if
-     * the mxListener is active and needs to create a new vertex.
-     * 
-     * @param factory
-     *          The factory that is used to create new JGraphT vertices.
-     */
-    public void setVertexFactory(VertexFactory<V> factory) {
-        vertexFactory = factory;
-    }
-    
-    
-    /**
-     *  Toggles whether the changes on the JGraphX graph are linked to the
-     *  jgrapht graph or not.
-     *  Needs a {@link #vertexFactory} that is set via {@link setVertexFactory}!
-     *  
-     *  @see {@link #activateMxListener()}
-     *  @see {@link #deactivateMxListener()}
-     */
-    public void toggleMxListener() {
-        if (isMxListenerActivated) {
-            deactivateMxListener();
-        } else {
-            activateMxListener();
-        }
-    }
-    
-    /**
-     * Links the changes of the JGraphX graph to the JGraphT graph, e.g. if
-     * a vertex is deleted in the JGraphX graph, the vertex will be deleted
-     * on the jgrapht graph (if available). If an edge is added and one or
-     * both vertices are not already in the JgraphT graph, they will be added
-     * to it.
-     * If the listener is already active this method will do nothing.
-     * Needs a {@link #vertexFactory} that is set via {@link setVertexFactory}!
-     * 
-     * @see {@link #deactivateMxListener()}
-     * @see {@link #toggleMxListener()}
-     */
-    public void activateMxListener() {
-        if (isMxListenerActivated) {
-            return;
-        }
-        
-        addListener(mxEvent.ADD, this);
-        addListener(mxEvent.ADD_CELLS, this);
-        // connect_cell seems to be the same as cell_connected
-        //addListener(mxEvent.CELL_CONNECTED, this);
-        addListener(mxEvent.CELLS_ADDED, this);
-        addListener(mxEvent.CELLS_REMOVED, this);
-        addListener(mxEvent.CHANGE, this);
-        addListener(mxEvent.CLEAR, this);
-        addListener(mxEvent.CONNECT, this);
-        addListener(mxEvent.CONNECT_CELL, this);
-        addListener(mxEvent.FLIP_EDGE, this);
-        addListener(mxEvent.INSERT, this);
-        addListener(mxEvent.REDO, this);
-        addListener(mxEvent.REMOVE_CELLS, this);
-        addListener(mxEvent.REMOVE_CELLS_FROM_PARENT, this);
-        addListener(mxEvent.UNDO, this);
-    }
-    
-    /**
-     * Removes the JGraphX listener, so changes will no longer be linked to
-     * the JGraphT graph. This does not affect the changes from a JGraphT to 
-     * the JGraphX graph. 
-     * If the listener wasn't activated before, this method will do nothing.
-     * 
-     * @see {@link #activateMxListener()}
-     * @see {@link #toggleMxListener()}
-     */
-    public void deactivateMxListener() {
-        if (!isMxListenerActivated) {
-            return;
-        }
-        
-        removeListener(this);
-    }
-    
-    @Override
-    public void invoke(Object sender, mxEventObject evt) {
-        isMxListenerInProgress = true;
-        
-        String eventName = evt.getName();
-        
-        
-        if (eventName.equals(mxEvent.ADD)) {
-            // TODO
-        } else if (eventName.equals(mxEvent.ADD_CELLS)) {
-            // TODO            
-        } else if (eventName.equals(mxEvent.CELLS_ADDED)) {
-            // TODO
-        } else if (eventName.equals(mxEvent.CELLS_REMOVED)) {
-            // TODO
-        } else if (eventName.equals(mxEvent.CHANGE)) {
-            // TODO
-        } else if (eventName.equals(mxEvent.CLEAR)) {
-            // TODO
-        } else if (eventName.equals(mxEvent.CONNECT)) {
-            // TODO
-        } else if (eventName.equals(mxEvent.CONNECT_CELL)) {
-            Object prop = evt.getProperty("edge");
-            
-            if (prop != null && prop instanceof mxCell) {
-                mxCell changedCell = (mxCell) prop;
-                changeCell(changedCell);
-            }
-            
-        } else if (eventName.equals(mxEvent.FLIP_EDGE)) {
-            // TODO
-        } else if (eventName.equals(mxEvent.INSERT)) {
-            // TODO
-        } else if (eventName.equals(mxEvent.REDO)) {
-            // TODO
-        } else if (eventName.equals(mxEvent.REMOVE_CELLS)) {
-            // TODO
-        } else if (eventName.equals(mxEvent.REMOVE_CELLS_FROM_PARENT)) {
-            // TODO
-        } else if (eventName.equals(mxEvent.UNDO)) {
-            // TODO
-        }
-        
-        isMxListenerInProgress = false;
-    }
     
    
 
     //                     Private Methods
     // ----------------------------------------------------------------
-    
-    /**
-     * Updates a cell that was changed in an event by adding/removing
-     * the corresponding vertices and edges from the hashmaps and jgrapht graph.
-     * 
-     * @param changedCell
-     *          The cell that was updated
-     */
-    private void changeCell(mxCell changedCell) {
-        
-        mxICell target = changedCell.getTarget();
-        mxICell source = changedCell.getSource();
-        
-        // Cell was "created"
-        if (!cellToEdgeMap.containsKey(changedCell)
-             && target != null && source != null)  {
-            
-            // if the target is not in the grapht yet, add it
-            if (!cellToVertexMap.containsKey(target)) {
-                
-                V vertex = vertexFactory.createVertex();
-                cellToVertexMap.put(target, vertex);
-                vertexToCellMap.put(vertex, target);
-            }
-            
-            // if the source is not in the grapht yet, add it
-            if (!cellToVertexMap.containsKey(source)) {
-                
-                V vertex = vertexFactory.createVertex();
-                cellToVertexMap.put(source, vertex);
-                vertexToCellMap.put(vertex, source);
-            }
-            
-            // add the edge to grapht
-            V tSource = cellToVertexMap.get(source);
-            V tTarget = cellToVertexMap.get(target);
-            
-            graphT.addEdge(tSource, tTarget);
-            
-            
-            // cell only has one vertex or was deleted
-        } else if (cellToEdgeMap.containsKey(changedCell) 
-                && (target == null || source == null)) {
-            
-            // delete the edge from grapht
-            E edge = cellToEdgeMap.get(changedCell);
-            
-            cellToEdgeMap.remove(changedCell);
-            edgeToCellMap.remove(edge);
-            
-            graphT.removeEdge(edge);
-            
-            
-            // cell was dragged from one vertex to another
-        } else if (cellToEdgeMap.containsKey(changedCell) 
-                && target != null && source != null) {
-            
-            // remove "old" edge, add "new" edge to change vertices
-            E edge = cellToEdgeMap.get(changedCell);
-            
-            V tsource = graphT.getEdgeSource(edge);
-            V ttarget = graphT.getEdgeTarget(edge);
-            
-            graphT.removeEdge(edge);
-            graphT.addEdge(tsource, ttarget, edge);
-        }
-                 
-    }
     
     /**
      * Removes a jgrapht edge and its visual representation from this graph
