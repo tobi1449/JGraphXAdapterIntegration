@@ -28,8 +28,8 @@ public class JGraphXInterfaceTests {
     @Test
     public final void exportTest() {
         // create a new graph
-        DirectedGraph<String, DefaultEdge> jGraphT = new
-                ListenableDirectedGraph<String, DefaultEdge>(
+        DirectedGraph<String, DefaultEdge> jGraphT =
+                new ListenableDirectedGraph<String, DefaultEdge>(
                 DefaultEdge.class);
 
         // fill graph with data
@@ -50,7 +50,9 @@ public class JGraphXInterfaceTests {
         jGraphT.addEdge(v3, v4);
 
         // create the canvas
-        JGraphXInterface jgraphx = new JGraphXInterface(jGraphT);  
+        JGraphXInterface<String, DefaultEdge> jgraphx =
+                new JGraphXInterface<String, DefaultEdge>(
+                jGraphT);
 
         // Test EPS
         jgraphx.export("eps", "test.eps");
@@ -67,7 +69,7 @@ public class JGraphXInterfaceTests {
         Assert.assertEquals(true, file.exists());
 
         file.delete();
-        
+
         // Test JPG
         jgraphx.export("jpg", "test.jpg");
 
@@ -75,7 +77,7 @@ public class JGraphXInterfaceTests {
         Assert.assertEquals(true, file.exists());
 
         file.delete();
-        
+
         // Test PNG
         jgraphx.export("png", "test.png");
 
@@ -92,15 +94,15 @@ public class JGraphXInterfaceTests {
 
         file.delete();
     }
-    
+
     /**
      * Tests if an exported jpg is valid.
      */
     @Test
     public final void testValidJPG() {
         // create a new graph
-        DirectedGraph<String, DefaultEdge> jGraphT = new
-                ListenableDirectedGraph<String, DefaultEdge>(
+        DirectedGraph<String, DefaultEdge> jGraphT = 
+                new ListenableDirectedGraph<String, DefaultEdge>(
                 DefaultEdge.class);
 
         // fill graph with data
@@ -113,14 +115,18 @@ public class JGraphXInterfaceTests {
         jGraphT.addEdge(v1, v2);
 
         // create the canvas
-        JGraphXInterface jgraphx = new JGraphXInterface(jGraphT); 
-        
+        JGraphXInterface<String, DefaultEdge> jgraphx = 
+                new JGraphXInterface<String, DefaultEdge>(
+                jGraphT);
+
         jgraphx.export("jpg", "test.jpg");
 
         File file = new File("test.jpg");
-        
+
         try {
-            JPEGImageDecoder decoder = new JPEGImageDecoder(new FileImageSource("test.jpg") ,new FileInputStream("test.jpg"));
+            JPEGImageDecoder decoder = new JPEGImageDecoder(
+                    new FileImageSource("test.jpg"), new FileInputStream(
+                            "test.jpg"));
             decoder.produceImage();
         } catch (IOException e) {
             Assert.fail("Unexpected IOException");
@@ -128,17 +134,17 @@ public class JGraphXInterfaceTests {
             Assert.fail("Unexpected ImageFormatException");
         }
 
-        file.delete();   
+        file.delete();
     }
-    
+
     /**
      * Tests if an exported png is valid.
      */
     @Test
     public final void testValidPNG() {
         // create a new graph
-        DirectedGraph<String, DefaultEdge> jGraphT = new
-                ListenableDirectedGraph<String, DefaultEdge>(
+        DirectedGraph<String, DefaultEdge> jGraphT = 
+                new ListenableDirectedGraph<String, DefaultEdge>(
                 DefaultEdge.class);
 
         // fill graph with data
@@ -151,14 +157,17 @@ public class JGraphXInterfaceTests {
         jGraphT.addEdge(v1, v2);
 
         // create the canvas
-        JGraphXInterface jgraphx = new JGraphXInterface(jGraphT); 
-        
+        JGraphXInterface<String, DefaultEdge> jgraphx =
+                new JGraphXInterface<String, DefaultEdge>(
+                jGraphT);
+
         jgraphx.export("png", "test.png");
 
         File file = new File("test.png");
-        
+
         try {
-            PNGImageDecoder decoder = new PNGImageDecoder(new FileImageSource("test.png") ,new FileInputStream("test.png"));
+            PNGImageDecoder decoder = new PNGImageDecoder(new FileImageSource(
+                    "test.png"), new FileInputStream("test.png"));
             decoder.produceImage();
         } catch (IOException e) {
             Assert.fail("Unexpected IOException");
@@ -166,6 +175,6 @@ public class JGraphXInterfaceTests {
             Assert.fail("Unexpected ImageFormatException");
         }
 
-        file.delete();   
+        file.delete();
     }
 }

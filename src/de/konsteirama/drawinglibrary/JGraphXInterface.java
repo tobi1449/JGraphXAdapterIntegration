@@ -35,11 +35,22 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 
-public class JGraphXInterface<V, E> implements DrawingLibraryInterface {
+/**
+ * The actual implementation of a DrawingLibraryInterface,
+ * which is used to manipulate the canvas etc.
+ *
+ * @param <V> Vertices
+ * @param <E> Edges
+ */
+public class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
 
+    /** */
     private mxGraphComponent graphComponent;
-    private GraphManipulation graphManipulation;
+    /** */
+    private GraphManipulation<V, E> graphManipulation;
+    /** */
     private GraphEvent graphEvent;
+    /** */
     private JGraphXAdapter<V, E> graphAdapter;
 
     /**
@@ -69,7 +80,8 @@ public class JGraphXInterface<V, E> implements DrawingLibraryInterface {
             }
         };
 
-        graphManipulation = new GraphManipulation(graphComponent, graphAdapter);
+        graphManipulation = 
+                new GraphManipulation<V, E>(graphComponent, graphAdapter);
         graphEvent = new GraphEvent(graphComponent);
 
         graphComponent.setWheelScrollingEnabled(false);
@@ -164,10 +176,15 @@ public class JGraphXInterface<V, E> implements DrawingLibraryInterface {
         // Create the transcoder and set some settings
         EPSTranscoder transcoder = new EPSTranscoder();
 
+        // Add Transcoding hints
+        float MAX_HEIGHT_WIDTH = 16384f;
+        
         transcoder.addTranscodingHint(
                 EPSTranscoder.KEY_PIXEL_UNIT_TO_MILLIMETER, 1.0f);
-        transcoder.addTranscodingHint(EPSTranscoder.KEY_MAX_HEIGHT, 16384f);
-        transcoder.addTranscodingHint(EPSTranscoder.KEY_MAX_WIDTH, 16384f);
+        transcoder.addTranscodingHint(EPSTranscoder.KEY_MAX_HEIGHT,
+                MAX_HEIGHT_WIDTH);
+        transcoder.addTranscodingHint(EPSTranscoder.KEY_MAX_WIDTH,
+                MAX_HEIGHT_WIDTH);
 
         String svgURI;
         try {
@@ -332,7 +349,8 @@ public class JGraphXInterface<V, E> implements DrawingLibraryInterface {
     }
 
     @Override
-    public final GraphManipulationInterface getGraphManipulationInterface() {
+    public final GraphManipulationInterface<V, E>
+            getGraphManipulationInterface() {
         return graphManipulation;
     }
 
@@ -342,7 +360,7 @@ public class JGraphXInterface<V, E> implements DrawingLibraryInterface {
     }
 
     @Override
-    public void setGraph(DirectedGraph g) {
+    public void setGraph(DirectedGraph<V, E> g) {
 
         graphAdapter = createNewAdapter(g);
         graphComponent.setGraph(graphAdapter);

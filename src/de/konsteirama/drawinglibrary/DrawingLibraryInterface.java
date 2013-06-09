@@ -6,8 +6,11 @@ import javax.swing.JComponent;
 
 /**
  * Interface for interaction with a graph drawing library.
+ *
+ * @param <V> Vertices
+ * @param <E> Edges
  */
-public interface DrawingLibraryInterface<V,E> {
+public interface DrawingLibraryInterface<V, E> {
 
     /**
      * Export the currently drawn graph to the path using the specified format.
@@ -32,7 +35,7 @@ public interface DrawingLibraryInterface<V,E> {
      * Returns the interface for manipulating the shown graph.
      * @return An instance of the GraphManipulationInterface
      */
-    GraphManipulationInterface getGraphManipulationInterface();
+    GraphManipulationInterface<V, E> getGraphManipulationInterface();
 
     /**
      * Returns the panel in which the graph is drawn.
@@ -44,6 +47,6 @@ public interface DrawingLibraryInterface<V,E> {
      * Set a new graph which should be drawn.
      * @param g The new graph
      */
-    void setGraph(DirectedGraph<V,E> g);
+    void setGraph(DirectedGraph<V, E> g);
     
 }
