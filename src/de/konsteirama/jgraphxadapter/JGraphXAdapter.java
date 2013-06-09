@@ -13,18 +13,21 @@ import com.mxgraph.model.mxICell;
 import com.mxgraph.view.mxGraph;
 
 /**
- * Adapter to draw a JGraphT graph with the JGraphX drawing library.
+ * <P> Adapter to draw a JGraphT graph with the JGraphX drawing library. </P>
+ * <P> This adapter will not convert JGraphX to JGraphT - this should be 
+ * handled in another class entirely. </P>
  * 
- * Known Bugs: If this class is used with String-Edges, please note 
+ * <P> Known Bugs: If this class is used with String-Edges, please note 
  * that there is a bug with the method JgraphT.addEdge(vertex1, vertex2); 
  * The edge will be created with an empty String "" as value and 
  * saved (in JGraphT as well as in this class), which results in the 
  * edge not saving correctly. So, if you're using Strings as Edgeclass 
  * please use the method addEdge(vertex1, vertex2, "Edgename"); 
- * with a unique edgename.
+ * with a unique edgename. </P>
  * 
  * @author Original: JeanYves Tinevez
- * @author Improvements: KonSteiRaMa
+ *
+ * @since 09 July, 2013
  *
  * @param <V> Vertex
  * @param <E> Edge
@@ -32,6 +35,8 @@ import com.mxgraph.view.mxGraph;
 public class JGraphXAdapter<V, E> extends mxGraph implements
         GraphListener<V, E> {
 
+    //~ Instance fields --------------------------------------------------------
+    
     /**
      * The graph to be drawn. Has vertices "V" and edges "E".
      */
@@ -64,8 +69,7 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
     
     
     
-    //                        Constructors
-    // ================================================================
+  //~ Constructors -------------------------------------------------------------
     
     /**
      * Constructs and draws a new ListenableGraph. If the graph changes
@@ -108,10 +112,7 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
     }
 
 
-    
-   
-    //                            Getter
-    // ================================================================
+  //~ Getters ------------------------------------------------------------------
     
     /**
      * Returns Hashmap which maps the vertices onto their 
@@ -148,9 +149,7 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
     }
     
     
-
-    //                     GraphListener Interface
-    // ================================================================
+  //~ GraphListener Interface --------------------------------------------------
     
     @Override
     public void vertexAdded(GraphVertexChangeEvent<V> e) {
@@ -199,10 +198,7 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
     
     
     
-   
-
-    //                     Private Methods
-    // ----------------------------------------------------------------
+  //~ Private Methods ----------------------------------------------------------
     
     /**
      * Removes a jgrapht edge and its visual representation from this graph
