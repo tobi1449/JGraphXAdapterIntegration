@@ -235,22 +235,15 @@ public class GraphManipulation<V, E>
      */
     @Override
     public void zoom(double factor) {
-        // could be that we have to use the Betrag of factor
-        if (factor != graphComponent.getZoomFactor()) {
-            double absFactor = Math.abs(factor);
-            graphComponent.setZoomFactor(absFactor);
-        }
-        
         if (!graphComponent.isCenterZoom()) {
           graphComponent.setCenterZoom(true); 
         }
         
-        //factor isn't a good measure ask if it could be changed
+        // factor isn't a good measure ask if it could be changed
         if (factor < 0) {
-        graphComponent.zoomIn(); 
-        }
-        else {
-        graphComponent.zoomOut();
+            graphComponent.zoomIn(); 
+        } else {
+            graphComponent.zoomOut();
         }
 
     }
