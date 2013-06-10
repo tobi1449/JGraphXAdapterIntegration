@@ -1,35 +1,31 @@
 package de.konsteirama.drawinglibrary;
 
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
-import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxEvent;
 import com.mxgraph.util.mxEventObject;
 import com.mxgraph.util.mxEventSource.mxIEventListener;
-import com.mxgraph.util.mxResources;
 import com.mxgraph.util.mxUndoManager;
 import com.mxgraph.util.mxUndoableEdit;
 import com.mxgraph.view.mxGraph;
-import com.mxgraph.view.mxGraphView;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
-
 import de.konsteirama.jgraphxadapter.JGraphXAdapter;
-import java.awt.Color;
-
 import org.jgrapht.Graph;
+
+import java.awt.Color;
+import java.awt.Point;
 
 
 /**
  * This class implements the GraphManipulationInterface. It handles
  * manipulations that are done on the JGraphX-graph that is viewed on the panel.
  * Manipulation will be done by the user.
- * @author Natascha
  *
  * @param <V> : vertices of the graph
  * @param <E> : edges of the graph
+ * @author Natascha
  */
-public class GraphManipulation<V, E> 
-             implements GraphManipulationInterface<V, E> {
+public class GraphManipulation<V, E>
+        implements GraphManipulationInterface<V, E> {
 
     /**
      * Adapter holding the current graph in JgraphX and JGraphT data structure.
@@ -51,8 +47,7 @@ public class GraphManipulation<V, E>
      * class that operates on a given graphComponent.
      *
      * @param graphComponent : a JGRaphX graphComponent, shown on the panel
-     * 
-     * @param graphXAdapter : 
+     * @param graphXAdapter  :
      */
     public GraphManipulation(mxGraphComponent graphComponent,
                              JGraphXAdapter<V, E> graphXAdapter) {
@@ -89,7 +84,7 @@ public class GraphManipulation<V, E>
     /**
      * Returns a boolean denoting whether the calling graph is able to perform
      * an undo-operation.
-     * 
+     *
      * @return if true then there is an action that can be undone
      */
     @Override
@@ -105,12 +100,12 @@ public class GraphManipulation<V, E>
     @Override
     public void centerNode(V node) {
         mxGraph graph = graphComponent.getGraph();
-        
-       graph.getModel().beginUpdate();
-       
-       graphComponent.scrollCellToVisible(node, true);
-       
-       graph.getModel().endUpdate();
+
+        graph.getModel().beginUpdate();
+
+        graphComponent.scrollCellToVisible(node, true);
+
+        graph.getModel().endUpdate();
 
     }
 
@@ -122,7 +117,13 @@ public class GraphManipulation<V, E>
      */
     @Override
     public void colorNode(V node, Color color) {
+        //Wäre vll geschickter das mit einem Array an Nodes zu machen
+        //Und wir sollten noch für alle Aktionen überprüfen ob wir das mit
+        // begin/endupdate machen sollten
 
+        //mxGraph graph = graphComponent.getGraph();
+        //graph.setCellStyles(mxConstants.STYLE_FILLCOLOR,
+        //        mxUtils.hexString(newColor), nodes);
     }
 
     /**
@@ -135,6 +136,9 @@ public class GraphManipulation<V, E>
     @Override
     public void markEdge(V node1, V node2) {
 
+        //mxGraph graph = graphComponent.getGraph();
+        //graph.setCellStyles(mxConstants.STYLE_STROKECOLOR,
+        //y        mxUtils.hexString(newColor), nodes);
     }
 
     /**
@@ -168,12 +172,12 @@ public class GraphManipulation<V, E>
      * @param node : a JGraphX-graph node object
      */
     @Override
-    public void removeNode(V node) {  
+    public void removeNode(V node) {
         mxGraph graph = graphComponent.getGraph();
-        
+
         Object[] cells = new Object[1];
         cells[0] = node;
-        
+
         graph.getModel().beginUpdate();
 
         graph.removeCells(cells, true);
@@ -191,13 +195,13 @@ public class GraphManipulation<V, E>
     @Override
     public void renameNode(V node, String newName) {
         mxGraph graph = graphComponent.getGraph();
-        
+
         String nodeName = newName;
-        
+
         graph.getModel().beginUpdate();
-        
+
         graphComponent.labelChanged(node, nodeName, null);
-        
+
         graph.getModel().endUpdate();
     }
 
@@ -208,8 +212,8 @@ public class GraphManipulation<V, E>
     @Override
     public void resetLayout() {
         Graph<V, E> graphT = graphAdapter.getGraph();
-        
-        JGraphXAdapter<V, E> newGraphAdapter = new JGraphXAdapter<V, E>(graphT);   
+
+        JGraphXAdapter<V, E> newGraphAdapter = new JGraphXAdapter<V, E>(graphT);
     }
 
     /**
@@ -230,12 +234,12 @@ public class GraphManipulation<V, E>
     @Override
     public void zoom(double factor) {
         if (!graphComponent.isCenterZoom()) {
-          graphComponent.setCenterZoom(true); 
+            graphComponent.setCenterZoom(true);
         }
-        
+
         // factor isn't a good measure ask if it could be changed
         if (factor < 0) {
-            graphComponent.zoomIn(); 
+            graphComponent.zoomIn();
         } else {
             graphComponent.zoomOut();
         }
@@ -244,12 +248,11 @@ public class GraphManipulation<V, E>
     /**
      * Zooms the panel to the given factor, centering on the given coordinates.
      *
-     * @param factor  : a double that gives the zoom-factor
-     * @param centerx : x-coordinate of the point zoom centers on
-     * @param centery : y-coordinate of the point zoom centers on
+     * @param factor : a double that gives the zoom-factor
+     * @param center : the point zoom centers on
      */
     @Override
-    public void zoom(double factor, double centerx, double centery) {
+    public void zoom(double factor, Point center) {
 
     }
 }

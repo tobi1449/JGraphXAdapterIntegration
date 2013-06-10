@@ -1,6 +1,7 @@
 package de.konsteirama.drawinglibrary;
 
 import java.awt.Color;
+import java.awt.Point;
 
 public interface GraphManipulationInterface<V, E> {
     /**
@@ -33,5 +34,5 @@ public interface GraphManipulationInterface<V, E> {
 
     void zoom(double factor);
 
-    void zoom(double factor, double centerx, double centery);
+    void zoom(double factor, Point center);
 }

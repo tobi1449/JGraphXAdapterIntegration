@@ -9,6 +9,7 @@ import com.mxgraph.util.mxCellRenderer.CanvasFactory;
 import com.mxgraph.util.mxDomUtils;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.util.mxXmlUtils;
+import com.mxgraph.view.mxCellState;
 import com.mxgraph.view.mxGraph;
 import de.konsteirama.jgraphxadapter.JGraphXAdapter;
 import org.apache.batik.transcoder.TranscoderException;
@@ -21,8 +22,8 @@ import org.jgrapht.ext.GraphMLExporter;
 import org.xml.sax.SAXException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JComponent;
 import javax.xml.transform.TransformerConfigurationException;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
@@ -78,9 +79,24 @@ public class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
 
                 return cell == null || cell.isEdge();
             }
+
+            @Override
+            public Component[] createComponents(mxCellState state) {
+                if (getGraph().getModel().isVertex(state.getCell())) {
+                    String label = state.getLabel();
+                    // get rid of these nasty [] around all labels
+                    label = label.replace("[", "");
+                    label = label.replace("]", "");
+
+                    return new Component[]{new LatexLabel(label)};
+                }
+                return null;
+            }
+
+            ;
         };
 
-        graphManipulation = 
+        graphManipulation =
                 new GraphManipulation<V, E>(graphComponent, graphAdapter);
         graphEvent = new GraphEvent(graphComponent);
 
@@ -178,7 +194,7 @@ public class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
 
         // Add Transcoding hints
         float MAX_HEIGHT_WIDTH = 16384f;
-        
+
         transcoder.addTranscodingHint(
                 EPSTranscoder.KEY_PIXEL_UNIT_TO_MILLIMETER, 1.0f);
         transcoder.addTranscodingHint(EPSTranscoder.KEY_MAX_HEIGHT,
@@ -350,7 +366,7 @@ public class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
 
     @Override
     public final GraphManipulationInterface<V, E>
-            getGraphManipulationInterface() {
+    getGraphManipulationInterface() {
         return graphManipulation;
     }
 
