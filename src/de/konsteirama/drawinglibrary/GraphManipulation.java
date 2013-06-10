@@ -150,7 +150,6 @@ public class GraphManipulation<V, E>
         layout.execute(graph.getDefaultParent());
 
         graph.getModel().endUpdate();
-
     }
 
     /**
@@ -169,8 +168,7 @@ public class GraphManipulation<V, E>
      * @param node : a JGraphX-graph node object
      */
     @Override
-    public void removeNode(V node) {
-        
+    public void removeNode(V node) {  
         mxGraph graph = graphComponent.getGraph();
         
         Object[] cells = new Object[1];
@@ -181,7 +179,6 @@ public class GraphManipulation<V, E>
         graph.removeCells(cells, true);
 
         graph.getModel().endUpdate();
-
     }
 
     /**
@@ -210,11 +207,9 @@ public class GraphManipulation<V, E>
      */
     @Override
     public void resetLayout() {
-        
         Graph<V, E> graphT = graphAdapter.getGraph();
         
-        JGraphXAdapter<V, E> newGraphAdapter = new JGraphXAdapter<V, E>(graphT);
-        
+        JGraphXAdapter<V, E> newGraphAdapter = new JGraphXAdapter<V, E>(graphT);   
     }
 
     /**
@@ -223,7 +218,6 @@ public class GraphManipulation<V, E>
     @Override
     public void undo() {
         undoManager.undo();
-
     }
 
     /**
@@ -245,7 +239,6 @@ public class GraphManipulation<V, E>
         } else {
             graphComponent.zoomOut();
         }
-
     }
 
     /**
