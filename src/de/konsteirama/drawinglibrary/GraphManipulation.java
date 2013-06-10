@@ -79,7 +79,7 @@ public class GraphManipulation<V, E>
      * Returns a boolean denoting whether the calling graph is able to perform a
      * redo-operation.
      *
-     * @return if falase then there was no undoable action performed earlier
+     * @return if false then there was no undoable action performed earlier
      */
     @Override
     public boolean canRedo() {
