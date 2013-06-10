@@ -197,7 +197,11 @@ public class GraphManipulation<V, E>
         
         String nodeName = newName;
         
-        graphComponent.labelChanged(node, nodeName, evt);
+        graph.getModel().beginUpdate();
+        
+        graphComponent.labelChanged(node, nodeName, null);
+        
+        graph.getModel().endUpdate();
     }
 
     /**
