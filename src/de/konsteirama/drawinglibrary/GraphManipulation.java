@@ -1,6 +1,7 @@
 package de.konsteirama.drawinglibrary;
 
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
+import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxEvent;
 import com.mxgraph.util.mxEventObject;
@@ -192,7 +193,11 @@ public class GraphManipulation<V, E>
      */
     @Override
     public void renameNode(V node, String newName) {
+        mxGraph graph = graphComponent.getGraph();
         
+        String nodeName = newName;
+        
+        graphComponent.labelChanged(node, nodeName, evt);
     }
 
     /**
