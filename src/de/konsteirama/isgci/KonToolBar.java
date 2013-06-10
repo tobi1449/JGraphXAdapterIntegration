@@ -18,7 +18,7 @@ public class KonToolBar extends JToolBar implements ActionListener {
     /**
      * A Button used to export the current Graph.
      */
-    private JButton button;
+    private JButton renameButton, zoomInButton, zoomOutButton;
     private MainPanel panel;
 
     public KonToolBar(MainPanel panel) {
@@ -29,21 +29,33 @@ public class KonToolBar extends JToolBar implements ActionListener {
         setRollover(true);
 
         // add some buttons
-        button = new JButton("Do Stuff");
-        button.addActionListener(this);
+        renameButton = new JButton("Rename Node (if selected)");
+        renameButton.addActionListener(this);
+        
+        zoomInButton = new JButton("+");
+        zoomInButton.addActionListener(this);
+        
+        zoomOutButton = new JButton("-");
+        zoomOutButton.addActionListener(this);
 
-        this.add(button);
+        this.add(zoomInButton);
+        this.add(zoomOutButton);
+        this.add(renameButton);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(button)) {
+        if (e.getSource().equals(renameButton)) {
             Object oCell = panel.getTabPane().getActiveGraphDrawing().getPanel().getGraph().getSelectionCell();
             
             if (oCell != null) {
                 mxCell cell = (mxCell) panel.getTabPane().getActiveGraphDrawing().getPanel().getGraph().getSelectionCell();
-                panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().renameNode(cell, "biuB");
+                panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().renameNode(cell, "Rename");
             }
+        } else if (e.getSource().equals(zoomInButton)) {
+            panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().zoom(-1);
+        } else if (e.getSource().equals(zoomOutButton)) {
+            panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().zoom(1);
         }
     }
 }
