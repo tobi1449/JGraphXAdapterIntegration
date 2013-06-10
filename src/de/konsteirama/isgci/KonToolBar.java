@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 
+import com.mxgraph.model.mxCell;
+
 public class KonToolBar extends JToolBar implements ActionListener {
 
     /**
@@ -16,7 +18,7 @@ public class KonToolBar extends JToolBar implements ActionListener {
     /**
      * A Button used to export the current Graph.
      */
-    private JButton exportButton;
+    private JButton button;
     private MainPanel panel;
 
     public KonToolBar(MainPanel panel) {
@@ -27,29 +29,21 @@ public class KonToolBar extends JToolBar implements ActionListener {
         setRollover(true);
 
         // add some buttons
-        exportButton = new JButton("Export");
-        exportButton.addActionListener(this);
+        button = new JButton("Do Stuff");
+        button.addActionListener(this);
 
-        this.add(exportButton);
+        this.add(button);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(exportButton)) {
-            this.panel.getTabPane().getActiveGraphDrawing()
-                    .export("jpg", "test.jpg");
-
-            String[] formats = this.panel.getTabPane().getActiveGraphDrawing()
-                    .getAvailableExportFormats();
-
-            System.out.println("Export Button pressed !");
-
-            System.out.print("Formats: ");
-            for (int i = 0; i < formats.length; i++) {
-                System.out.print(formats[i] + " ");
-            }
+        if (e.getSource().equals(button)) {
+            Object oCell = panel.getTabPane().getActiveGraphDrawing().getPanel().getGraph().getSelectionCell();
             
-            System.out.println();
+            if (oCell != null) {
+                mxCell cell = (mxCell) panel.getTabPane().getActiveGraphDrawing().getPanel().getGraph().getSelectionCell();
+                panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().renameNode(cell, "biuB");
+            }
         }
     }
 }

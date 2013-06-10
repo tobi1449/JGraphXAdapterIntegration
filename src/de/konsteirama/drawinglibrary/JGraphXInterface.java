@@ -355,7 +355,7 @@ public class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
     }
 
     @Override
-    public final JComponent getPanel() {
+    public final mxGraphComponent getPanel() {
         return graphComponent;
     }
 

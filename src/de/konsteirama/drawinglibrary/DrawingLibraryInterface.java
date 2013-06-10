@@ -2,6 +2,8 @@ package de.konsteirama.drawinglibrary;
 
 import org.jgrapht.DirectedGraph;
 
+import com.mxgraph.swing.mxGraphComponent;
+
 import javax.swing.JComponent;
 
 /**
@@ -39,9 +41,9 @@ public interface DrawingLibraryInterface<V, E> {
 
     /**
      * Returns the panel in which the graph is drawn.
-     * @return A JComponent which draws the specified graphs
+     * @return A mxGraphComponent which draws the specified graphs
      */
-    JComponent getPanel();
+    mxGraphComponent getPanel();
 
     /**
      * Set a new graph which should be drawn.
