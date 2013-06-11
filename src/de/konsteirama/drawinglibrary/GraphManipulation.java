@@ -14,6 +14,8 @@ import org.jgrapht.Graph;
 import java.awt.Color;
 import java.awt.Point;
 
+import javax.swing.JScrollBar;
+
 
 /**
  * This class implements the GraphManipulationInterface. It handles
@@ -253,6 +255,18 @@ public class GraphManipulation<V, E>
      */
     @Override
     public void zoom(double factor, Point center) {
-
+        zoom(factor);
+        
+        // Get the horizontal and vertical Scrollbar
+        JScrollBar horScrollBar = graphComponent.getHorizontalScrollBar(); 
+        JScrollBar vertScrollBar = graphComponent.getVerticalScrollBar();  
+        
+        // Get the relative position of the mousepointer in x and y
+        double relPosX = center.getX() / (double) graphComponent.getWidth();
+        double relPosY = center.getY() / (double) graphComponent.getHeight();
+        
+        // Some to the relative x and y coordinates
+        horScrollBar.setValue((int) (relPosX * horScrollBar.getMaximum()));
+        vertScrollBar.setValue((int) (relPosY * vertScrollBar.getMaximum()));
     }
 }

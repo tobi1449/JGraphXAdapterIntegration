@@ -1,5 +1,6 @@
 package de.konsteirama.isgci;
 
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -72,9 +73,11 @@ public class KonToolBar extends JToolBar implements ActionListener {
                 panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().centerNode(cell);
             }
         } else if (e.getSource().equals(zoomInButton)) {
-            panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().zoom(-1);
+            panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().zoom(-1, new Point(50 , 50));
+            //panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().zoom(-1);
         } else if (e.getSource().equals(zoomOutButton)) {
-            panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().zoom(1);
+            panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().zoom(1, new Point(50, 50));
+            //panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().zoom(1);
         } else if (e.getSource().equals(redoButton)) {
             panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().redo();
         } else if (e.getSource().equals(undoButton)) {

@@ -88,7 +88,7 @@ public class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
                     label = label.replace("[", "");
                     label = label.replace("]", "");
 
-                    return new Component[]{new LatexLabel(label)};
+                    return new Component[]{};//new LatexLabel(label)};
                 }
                 return null;
             }
