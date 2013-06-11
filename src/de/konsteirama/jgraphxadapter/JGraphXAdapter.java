@@ -9,20 +9,7 @@ import org.jgrapht.event.GraphEdgeChangeEvent;
 import org.jgrapht.event.GraphListener;
 import org.jgrapht.event.GraphVertexChangeEvent;
 
-<<<<<<< HEAD
 import com.mxgraph.model.mxCell;
-import com.mxgraph.view.mxGraph;
-
-/**
- * Adapter to draw a JGraphT graph with the JGraphX drawing library.
- * 
- * @author JeanYves Tinevez
- * 
- * @param <V>
- *            Vertex
- * @param <E>
- *            Edge
-=======
 import com.mxgraph.model.mxICell;
 import com.mxgraph.view.mxGraph;
 
@@ -45,16 +32,12 @@ import com.mxgraph.view.mxGraph;
  *
  * @param <V> Vertex
  * @param <E> Edge
->>>>>>> upstream/master
  */
 public class JGraphXAdapter<V, E> extends mxGraph implements
         GraphListener<V, E> {
 
-<<<<<<< HEAD
-=======
     //~ Instance fields --------------------------------------------------------
-    
->>>>>>> upstream/master
+
     /**
      * The graph to be drawn. Has vertices "V" and edges "E".
      */
@@ -90,42 +73,21 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
   //~ Constructors -------------------------------------------------------------
     
     /**
-<<<<<<< HEAD
-     * Constructs and draws a new ListenableGraph.
-     * 
-     * @param graphT
-     *            casted to graph
-=======
      * Constructs and draws a new ListenableGraph. If the graph changes
      * through as ListenableGraph, the JGraphXAdapter will automatically
      * add/remove the new edge/vertex as it implements the GraphListener
      * interface.
      * Throws a IllegalArgumentException if the graph is null.
      * @param graph casted to graph
->>>>>>> upstream/master
      */
     public JGraphXAdapter(ListenableGraph<V, E> graph) {
         // call normal constructor with graph class
-<<<<<<< HEAD
-        this((Graph<V, E>) graphT);
-
-        graphT.addGraphListener(this);
-=======
         this((Graph<V, E>) graph);
         
         graph.addGraphListener(this);
->>>>>>> upstream/master
     }
 
     /**
-<<<<<<< HEAD
-     * Constructs and draws a new graph.
-     * 
-     * @param graphT
-     *            is a graph
-     * @throws IllegalArgumentException
-     *             if {@link #graphT} is null
-=======
      * Constructs and draws a new mxGraph from a jGraphT graph. Changes on 
      * the jgraphT graph will not edit this mxGraph any further; use the 
      * constructor with the ListenableGraph parameter instead or use this 
@@ -133,7 +95,6 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
      * 
      * Throws an IllegalArgumentException if the parameter is null.
      * @param graph is a graph
->>>>>>> upstream/master
      */
     public JGraphXAdapter(Graph<V, E> graph) {
         super();
@@ -146,13 +107,8 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
         }
 
         // generate the drawing
-<<<<<<< HEAD
-        insertJGraphT(graphT);
-
-=======
         insertJGraphT(graph);
         
->>>>>>> upstream/master
         setAutoSizeCells(true);
     }
 
@@ -160,13 +116,8 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
   //~ Getters ------------------------------------------------------------------
     
     /**
-<<<<<<< HEAD
-     * Returns Hashmap which maps the vertices onto their visualization mxCells.
-     * 
-=======
      * Returns Hashmap which maps the vertices onto their 
      * visualization mxICells.
->>>>>>> upstream/master
      * @return {@link #vertexToCellMap}
      */
     public HashMap<V, mxICell> getVertexToCellMap() {
@@ -174,12 +125,7 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
     }
 
     /**
-<<<<<<< HEAD
-     * Returns Hashmap which maps the edges onto their visualization mxCells.
-     * 
-=======
      * Returns Hashmap which maps the edges onto their visualization mxICells.
->>>>>>> upstream/master
      * @return {@link #edgeToCellMap}
      */
     public HashMap<E, mxICell> getEdgeToCellMap() {
@@ -187,12 +133,7 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
     }
 
     /**
-<<<<<<< HEAD
-     * Returns Hashmap which maps the visualization mxCells onto their edges.
-     * 
-=======
      * Returns Hashmap which maps the visualization mxICells onto their edges.
->>>>>>> upstream/master
      * @return {@link #cellToEdgeMap}
      */
     public HashMap<mxICell, E> getCellToEdgeMap() {
@@ -200,13 +141,8 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
     }
 
     /**
-<<<<<<< HEAD
-     * Returns Hashmap which maps the visualization mxCells onto their vertices.
-     * 
-=======
      * Returns Hashmap which maps the visualization mxICells 
      * onto their vertices.
->>>>>>> upstream/master
      * @return {@link #cellToVertexMap}
      */
     public HashMap<mxICell, V> getCellToVertexMap() {
@@ -294,16 +230,10 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
 
         try {
             // create a new JGraphX vertex at position 0
-<<<<<<< HEAD
-            mxCell cell = (mxCell) insertVertex(defaultParent, null, vertex, 0,
-                    0, 0, 0);
-
-=======
             mxICell cell = (mxICell) insertVertex(defaultParent, null, vertex, 
                                                 0, 0, 0, 0);
             
             // update cell size so cell isn't "above" graph
->>>>>>> upstream/master
             updateCellSize(cell);
 
             // Save reference between vertex and cell
@@ -336,17 +266,6 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
                     .containsKey(targetVertex))) {
                 return;
             }
-<<<<<<< HEAD
-
-            // get mxCells
-            Object sourceCell = vertexToCellMap.get(sourceVertex);
-            Object targetCell = vertexToCellMap.get(targetVertex);
-
-            // add edge between mxcells
-            mxCell cell = (mxCell) insertEdge(defaultParent, null, edge,
-                    sourceCell, targetCell);
-
-=======
             
             // get mxICells
             Object sourceCell = vertexToCellMap.get(sourceVertex);
@@ -357,7 +276,6 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
                     edge, sourceCell, targetCell);
             
             // update cell size so cell isn't "above" graph
->>>>>>> upstream/master
             updateCellSize(cell);
 
             // Save reference between vertex and cell
@@ -372,20 +290,11 @@ public class JGraphXAdapter<V, E> extends mxGraph implements
     /**
      * Draws a given graph with all its vertices and edges.
      * 
-<<<<<<< HEAD
-     * @param graphT
-     *            the graph to be added to the existing graph.
-     */
-    private void insertJGraphT(Graph<V, E> graphT) {
-
-        for (V vertex : graphT.vertexSet()) {
-=======
      * @param graph the graph to be added to the existing graph.
      */
     private void insertJGraphT(Graph<V, E> graph) {
         
         for (V vertex : graph.vertexSet()) {
->>>>>>> upstream/master
             addJGraphTVertex(vertex);
         }
 
