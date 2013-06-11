@@ -26,8 +26,7 @@ import javax.swing.JScrollBar;
  * @param <E> : edges of the graph
  * @author Natascha
  */
-public class GraphManipulation<V, E>
-        implements GraphManipulationInterface<V, E> {
+class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
 
     /**
      * Adapter holding the current graph in JgraphX and JGraphT data structure.

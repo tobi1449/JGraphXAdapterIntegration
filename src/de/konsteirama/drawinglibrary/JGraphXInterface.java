@@ -43,7 +43,7 @@ import java.net.MalformedURLException;
  * @param <V> Vertices
  * @param <E> Edges
  */
-public class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
+class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
 
     /** */
     private mxGraphComponent graphComponent;
@@ -59,7 +59,7 @@ public class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
      *
      * @param g JGraphT graph to draw
      */
-    public JGraphXInterface(DirectedGraph<V, E> g) {
+    public JGraphXInterface(Graph<V, E> g) {
 
         // Convert to JGraphT-Graph
         graphAdapter = createNewAdapter(g);
@@ -115,8 +115,7 @@ public class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
      * @param g JGraphT graph
      * @return JGraphXAdapter
      */
-    private JGraphXAdapter<V, E> createNewAdapter(
-            DirectedGraph<V, E> g) {
+    private JGraphXAdapter<V, E> createNewAdapter(Graph<V, E> g) {
         return new JGraphXAdapter<V, E>(g) {
             @Override
             public boolean isCellSelectable(Object cell) {
@@ -374,7 +373,7 @@ public class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
     }
 
     @Override
-    public void setGraph(DirectedGraph<V, E> g) {
+    public void setGraph(Graph<V, E> g) {
 
         graphAdapter = createNewAdapter(g);
         graphComponent.setGraph(graphAdapter);

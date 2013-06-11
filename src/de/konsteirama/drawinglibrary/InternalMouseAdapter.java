@@ -9,7 +9,7 @@ import java.awt.event.MouseWheelEvent;
 /**
  * Internal mouse adapter for double and right click support.
  */
-public class InternalMouseAdapter extends MouseAdapter {
+class InternalMouseAdapter extends MouseAdapter {
 
     private mxGraphComponent graphComponent;
 

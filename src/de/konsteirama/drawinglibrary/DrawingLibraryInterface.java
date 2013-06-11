@@ -1,10 +1,8 @@
 package de.konsteirama.drawinglibrary;
 
-import org.jgrapht.DirectedGraph;
+import org.jgrapht.Graph;
 
 import com.mxgraph.swing.mxGraphComponent;
-
-import javax.swing.JComponent;
 
 /**
  * Interface for interaction with a graph drawing library.
@@ -49,6 +47,6 @@ public interface DrawingLibraryInterface<V, E> {
      * Set a new graph which should be drawn.
      * @param g The new graph
      */
-    void setGraph(DirectedGraph<V, E> g);
+    void setGraph(Graph<V, E> g);
     
 }

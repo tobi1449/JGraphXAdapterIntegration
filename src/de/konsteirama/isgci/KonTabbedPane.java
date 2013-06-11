@@ -1,7 +1,7 @@
 package de.konsteirama.isgci;
 
+import de.konsteirama.drawinglibrary.DrawingLibraryFactory;
 import de.konsteirama.drawinglibrary.DrawingLibraryInterface;
-import de.konsteirama.drawinglibrary.JGraphXInterface;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.ListenableDirectedGraph;
@@ -26,7 +26,7 @@ public class KonTabbedPane extends JTabbedPane {
      * A ArrayList of all currently available JGraphXInterfaces connected via a
      * Tab.
      */
-    private ArrayList<JGraphXInterface> graphInterfaces;
+    private ArrayList<DrawingLibraryInterface> graphInterfaces;
 
     /**
      * The constructor of KonTabbedPane.
@@ -35,15 +35,16 @@ public class KonTabbedPane extends JTabbedPane {
      */
     public KonTabbedPane() {
         // Initialize the ArrayList
-        graphInterfaces = new ArrayList<JGraphXInterface>();
+        graphInterfaces = new ArrayList<DrawingLibraryInterface>();
 
         DirectedGraph<String, DefaultEdge> graph = CreateTestGraph();
 
         /*
          * Adds a tab
          */
-        JGraphXInterface graphInterface = new JGraphXInterface<String,
-                DefaultEdge>(graph);
+        DrawingLibraryInterface<?, ?> graphInterface =  
+                DrawingLibraryFactory.createNewInterface(graph);
+        
         graphInterfaces.add(graphInterface);
 
         // Adds the graph to the tab and adds the tab to the pane
@@ -53,7 +54,7 @@ public class KonTabbedPane extends JTabbedPane {
         /*
          * Adds a tab
          */
-        graphInterface = new JGraphXInterface<String, DefaultEdge>(graph);
+        graphInterface = DrawingLibraryFactory.createNewInterface(graph);
         graphInterfaces.add(graphInterface);
 
         // Adds the graph to the tab and adds the tab to the pane

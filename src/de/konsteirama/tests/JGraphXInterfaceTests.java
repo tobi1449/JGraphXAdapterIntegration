@@ -1,11 +1,13 @@
 package de.konsteirama.tests;
 
-import de.konsteirama.drawinglibrary.JGraphXInterface;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.ListenableDirectedGraph;
 import org.junit.Assert;
 import org.junit.Test;
+
+import de.konsteirama.drawinglibrary.DrawingLibraryFactory;
+import de.konsteirama.drawinglibrary.DrawingLibraryInterface;
 import sun.awt.image.FileImageSource;
 import sun.awt.image.ImageFormatException;
 import sun.awt.image.JPEGImageDecoder;
@@ -50,9 +52,8 @@ public class JGraphXInterfaceTests {
         jGraphT.addEdge(v3, v4);
 
         // create the canvas
-        JGraphXInterface<String, DefaultEdge> jgraphx =
-                new JGraphXInterface<String, DefaultEdge>(
-                jGraphT);
+        DrawingLibraryInterface<?, ?> jgraphx =  
+                DrawingLibraryFactory.createNewInterface(jGraphT);
 
         // Test EPS
         jgraphx.export("eps", "test.eps");
@@ -115,9 +116,8 @@ public class JGraphXInterfaceTests {
         jGraphT.addEdge(v1, v2);
 
         // create the canvas
-        JGraphXInterface<String, DefaultEdge> jgraphx = 
-                new JGraphXInterface<String, DefaultEdge>(
-                jGraphT);
+        DrawingLibraryInterface<?, ?> jgraphx =  
+                DrawingLibraryFactory.createNewInterface(jGraphT);
 
         jgraphx.export("jpg", "test.jpg");
 
@@ -157,9 +157,8 @@ public class JGraphXInterfaceTests {
         jGraphT.addEdge(v1, v2);
 
         // create the canvas
-        JGraphXInterface<String, DefaultEdge> jgraphx =
-                new JGraphXInterface<String, DefaultEdge>(
-                jGraphT);
+        DrawingLibraryInterface<?, ?> jgraphx =  
+                DrawingLibraryFactory.createNewInterface(jGraphT);
 
         jgraphx.export("png", "test.png");
 

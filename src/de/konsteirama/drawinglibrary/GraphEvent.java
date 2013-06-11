@@ -7,7 +7,7 @@ import java.awt.event.MouseAdapter;
 /**
  * Implementation of the GraphEventInterface.
  */
-public class GraphEvent implements GraphEventInterface {
+class GraphEvent implements GraphEventInterface {
 
     private mxGraphComponent graphComponent;
 
