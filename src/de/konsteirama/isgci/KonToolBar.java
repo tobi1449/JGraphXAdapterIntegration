@@ -62,22 +62,20 @@ public class KonToolBar extends JToolBar implements ActionListener {
             Object oCell = panel.getTabPane().getActiveGraphDrawing().getPanel().getGraph().getSelectionCell();
             
             if (oCell != null) {
-                mxCell cell = (mxCell) panel.getTabPane().getActiveGraphDrawing().getPanel().getGraph().getSelectionCell();
-                panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().renameNode(cell, "Rename");
+                mxCell cell = (mxCell) oCell;
+                panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().renameNode(cell, cell.getValue() + "x");
             }
         } else if (e.getSource().equals(centerButton)) {
             Object oCell = panel.getTabPane().getActiveGraphDrawing().getPanel().getGraph().getSelectionCell();
             
             if (oCell != null) {
-                mxCell cell = (mxCell) panel.getTabPane().getActiveGraphDrawing().getPanel().getGraph().getSelectionCell();
+                mxCell cell = (mxCell) oCell;
                 panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().centerNode(cell);
             }
         } else if (e.getSource().equals(zoomInButton)) {
-            panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().zoom(-1, new Point(50 , 50));
-            //panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().zoom(-1);
+            panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().zoom(-1);
         } else if (e.getSource().equals(zoomOutButton)) {
-            panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().zoom(1, new Point(50, 50));
-            //panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().zoom(1);
+            panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().zoom(1);
         } else if (e.getSource().equals(redoButton)) {
             panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().redo();
         } else if (e.getSource().equals(undoButton)) {

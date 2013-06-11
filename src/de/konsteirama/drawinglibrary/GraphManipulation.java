@@ -180,10 +180,16 @@ public class GraphManipulation<V, E>
         Object[] cells = new Object[1];
         cells[0] = node;
 
+        // Adds all edges connected to the node
+        cells = graph.addAllEdges(cells);
+        
         graph.getModel().beginUpdate();
-
-        graph.removeCells(cells, true);
-
+        
+        // Deletes every cell
+        for (Object object : cells) {
+            graph.getModel().remove(object);
+        }
+        
         graph.getModel().endUpdate();
     }
 
@@ -265,7 +271,7 @@ public class GraphManipulation<V, E>
         double relPosX = center.getX() / (double) graphComponent.getWidth();
         double relPosY = center.getY() / (double) graphComponent.getHeight();
         
-        // Some to the relative x and y coordinates
+        // Zoom to the relative x and y coordinates
         horScrollBar.setValue((int) (relPosX * horScrollBar.getMaximum()));
         vertScrollBar.setValue((int) (relPosY * vertScrollBar.getMaximum()));
     }
