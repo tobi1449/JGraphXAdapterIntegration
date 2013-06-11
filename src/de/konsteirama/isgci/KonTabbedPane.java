@@ -12,7 +12,6 @@ import java.util.ArrayList;
 /**
  * Represents the TabbedPane, beneath the Toolbar.
  * 
- * @author highyield
  * 
  */
 public class KonTabbedPane extends JTabbedPane {
