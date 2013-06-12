@@ -2,12 +2,16 @@ package de.konsteirama.drawinglibrary;
 
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxEvent;
 import com.mxgraph.util.mxEventObject;
 import com.mxgraph.util.mxEventSource.mxIEventListener;
 import com.mxgraph.util.mxUndoManager;
 import com.mxgraph.util.mxUndoableEdit;
+import com.mxgraph.util.mxUtils;
 import com.mxgraph.view.mxGraph;
+import com.mxgraph.view.mxStylesheet;
+
 import de.konsteirama.jgraphxadapter.JGraphXAdapter;
 import org.jgrapht.Graph;
 
@@ -115,14 +119,14 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
      * @param color : a color-parameter
      */
     @Override
-    public void colorNode(V node, Color color) {
+    public void colorNode(V[] nodes, Color color) {
         //Wäre vll geschickter das mit einem Array an Nodes zu machen
         //Und wir sollten noch für alle Aktionen überprüfen ob wir das mit
         // begin/endupdate machen sollten
 
-        //mxGraph graph = graphComponent.getGraph();
-        //graph.setCellStyles(mxConstants.STYLE_FILLCOLOR,
-        //        mxUtils.hexString(newColor), nodes);
+        mxGraph graph = graphComponent.getGraph();
+        graph.setCellStyles(mxConstants.STYLE_FILLCOLOR,
+                mxUtils.hexString(color), nodes);
     }
 
     /**
@@ -133,10 +137,10 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
      * @param node2 : node where the edge ends
      */
     @Override
-    public void markEdge(V node1, V node2) {
-        //mxGraph graph = graphComponent.getGraph();
-        //graph.setCellStyles(mxConstants.STYLE_STROKECOLOR,
-        //y        mxUtils.hexString(newColor), nodes);
+    public void markEdge(E[] edge) {
+        mxGraph graph = graphComponent.getGraph();
+        graph.setCellStyles(mxConstants.STYLE_STROKECOLOR,
+                mxUtils.hexString(newColor), edge);
     }
 
     /**

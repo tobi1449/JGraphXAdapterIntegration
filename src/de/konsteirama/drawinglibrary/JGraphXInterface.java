@@ -106,7 +106,6 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
         graphManipulation.reapplyHierarchicalLayout();
 
         applyCustomGraphSettings();
-
     }
 
     /**
@@ -363,7 +362,7 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
 
     @Override
     public final GraphManipulationInterface<V, E>
-    getGraphManipulationInterface() {
+            getGraphManipulationInterface() {
         return graphManipulation;
     }
 

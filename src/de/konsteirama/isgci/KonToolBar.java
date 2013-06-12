@@ -20,7 +20,7 @@ public class KonToolBar extends JToolBar implements ActionListener {
     /**
      * A Button used to export the current Graph.
      */
-    private JButton renameButton, zoomInButton, zoomOutButton, centerButton, undoButton, redoButton;
+    private JButton renameButton, zoomInButton, zoomOutButton, centerButton, reapplyButton, undoButton, redoButton;
     private JTextField zoomField;
     private MainPanel panel;
 
@@ -44,6 +44,9 @@ public class KonToolBar extends JToolBar implements ActionListener {
         centerButton = new JButton("Center Node");
         centerButton.addActionListener(this);
         
+        reapplyButton = new JButton("Reapply Hierarchy");
+        reapplyButton.addActionListener(this);
+        
         undoButton = new JButton("<-");
         undoButton.addActionListener(this);    
         
@@ -57,6 +60,7 @@ public class KonToolBar extends JToolBar implements ActionListener {
         this.add(zoomField);
         this.add(zoomOutButton);
         this.add(centerButton);
+        this.add(reapplyButton);
         this.add(renameButton);
         this.add(undoButton);
         this.add(redoButton);
@@ -88,6 +92,8 @@ public class KonToolBar extends JToolBar implements ActionListener {
             panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().undo();
         } else if (e.getSource().equals(zoomField)) {
             panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().zoomTo((double) Integer.parseInt(zoomField.getText()) / 100);
+        } else if (e.getSource().equals(reapplyButton)) {
+            panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().reapplyHierarchicalLayout();
         }
     }
 }
