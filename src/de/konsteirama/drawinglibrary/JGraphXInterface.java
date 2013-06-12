@@ -26,6 +26,7 @@ import javax.xml.transform.TransformerConfigurationException;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -369,6 +370,38 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
     @Override
     public final mxGraphComponent getPanel() {
         return graphComponent;
+    }
+
+    /**
+     * Returns the node located at the specified point
+     *
+     * @param p Location to look for a node
+     * @return Node located at the given point or null if there is no node
+     */
+    @Override
+    public V getNodeAt(Point p) {
+        mxCell cell = (mxCell)graphComponent.getCellAt((int)p.getX(),
+                (int)p.getY());
+        if(cell != null && cell.isVertex())
+            return graphAdapter.getCellToVertexMap().get(cell);
+        else
+            return null;
+    }
+
+    /**
+     * Returns the edge located at the specified point
+     *
+     * @param p Location to look for an edge
+     * @return Edge located at the given point or null if there is no edge
+     */
+    @Override
+    public E getEdgeAt(Point p) {
+        mxCell cell = (mxCell)graphComponent.getCellAt((int)p.getX(),
+                (int)p.getY());
+        if(cell != null && cell.isEdge())
+            return graphAdapter.getCellToEdgeMap().get(cell);
+        else
+            return null;
     }
 
     @Override

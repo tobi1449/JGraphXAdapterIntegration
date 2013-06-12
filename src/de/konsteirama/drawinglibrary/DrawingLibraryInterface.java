@@ -4,6 +4,9 @@ import org.jgrapht.Graph;
 
 import com.mxgraph.swing.mxGraphComponent;
 
+import javax.swing.JComponent;
+import java.awt.Point;
+
 /**
  * Interface for interaction with a graph drawing library.
  *
@@ -42,6 +45,20 @@ public interface DrawingLibraryInterface<V, E> {
      * @return A mxGraphComponent which draws the specified graphs
      */
     mxGraphComponent getPanel();
+
+    /**
+     * Returns the node located at the specified point
+     * @param p Location to look for a node
+     * @return Node located at the given point or null if there is no node
+     */
+    V getNodeAt(Point p);
+
+    /**
+     * Returns the edge located at the specified point
+     * @param p Location to look for an edge
+     * @return Edge located at the given point or null if there is no edge
+     */
+    E getEdgeAt(Point p);
 
     /**
      * Set a new graph which should be drawn.
