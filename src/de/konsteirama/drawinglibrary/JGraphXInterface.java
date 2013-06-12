@@ -139,7 +139,6 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
      * Applies some custom settings to the graph.
      */
     private void applyCustomGraphSettings() {
-
         graphAdapter.setKeepEdgesInBackground(true);
         graphAdapter.setAllowDanglingEdges(false);
         graphAdapter.setAllowLoops(false);
@@ -353,7 +352,7 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
      */
     @Override
     public final String[] getAvailableExportFormats() {
-        return new String[]{"ps", "svg", "graphml"};
+        return new String[]{"ps", "svg", "graphml", "jpg", "png"};
     }
 
     @Override

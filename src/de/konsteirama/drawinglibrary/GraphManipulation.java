@@ -61,7 +61,6 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
         //notify undoManager about edits
         graphComponent.getGraph().getModel().addListener(mxEvent.UNDO, undoHandler);
         graphComponent.getGraph().getView().addListener(mxEvent.UNDO, undoHandler);
-
     }
 
     protected mxIEventListener undoHandler = new mxIEventListener() {
@@ -107,7 +106,6 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
         graphComponent.scrollCellToVisible(node, true);
 
         graph.getModel().endUpdate();
-
     }
 
     /**
@@ -136,7 +134,6 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
      */
     @Override
     public void markEdge(V node1, V node2) {
-
         //mxGraph graph = graphComponent.getGraph();
         //graph.setCellStyles(mxConstants.STYLE_STROKECOLOR,
         //y        mxUtils.hexString(newColor), nodes);
@@ -163,7 +160,6 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
     @Override
     public void redo() {
         undoManager.redo();
-
     }
 
     /**
@@ -236,11 +232,11 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
      * graph is too big for the panel only a section of the whole graph will be
      * shown. This method zooms to the center of the panel.
      *
-     * @param factor : a double that represents the zoom factor (ranges from 0 to infinite, 1 is 100%)
+     * @param factor : a double that represents the zoom factor
+     *                  (ranges from 0 to infinite, 1 is 100%)
      */
     @Override
     public void zoomTo(double factor) {
-        System.out.println(factor);
         graphComponent.zoomTo(factor, true);
     }
 
