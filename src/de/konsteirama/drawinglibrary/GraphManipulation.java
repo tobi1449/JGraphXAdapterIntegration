@@ -280,8 +280,8 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
         JScrollBar vertScrollBar = graphComponent.getVerticalScrollBar();  
         
         // Get the relative position of the mousepointer in x and y
-        double relPosX = center.getX() / (double) graphComponent.getWidth();
-        double relPosY = center.getY() / (double) graphComponent.getHeight();
+        double relPosX = center.getX() / graphComponent.getWidth();
+        double relPosY = center.getY() / graphComponent.getHeight();
         
         // Zoom to the relative x and y coordinates
         horScrollBar.setValue((int) (relPosX * horScrollBar.getMaximum()));
