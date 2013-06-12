@@ -138,9 +138,9 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
      */
     @Override
     public void markEdge(E[] edge) {
-        mxGraph graph = graphComponent.getGraph();
-        graph.setCellStyles(mxConstants.STYLE_STROKECOLOR,
-                mxUtils.hexString(newColor), edge);
+        //mxGraph graph = graphComponent.getGraph();
+        //graph.setCellStyles(mxConstants.STYLE_STROKECOLOR,
+        //        mxUtils.hexString(newColor), edge);
     }
 
     /**

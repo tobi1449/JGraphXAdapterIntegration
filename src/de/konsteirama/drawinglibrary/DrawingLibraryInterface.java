@@ -4,7 +4,6 @@ import org.jgrapht.Graph;
 
 import com.mxgraph.swing.mxGraphComponent;
 
-import javax.swing.JComponent;
 import java.awt.Point;
 
 /**

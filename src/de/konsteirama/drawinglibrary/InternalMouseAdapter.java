@@ -11,14 +11,20 @@ import java.awt.event.MouseWheelEvent;
  */
 class InternalMouseAdapter extends MouseAdapter {
 
+    private GraphManipulation<?, ?> graphManipulation;
+    
     private mxGraphComponent graphComponent;
 
     /**
      * Constructor of the InternalMouseAdapter
-     * @param graphComponent
+     * 
+     * @param graphComponent : The actual canvas
+     * @param graphManipulation : The Interface to interact with the canvas
      */
-    protected InternalMouseAdapter(mxGraphComponent graphComponent) {
+    protected InternalMouseAdapter(mxGraphComponent graphComponent,
+            GraphManipulation<?, ?> graphManipulation) {
         this.graphComponent = graphComponent;
+        this.graphManipulation = graphManipulation;
     }
 
     private boolean doPan;
@@ -48,9 +54,9 @@ class InternalMouseAdapter extends MouseAdapter {
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
         if (e.getWheelRotation() < 0) {
-            graphComponent.zoomIn();
+            graphManipulation.zoom(true, e.getPoint());
         } else {
-            graphComponent.zoomOut();
+            graphManipulation.zoom(false, e.getPoint());
         }
     }
 }

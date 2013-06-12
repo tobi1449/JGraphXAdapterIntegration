@@ -101,7 +101,7 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
 
         graphComponent.setWheelScrollingEnabled(false);
         graphEvent.registerMouseAdapter(
-                new InternalMouseAdapter(graphComponent));
+                new InternalMouseAdapter(graphComponent, graphManipulation));
 
         graphManipulation.reapplyHierarchicalLayout();
 
@@ -405,7 +405,6 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
 
     @Override
     public void setGraph(Graph<V, E> g) {
-
         graphAdapter = createNewAdapter(g);
         graphComponent.setGraph(graphAdapter);
 
