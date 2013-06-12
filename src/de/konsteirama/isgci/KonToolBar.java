@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
 import com.mxgraph.model.mxCell;
@@ -20,6 +21,7 @@ public class KonToolBar extends JToolBar implements ActionListener {
      * A Button used to export the current Graph.
      */
     private JButton renameButton, zoomInButton, zoomOutButton, centerButton, undoButton, redoButton;
+    private JTextField zoomField;
     private MainPanel panel;
 
     public KonToolBar(MainPanel panel) {
@@ -47,8 +49,12 @@ public class KonToolBar extends JToolBar implements ActionListener {
         
         redoButton = new JButton("->");
         redoButton.addActionListener(this);
+        
+        zoomField = new JTextField("100");
+        zoomField.addActionListener(this);
 
         this.add(zoomInButton);
+        this.add(zoomField);
         this.add(zoomOutButton);
         this.add(centerButton);
         this.add(renameButton);
@@ -73,13 +79,15 @@ public class KonToolBar extends JToolBar implements ActionListener {
                 panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().centerNode(cell);
             }
         } else if (e.getSource().equals(zoomInButton)) {
-            panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().zoom(-1);
+            panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().zoom(true);
         } else if (e.getSource().equals(zoomOutButton)) {
-            panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().zoom(1);
+            panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().zoom(false);
         } else if (e.getSource().equals(redoButton)) {
             panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().redo();
         } else if (e.getSource().equals(undoButton)) {
             panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().undo();
+        } else if (e.getSource().equals(zoomField)) {
+            panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().zoomTo((double) Integer.parseInt(zoomField.getText()) / 100);
         }
     }
 }

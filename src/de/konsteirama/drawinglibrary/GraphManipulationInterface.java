@@ -31,8 +31,10 @@ public interface GraphManipulationInterface<V, E> {
     void resetLayout();
 
     void undo();
+    
+    void zoomTo(double factor);
 
-    void zoom(double factor);
+    void zoom(boolean zoomIn);
 
-    void zoom(double factor, Point center);
+    void zoom(boolean zoomIn, Point center);
 }

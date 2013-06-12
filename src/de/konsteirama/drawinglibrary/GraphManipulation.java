@@ -230,22 +230,35 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
     public void undo() {
         undoManager.undo();
     }
-
+    
     /**
      * Zooms the panel to the given factor. It will magnify the graph, if the
      * graph is too big for the panel only a section of the whole graph will be
      * shown. This method zooms to the center of the panel.
      *
-     * @param factor : a double that gives the zoom-factor
+     * @param factor : a double that represents the zoom factor (ranges from 0 to infinite, 1 is 100%)
      */
     @Override
-    public void zoom(double factor) {
+    public void zoomTo(double factor) {
+        System.out.println(factor);
+        graphComponent.zoomTo(factor, true);
+    }
+
+    /**
+     * Zooms the panel. It will magnify the graph, if the
+     * graph is too big for the panel only a section of the whole graph will be
+     * shown. This method zooms to the center of the panel.
+     *
+     * @param zoomIn : a boolean to zoom in or out
+     */
+    @Override
+    public void zoom(boolean zoomIn) {
         if (!graphComponent.isCenterZoom()) {
             graphComponent.setCenterZoom(true);
         }
 
         // factor isn't a good measure ask if it could be changed
-        if (factor < 0) {
+        if (zoomIn) {
             graphComponent.zoomIn();
         } else {
             graphComponent.zoomOut();
@@ -253,14 +266,14 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
     }
 
     /**
-     * Zooms the panel to the given factor, centering on the given coordinates.
+     * Zooms the panel, centering on the given coordinates.
      *
-     * @param factor : a double that gives the zoom-factor
+     * @param zoomIn : a boolean to zoom in or out
      * @param center : the point zoom centers on
      */
     @Override
-    public void zoom(double factor, Point center) {
-        zoom(factor);
+    public void zoom(boolean zoomIn, Point center) {
+        zoom(zoomIn);
         
         // Get the horizontal and vertical Scrollbar
         JScrollBar horScrollBar = graphComponent.getHorizontalScrollBar(); 
