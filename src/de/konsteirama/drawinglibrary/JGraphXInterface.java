@@ -99,6 +99,8 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
         graphEvent = new GraphEvent(graphComponent);
 
         graphComponent.setWheelScrollingEnabled(false);
+        graphComponent.setAutoScroll(false);
+
         graphEvent.registerMouseAdapter(
                 new InternalMouseAdapter(graphComponent, graphManipulation));
 
