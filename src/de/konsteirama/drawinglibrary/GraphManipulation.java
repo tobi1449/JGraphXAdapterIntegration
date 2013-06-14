@@ -10,7 +10,6 @@ import com.mxgraph.util.mxUndoManager;
 import com.mxgraph.util.mxUndoableEdit;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.view.mxGraph;
-import com.mxgraph.view.mxStylesheet;
 
 import de.konsteirama.jgraphxadapter.JGraphXAdapter;
 import org.jgrapht.Graph;
@@ -23,7 +22,8 @@ import javax.swing.JScrollBar;
 
 /**
  * This class implements the GraphManipulationInterface. It handles
- * manipulations that are done on the JGraphX-graph that is viewed on the panel.
+ * manipulations that are done on the JGraphX-graph that 
+ * is viewed on the panel.
  * Manipulation will be done by the user.
  *
  * @param <V> : vertices of the graph
@@ -63,8 +63,10 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
         this.undoManager = new mxUndoManager();
 
         //notify undoManager about edits
-        graphComponent.getGraph().getModel().addListener(mxEvent.UNDO, undoHandler);
-        graphComponent.getGraph().getView().addListener(mxEvent.UNDO, undoHandler);
+        graphComponent.getGraph().getModel().
+                    addListener(mxEvent.UNDO, undoHandler);
+        graphComponent.getGraph().getView().
+                    addListener(mxEvent.UNDO, undoHandler);
     }
 
     protected mxIEventListener undoHandler = new mxIEventListener() {
@@ -75,8 +77,8 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
     };
 
     /**
-     * Returns a boolean denoting whether the calling graph is able to perform a
-     * redo-operation.
+     * Returns a boolean denoting whether the calling graph is able to perform
+     * a redo-operation.
      *
      * @return if false then there was no undoable action performed earlier
      */
@@ -115,15 +117,11 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
     /**
      * Colors a given node in a given color.
      *
-     * @param node  : a node of the graph
+     * @param nodes : an array of nodes of the graph
      * @param color : a color-parameter
      */
     @Override
     public void colorNode(V[] nodes, Color color) {
-        //Wäre vll geschickter das mit einem Array an Nodes zu machen
-        //Und wir sollten noch für alle Aktionen überprüfen ob wir das mit
-        // begin/endupdate machen sollten
-
         mxGraph graph = graphComponent.getGraph();
         graph.setCellStyles(mxConstants.STYLE_FILLCOLOR,
                 mxUtils.hexString(color), nodes);
@@ -133,14 +131,13 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
      * Marks the edge between two given nodes by adding a small grey arrow and
      * coloring the edge.
      *
-     * @param node1 : node where the edge starts
-     * @param node2 : node where the edge ends
+     * @param edges : an array of edges of the graph
      */
     @Override
-    public void markEdge(E[] edge) {
-        //mxGraph graph = graphComponent.getGraph();
-        //graph.setCellStyles(mxConstants.STYLE_STROKECOLOR,
-        //        mxUtils.hexString(newColor), edge);
+    public void markEdge(E[] edges) {
+        mxGraph graph = graphComponent.getGraph();        
+        graph.setCellStyles(mxConstants.STYLE_STROKECOLOR,
+                mxUtils.hexString(Color.black), edges);
     }
 
     /**

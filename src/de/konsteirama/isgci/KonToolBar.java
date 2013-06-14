@@ -1,6 +1,6 @@
 package de.konsteirama.isgci;
 
-import java.awt.Point;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -20,7 +20,7 @@ public class KonToolBar extends JToolBar implements ActionListener {
     /**
      * A Button used to export the current Graph.
      */
-    private JButton renameButton, zoomInButton, zoomOutButton, centerButton, reapplyButton, undoButton, redoButton;
+    private JButton renameButton, zoomInButton, zoomOutButton, centerButton, reapplyButton, undoButton, redoButton, colorButton, markButton;
     private JTextField zoomField;
     private MainPanel panel;
 
@@ -55,6 +55,12 @@ public class KonToolBar extends JToolBar implements ActionListener {
         
         zoomField = new JTextField("100");
         zoomField.addActionListener(this);
+        
+        colorButton = new JButton("Color Node");
+        colorButton.addActionListener(this);
+        
+        markButton = new JButton("Mark Edges (of Node)");
+        markButton.addActionListener(this);
 
         this.add(zoomInButton);
         this.add(zoomField);
@@ -64,36 +70,64 @@ public class KonToolBar extends JToolBar implements ActionListener {
         this.add(renameButton);
         this.add(undoButton);
         this.add(redoButton);
+        this.add(colorButton);
+        this.add(markButton);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(renameButton)) {
-            Object oCell = panel.getTabPane().getActiveGraphDrawing().getPanel().getGraph().getSelectionCell();
+            Object oCell = panel.getTabPane().getActiveGraphDrawing()
+                    .getPanel().getGraph().getSelectionCell();
             
             if (oCell != null) {
                 mxCell cell = (mxCell) oCell;
                 panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().renameNode(cell, cell.getValue() + "x");
             }
         } else if (e.getSource().equals(centerButton)) {
-            Object oCell = panel.getTabPane().getActiveGraphDrawing().getPanel().getGraph().getSelectionCell();
+            Object oCell = panel.getTabPane().getActiveGraphDrawing()
+                    .getPanel().getGraph().getSelectionCell();
             
             if (oCell != null) {
                 mxCell cell = (mxCell) oCell;
-                panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().centerNode(cell);
+                panel.getTabPane().getActiveGraphDrawing()
+                    .getGraphManipulationInterface().centerNode(cell);
             }
         } else if (e.getSource().equals(zoomInButton)) {
-            panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().zoom(true);
+            panel.getTabPane().getActiveGraphDrawing()
+                .getGraphManipulationInterface().zoom(true);
         } else if (e.getSource().equals(zoomOutButton)) {
-            panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().zoom(false);
+            panel.getTabPane().getActiveGraphDrawing()
+                .getGraphManipulationInterface().zoom(false);
         } else if (e.getSource().equals(redoButton)) {
-            panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().redo();
+            panel.getTabPane().getActiveGraphDrawing()
+                .getGraphManipulationInterface().redo();
         } else if (e.getSource().equals(undoButton)) {
-            panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().undo();
+            panel.getTabPane().getActiveGraphDrawing()
+                .getGraphManipulationInterface().undo();
         } else if (e.getSource().equals(zoomField)) {
-            panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().zoomTo((double) Integer.parseInt(zoomField.getText()) / 100);
+            panel.getTabPane().getActiveGraphDrawing()
+                .getGraphManipulationInterface()
+                .zoomTo((double) Integer.parseInt(zoomField.getText()) / 100);
         } else if (e.getSource().equals(reapplyButton)) {
-            panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().reapplyHierarchicalLayout();
+            panel.getTabPane().getActiveGraphDrawing()
+                .getGraphManipulationInterface().reapplyHierarchicalLayout();
+        } else if (e.getSource().equals(colorButton)) {
+            Object oCell = panel.getTabPane().getActiveGraphDrawing()
+                    .getPanel().getGraph().getSelectionCell();
+            
+            if (oCell != null) {
+                mxCell cell = (mxCell) oCell;
+                panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().colorNode(new mxCell[] {cell}, Color.RED);
+            }  
+        } else if (e.getSource().equals(markButton)) {
+            Object oCell = panel.getTabPane().getActiveGraphDrawing()
+                    .getPanel().getGraph().getSelectionCell();
+            
+            if (oCell != null) {
+                mxCell cell = (mxCell) oCell;
+                panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().markEdge(new mxCell[] {cell});
+            }  
         }
     }
 }

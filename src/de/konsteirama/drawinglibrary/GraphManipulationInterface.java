@@ -18,7 +18,7 @@ public interface GraphManipulationInterface<V, E> {
 
     void colorNode(V[] node, Color color);
 
-    void markEdge(E[] edge);
+    void markEdge(E[] edges);
 
     void reapplyHierarchicalLayout();
 
