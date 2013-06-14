@@ -95,11 +95,13 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
         };
 
         graphManipulation =
-                new GraphManipulation<V, E>(graphComponent, graphAdapter);
+                new GraphManipulation<V, E>(graphComponent);
         graphEvent = new GraphEvent(graphComponent);
 
         graphComponent.setWheelScrollingEnabled(false);
         graphComponent.setAutoScroll(false);
+        graphComponent.setCenterZoom(false);
+        graphComponent.setConnectable(false);
 
         graphEvent.registerMouseAdapter(
                 new InternalMouseAdapter(graphComponent, graphManipulation));
