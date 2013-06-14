@@ -194,8 +194,6 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
 
         graph.getModel().beginUpdate();
 
-
-
         graph.setCellStyles(mxConstants.STYLE_FILLCOLOR,
                 mxUtils.hexString(color), getCellsFromNodes(nodes));
 
@@ -234,7 +232,7 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
         graph.getModel().beginUpdate();
 
         graph.setCellStyles(mxConstants.STYLE_STROKECOLOR,
-                mxUtils.hexString(Color.blue), getCellsFromEdges(edges));
+                mxUtils.hexString(null), getCellsFromEdges(edges));
 
         graph.getModel().endUpdate();
     }
@@ -348,8 +346,8 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
      */
     @Override
     public void zoom(boolean zoomIn) {
-
-        // factor isn't a good measure ask if it could be changed
+        graphComponent.setCenterZoom(true);
+        
         if (zoomIn) {
             graphComponent.zoomIn();
         } else {
@@ -365,19 +363,18 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
      */
     @Override
     public void zoom(boolean zoomIn, Point center) {
-
         Point pointOnCanvas = getPointOnGraph(center);
 
         zoom(zoomIn);
 
         Point newPointOnCanvas = getPointOnGraph(center);
-
-        Point delta = new Point((int)(pointOnCanvas.getX() -
-                newPointOnCanvas.getX()), (int)(pointOnCanvas.getY() -
-                newPointOnCanvas.getY()));
+        
+        Point delta = new Point((int) (pointOnCanvas.getX()
+                - newPointOnCanvas.getX()), (int) (pointOnCanvas.getY()
+                - newPointOnCanvas.getY()));
 
         Point viewPosition = graphComponent.getViewport().getViewPosition();
-        viewPosition.translate((int)delta.getX(), (int)delta.getY());
+        viewPosition.translate((int) delta.getX(), (int) delta.getY());
 
         graphComponent.getViewport().setViewPosition(viewPosition);
     }

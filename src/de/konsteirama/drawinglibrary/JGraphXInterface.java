@@ -383,7 +383,7 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
     @Override
     public V getNodeAt(Point p) {
         mxCell cell = (mxCell)graphComponent.getCellAt((int)p.getX(),
-                (int)p.getY());
+                (int) p.getY());
         if(cell != null && cell.isVertex())
             return graphAdapter.getCellToVertexMap().get(cell);
         else
@@ -399,7 +399,7 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
     @Override
     public E getEdgeAt(Point p) {
         mxCell cell = (mxCell)graphComponent.getCellAt((int)p.getX(),
-                (int)p.getY());
+                (int) p.getY());
         if(cell != null && cell.isEdge())
             return graphAdapter.getCellToEdgeMap().get(cell);
         else
