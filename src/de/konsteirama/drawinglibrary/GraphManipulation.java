@@ -139,6 +139,19 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
         graph.setCellStyles(mxConstants.STYLE_STROKECOLOR,
                 mxUtils.hexString(Color.black), edges);
     }
+    
+    /**
+     * Unmarks the edge between two given nodes by removing
+     * the small grey arrow and uncoloring the edge.
+     *
+     * @param edges : an array of edges of the graph
+     */
+    @Override
+    public void unmarkEdge(E[] edges) {
+        mxGraph graph = graphComponent.getGraph();        
+        graph.setCellStyles(mxConstants.STYLE_STROKECOLOR,
+                mxUtils.hexString(Color.blue), edges);
+    }
 
     /**
      * Gives a hierarchical order to the displayed graph.

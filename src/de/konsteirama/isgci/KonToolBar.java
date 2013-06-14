@@ -20,7 +20,7 @@ public class KonToolBar extends JToolBar implements ActionListener {
     /**
      * A Button used to export the current Graph.
      */
-    private JButton renameButton, zoomInButton, zoomOutButton, centerButton, reapplyButton, undoButton, redoButton, colorButton, markButton;
+    private JButton renameButton, zoomInButton, zoomOutButton, centerButton, reapplyButton, undoButton, redoButton, colorButton;
     private JTextField zoomField;
     private MainPanel panel;
 
@@ -58,9 +58,6 @@ public class KonToolBar extends JToolBar implements ActionListener {
         
         colorButton = new JButton("Color Node");
         colorButton.addActionListener(this);
-        
-        markButton = new JButton("Mark Edges (of Node)");
-        markButton.addActionListener(this);
 
         this.add(zoomInButton);
         this.add(zoomField);
@@ -71,7 +68,6 @@ public class KonToolBar extends JToolBar implements ActionListener {
         this.add(undoButton);
         this.add(redoButton);
         this.add(colorButton);
-        this.add(markButton);
     }
 
     @Override
@@ -119,14 +115,6 @@ public class KonToolBar extends JToolBar implements ActionListener {
             if (oCell != null) {
                 mxCell cell = (mxCell) oCell;
                 panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().colorNode(new mxCell[] {cell}, Color.RED);
-            }  
-        } else if (e.getSource().equals(markButton)) {
-            Object oCell = panel.getTabPane().getActiveGraphDrawing()
-                    .getPanel().getGraph().getSelectionCell();
-            
-            if (oCell != null) {
-                mxCell cell = (mxCell) oCell;
-                panel.getTabPane().getActiveGraphDrawing().getGraphManipulationInterface().markEdge(new mxCell[] {cell});
             }  
         }
     }
