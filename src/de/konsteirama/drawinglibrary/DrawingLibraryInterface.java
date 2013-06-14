@@ -60,9 +60,15 @@ public interface DrawingLibraryInterface<V, E> {
     E getEdgeAt(Point p);
 
     /**
-     * Set a new graph which should be drawn.
+     * Sets a new graph which should be drawn.
      * @param g The new graph
      */
     void setGraph(Graph<V, E> g);
+
+    /**
+     * Returns the current graph.
+     * @return the current graph
+     */
+    Graph<V,E> getGraph();
     
 }
