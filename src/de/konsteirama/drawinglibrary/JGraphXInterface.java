@@ -305,7 +305,7 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
         }
 
         BufferedImage image = new BufferedImage(d.width, d.height,
-                BufferedImage.TYPE_INT_ARGB);
+                BufferedImage.TYPE_INT_RGB);
 
         Graphics2D g = image.createGraphics();
         graphComponent.getGraphControl().paint(g);
