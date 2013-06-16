@@ -22,6 +22,8 @@ import org.xml.sax.SAXException;
 
 import javax.imageio.ImageIO;
 import javax.xml.transform.TransformerConfigurationException;
+
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -88,11 +90,18 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
                     label = label.replace("[", "");
                     label = label.replace("]", "");
 
-                    return new Component[]{new LatexLabel(label)};
+                    LatexLabel ll = new LatexLabel(label);
+                    ll.setBackground(new Color(0, 0, 0, 0));
+                    
+                    return new Component[]{ ll };
                 }
                 return null;
             };
         };
+        
+        // make background white
+        graphComponent.getViewport().setOpaque(true);
+        graphComponent.getViewport().setBackground(Color.white);
 
         graphManipulation =
                 new GraphManipulation<V, E>(graphComponent);
