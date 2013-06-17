@@ -6,6 +6,7 @@ import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxCellRenderer;
 import com.mxgraph.util.mxCellRenderer.CanvasFactory;
+import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxDomUtils;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.util.mxXmlUtils;
@@ -21,8 +22,8 @@ import org.jgrapht.ext.GraphMLExporter;
 import org.xml.sax.SAXException;
 
 import javax.imageio.ImageIO;
+import javax.swing.SwingConstants;
 import javax.xml.transform.TransformerConfigurationException;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -90,18 +91,19 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
                     label = label.replace("[", "");
                     label = label.replace("]", "");
 
-                    LatexLabel ll = new LatexLabel(label);
-                    ll.setBackground(new Color(0, 0, 0, 0));
-                    
-                    return new Component[]{ ll };
+                    LatexLabel labelComponent = new LatexLabel(label);
+                    labelComponent.setHorizontalAlignment(SwingConstants
+                            .CENTER);
+                    labelComponent.setVerticalAlignment(SwingConstants.CENTER);
+                    labelComponent.setBackground(new Color(0, 0, 0, 0));
+
+                    return new Component[]{labelComponent};
                 }
                 return null;
-            };
+            }
+
+            ;
         };
-        
-        // make background white
-        graphComponent.getViewport().setOpaque(true);
-        graphComponent.getViewport().setBackground(Color.white);
 
         graphManipulation =
                 new GraphManipulation<V, E>(graphComponent);
@@ -118,6 +120,9 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
         graphManipulation.reapplyHierarchicalLayout();
 
         applyCustomGraphSettings();
+
+        graphComponent.refresh();
+        graphComponent.repaint();
     }
 
     /**
@@ -163,6 +168,10 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
         graphAdapter.setVertexLabelsMovable(false);
         graphAdapter.setConnectableEdges(false);
         graphAdapter.setAutoSizeCells(true);
+
+        graphAdapter.getStylesheet().getDefaultVertexStyle()
+                .put(mxConstants.STYLE_NOLABEL, "1");
+        graphAdapter.setLabelsVisible(false);
     }
 
     /**
@@ -374,7 +383,7 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
 
     @Override
     public final GraphManipulationInterface<V, E>
-            getGraphManipulationInterface() {
+    getGraphManipulationInterface() {
         return graphManipulation;
     }
 
@@ -391,9 +400,9 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
      */
     @Override
     public V getNodeAt(Point p) {
-        mxCell cell = (mxCell)graphComponent.getCellAt((int)p.getX(),
+        mxCell cell = (mxCell) graphComponent.getCellAt((int) p.getX(),
                 (int) p.getY());
-        if(cell != null && cell.isVertex())
+        if (cell != null && cell.isVertex())
             return graphAdapter.getCellToVertexMap().get(cell);
         else
             return null;
@@ -407,26 +416,12 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
      */
     @Override
     public E getEdgeAt(Point p) {
-        mxCell cell = (mxCell)graphComponent.getCellAt((int)p.getX(),
+        mxCell cell = (mxCell) graphComponent.getCellAt((int) p.getX(),
                 (int) p.getY());
-        if(cell != null && cell.isEdge())
+        if (cell != null && cell.isEdge())
             return graphAdapter.getCellToEdgeMap().get(cell);
         else
             return null;
-    }
-
-    /**
-     * Set a new graph which should be drawn.
-     * @param g The new graph
-     */
-    @Override
-    public void setGraph(Graph<V, E> g) {
-        graphAdapter = createNewAdapter(g);
-        graphComponent.setGraph(graphAdapter);
-
-        applyCustomGraphSettings();
-
-        graphManipulation.reapplyHierarchicalLayout();
     }
 
     /**
@@ -437,5 +432,20 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
     @Override
     public Graph<V, E> getGraph() {
         return graphAdapter.getGraph();
+    }
+
+    /**
+     * Set a new graph which should be drawn.
+     *
+     * @param g The new graph
+     */
+    @Override
+    public void setGraph(Graph<V, E> g) {
+        graphAdapter = createNewAdapter(g);
+        graphComponent.setGraph(graphAdapter);
+
+        applyCustomGraphSettings();
+
+        graphManipulation.reapplyHierarchicalLayout();
     }
 }

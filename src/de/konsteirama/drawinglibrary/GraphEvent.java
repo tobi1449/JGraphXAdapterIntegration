@@ -25,6 +25,5 @@ class GraphEvent implements GraphEventInterface {
         graphComponent.addMouseListener(adapter);
         graphComponent.getGraphControl().addMouseListener(adapter);
         graphComponent.addMouseWheelListener(adapter);
-        graphComponent.getGraphControl().addMouseWheelListener(adapter);
     }
 }

@@ -11,17 +11,17 @@ import com.mxgraph.util.mxUndoManager;
 import com.mxgraph.util.mxUndoableEdit;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.view.mxGraph;
-
 import de.konsteirama.jgraphxadapter.JGraphXAdapter;
 import org.jgrapht.Graph;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.Rectangle;
 
 
 /**
  * This class implements the GraphManipulationInterface. It handles
- * manipulations that are done on the JGraphX-graph that 
+ * manipulations that are done on the JGraphX-graph that
  * is viewed on the panel.
  * Manipulation will be done by the user.
  *
@@ -31,91 +31,20 @@ import java.awt.Point;
  */
 class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
 
+    protected mxIEventListener undoHandler = new mxIEventListener() {
+        public void invoke(Object source, mxEventObject evt) {
+            undoManager.undoableEditHappened((mxUndoableEdit) evt
+                    .getProperty("edit"));
+        }
+    };
     /**
      * GraphComponent is the panel the graph is drawn in.
      */
     private mxGraphComponent graphComponent;
-
     /**
      * Manages the undo-operations on the calling graph.
      */
     private mxUndoManager undoManager;
-
-    /**
-     * Returns the current graph adapter
-     * @return The current graph adapter
-     */
-    private JGraphXAdapter<V, E> getGraphAdapter()
-    {
-        return (JGraphXAdapter<V, E>) graphComponent.getGraph();
-    }
-
-    /**
-     * Returns the cell associated with the given node
-     * @param node
-     * @return
-     */
-    private mxICell getCellFromNode(V node)
-    {
-        return getGraphAdapter().getVertexToCellMap().get(node);
-    }
-
-    /**
-     * Returns the cell associated with the given edge
-     * @param edge
-     * @return
-     */
-    private mxICell getCellFromEdge(E edge)
-    {
-        return getGraphAdapter().getEdgeToCellMap().get(edge);
-    }
-
-    /**
-     * Returns the cells associated with the given nodes
-     * @param nodes
-     * @return
-     */
-    private mxICell[] getCellsFromNodes(V[] nodes)
-    {
-        mxICell[] cells = new mxICell[nodes.length];
-        for(int i = 0; i < nodes.length; i++){
-            cells[i] = getCellFromNode(nodes[i]);
-        }
-        return cells;
-    }
-
-    /**
-     * Returns the cells associated with the given edges
-     * @param edges
-     * @return
-     */
-    private mxICell[] getCellsFromEdges(E[] edges)
-    {
-        mxICell[] cells = new mxICell[edges.length];
-        for(int i = 0; i < edges.length; i++){
-            cells[i] = getCellFromEdge(edges[i]);
-        }
-        return cells;
-    }
-
-    /**
-     * Translates a point from graphComponent to graph
-     * @param p
-     * @return
-     */
-    private Point getPointOnGraph(Point p)
-    {
-        mxGraph graph = graphComponent.getGraph();
-
-        double s = graph.getView().getScale();
-        Point tr = graph.getView().getTranslate().getPoint();
-
-        double off = graph.getGridSize() / 2;
-        double x = graph.snap(p.getX() / s - tr.getX() - off);
-        double y = graph.snap(p.getY() / s - tr.getY() - off);
-
-        return new Point((int)x, (int)y);
-    }
 
     /**
      * Constructor of the class. Creates an instance of the GraphManipulation
@@ -131,17 +60,86 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
 
         //notify undoManager about edits
         graphComponent.getGraph().getModel().
-                    addListener(mxEvent.UNDO, undoHandler);
+                addListener(mxEvent.UNDO, undoHandler);
         graphComponent.getGraph().getView().
-                    addListener(mxEvent.UNDO, undoHandler);
+                addListener(mxEvent.UNDO, undoHandler);
     }
 
-    protected mxIEventListener undoHandler = new mxIEventListener() {
-        public void invoke(Object source, mxEventObject evt) {
-            undoManager.undoableEditHappened((mxUndoableEdit) evt
-                    .getProperty("edit"));
+    /**
+     * Returns the current graph adapter
+     *
+     * @return The current graph adapter
+     */
+    private JGraphXAdapter<V, E> getGraphAdapter() {
+        return (JGraphXAdapter<V, E>) graphComponent.getGraph();
+    }
+
+    /**
+     * Returns the cell associated with the given node
+     *
+     * @param node
+     * @return
+     */
+    private mxICell getCellFromNode(V node) {
+        return getGraphAdapter().getVertexToCellMap().get(node);
+    }
+
+    /**
+     * Returns the cell associated with the given edge
+     *
+     * @param edge
+     * @return
+     */
+    private mxICell getCellFromEdge(E edge) {
+        return getGraphAdapter().getEdgeToCellMap().get(edge);
+    }
+
+    /**
+     * Returns the cells associated with the given nodes
+     *
+     * @param nodes
+     * @return
+     */
+    private mxICell[] getCellsFromNodes(V[] nodes) {
+        mxICell[] cells = new mxICell[nodes.length];
+        for (int i = 0; i < nodes.length; i++) {
+            cells[i] = getCellFromNode(nodes[i]);
         }
-    };
+        return cells;
+    }
+
+    /**
+     * Returns the cells associated with the given edges
+     *
+     * @param edges
+     * @return
+     */
+    private mxICell[] getCellsFromEdges(E[] edges) {
+        mxICell[] cells = new mxICell[edges.length];
+        for (int i = 0; i < edges.length; i++) {
+            cells[i] = getCellFromEdge(edges[i]);
+        }
+        return cells;
+    }
+
+    /**
+     * Translates a point from graphComponent to graph
+     *
+     * @param p
+     * @return
+     */
+    private Point getPointOnGraph(Point p) {
+        mxGraph graph = graphComponent.getGraph();
+
+        double s = graph.getView().getScale();
+        Point tr = graph.getView().getTranslate().getPoint();
+
+        double off = graph.getGridSize() / 2;
+        double x = graph.snap(p.getX() / s - tr.getX() - off);
+        double y = graph.snap(p.getY() / s - tr.getY() - off);
+
+        return new Point((int) x, (int) y);
+    }
 
     /**
      * Returns a boolean denoting whether the calling graph is able to perform
@@ -218,7 +216,7 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
 
         graph.getModel().endUpdate();
     }
-    
+
     /**
      * Unmarks the edge between two given nodes by removing
      * the small grey arrow and uncoloring the edge.
@@ -274,14 +272,14 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
 
         // Adds all edges connected to the node
         cells = graph.addAllEdges(cells);
-        
+
         graph.getModel().beginUpdate();
-        
+
         // Deletes every cell
         for (Object object : cells) {
             graph.getModel().remove(object);
         }
-        
+
         graph.getModel().endUpdate();
     }
 
@@ -300,7 +298,7 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
 
         graph.getModel().beginUpdate();
 
-        graphComponent.labelChanged(getCellFromNode(node), nodeName, null);
+        getCellFromNode(node).setValue(newName);
 
         graph.getModel().endUpdate();
     }
@@ -323,14 +321,14 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
     public void undo() {
         undoManager.undo();
     }
-    
+
     /**
      * Zooms the panel to the given factor. It will magnify the graph, if the
      * graph is too big for the panel only a section of the whole graph will be
      * shown. This method zooms to the center of the panel.
      *
      * @param factor : a double that represents the zoom factor
-     *                  (ranges from 0 to infinite, 1 is 100%)
+     *               (ranges from 0 to infinite, 1 is 100%)
      */
     @Override
     public void zoomTo(double factor) {
@@ -347,7 +345,7 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
     @Override
     public void zoom(boolean zoomIn) {
         graphComponent.setCenterZoom(true);
-        
+
         if (zoomIn) {
             graphComponent.zoomIn();
         } else {
@@ -368,14 +366,26 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
         zoom(zoomIn);
 
         Point newPointOnCanvas = getPointOnGraph(center);
-        
-        Point delta = new Point((int) (pointOnCanvas.getX()
-                - newPointOnCanvas.getX()), (int) (pointOnCanvas.getY()
-                - newPointOnCanvas.getY()));
 
-        Point viewPosition = graphComponent.getViewport().getViewPosition();
-        viewPosition.translate((int) delta.getX(), (int) delta.getY());
+        double zoomFactor = zoomIn ? graphComponent.getZoomFactor() :
+                1 / graphComponent.getZoomFactor();
 
-        graphComponent.getViewport().setViewPosition(viewPosition);
+        Rectangle rect = graphComponent.getGraphControl().getVisibleRect();
+
+        rect.setLocation((int) (rect.getX() * zoomFactor),
+                (int) (rect.getY() * zoomFactor));
+
+        graphComponent.getGraphControl().scrollRectToVisible(rect);
+
+        /*int x = (int)((pointOnCanvas.getX() -
+                newPointOnCanvas.getX()) * zoomFactor);
+        int y = (int)((pointOnCanvas.getY() -
+                newPointOnCanvas.getY()) * zoomFactor);
+        Point delta = new Point(x, y);
+
+        Rectangle rect = graphComponent.getGraphControl().getVisibleRect();
+        rect.translate((int)delta.getX(), (int)delta.getY());
+
+        graphComponent.getGraphControl().scrollRectToVisible(rect, true);*/
     }
 }
