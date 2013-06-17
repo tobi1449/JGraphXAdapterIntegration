@@ -5,6 +5,7 @@ import org.jgrapht.Graph;
 import com.mxgraph.swing.mxGraphComponent;
 
 import java.awt.Point;
+import java.util.List;
 
 /**
  * Interface for interaction with a graph drawing library.
@@ -70,5 +71,16 @@ public interface DrawingLibraryInterface<V, E> {
      * @return the current graph
      */
     Graph<V,E> getGraph();
+
+    /**
+     * Returns a list of the selected nodes.
+     * @return
+     */
+    List<V> getSelectedNodes();
+
+    /**
+     * Sets the selection to the given nodes.
+     */
+    void setSelectedNodes(List<V> nodes);
     
 }

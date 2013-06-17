@@ -1,6 +1,7 @@
 package de.konsteirama.drawinglibrary;
 
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
+import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxICell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.util.mxConstants;
@@ -17,6 +18,8 @@ import org.jgrapht.Graph;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -47,6 +50,11 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
     private mxUndoManager undoManager;
 
     /**
+     * Currently highlighted cells with their previous color
+     */
+    private HashMap<mxICell, Color> markedCells;
+
+    /**
      * Constructor of the class. Creates an instance of the GraphManipulation
      * class that operates on a given graphComponent.
      *
@@ -63,6 +71,9 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
                 addListener(mxEvent.UNDO, undoHandler);
         graphComponent.getGraph().getView().
                 addListener(mxEvent.UNDO, undoHandler);
+
+        markedCells = new HashMap<mxICell, Color>();
+
     }
 
     /**
@@ -281,6 +292,57 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
         }
 
         graph.getModel().endUpdate();
+    }
+
+    /**
+     * Highlights a node and if specified its neighbors
+     * @param hightlightNeighbors
+     */
+    @Override
+    public void highlightNode(V node, boolean hightlightNeighbors) {
+
+        ArrayList<mxICell> cells = new ArrayList<mxICell>(1);
+        mxICell cell = getCellFromNode(node);
+        cells.add(cell);
+
+        if(hightlightNeighbors)
+        {
+            for(int i = 0; i < cell.getEdgeCount(); i++)
+            {
+                mxCell edge = (mxCell)cell.getEdgeAt(i);
+                markedCells.put(edge, mxUtils.getColor(getGraphAdapter()
+                        .getCellStyle(edge), mxConstants.STYLE_STROKECOLOR));
+
+                mxICell source = edge.getSource();
+                mxICell target = edge.getTarget();
+
+                if(!markedCells.containsKey(source))
+                    markedCells.put(source, mxUtils.getColor(getGraphAdapter
+                            ().getCellStyle(source),
+                            mxConstants.STYLE_STROKECOLOR));
+                if(!markedCells.containsKey(target))
+                    markedCells.put(target, mxUtils.getColor(getGraphAdapter
+                            ().getCellStyle(target),
+                            mxConstants.STYLE_STROKECOLOR));
+            }
+        }
+
+        getGraphAdapter().setCellStyles(mxConstants.STYLE_STROKECOLOR, mxUtils.getHexColorString
+                    (Color.yellow), cells.toArray());
+
+    }
+
+    @Override
+    public void unHiglightAll() {
+        graphComponent.getGraph().getModel().beginUpdate();
+
+        for(mxICell cell : markedCells.keySet())
+        {
+            getGraphAdapter().setCellStyles(mxConstants.STYLE_STROKECOLOR,
+                    mxUtils.getHexColorString(markedCells.get(cell)),
+                    new Object[]{cell});
+        }
+        graphComponent.getGraph().getModel().endUpdate();
     }
 
     /**

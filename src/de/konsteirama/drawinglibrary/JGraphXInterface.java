@@ -38,6 +38,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * The actual implementation of a DrawingLibraryInterface,
@@ -122,6 +125,8 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
                 new InternalMouseAdapter(graphComponent, graphManipulation));
 
         graphManipulation.reapplyHierarchicalLayout();
+
+
     }
 
     /**
@@ -167,6 +172,7 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
         graphAdapter.setVertexLabelsMovable(false);
         graphAdapter.setConnectableEdges(false);
         graphAdapter.setAutoSizeCells(true);
+        graphAdapter.setDropEnabled(false);
 
         graphAdapter.getStylesheet().getDefaultVertexStyle()
                 .put(mxConstants.STYLE_NOLABEL, "1");
@@ -446,5 +452,37 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
         applyCustomGraphSettings();
 
         graphManipulation.reapplyHierarchicalLayout();
+    }
+
+    /**
+     * Returns a list of the selected nodes.
+     *
+     * @return
+     */
+    @Override
+    public List<V> getSelectedNodes() {
+        List<V> list = new ArrayList<V>(graphAdapter.getSelectionCount());
+
+        for(Object cell : graphAdapter.getSelectionCells())
+        {
+            list.add(graphAdapter.getCellToVertexMap().get(cell));
+        }
+        return list;
+    }
+
+    /**
+     * Sets the selection to the given nodes.
+     */
+    @Override
+    public void setSelectedNodes(List<V> nodes) {
+
+        Collection<Object> col = new ArrayList<Object>(nodes.size());
+
+        for(V node : nodes)
+        {
+            col.add(graphAdapter.getVertexToCellMap().get(node));
+        }
+
+        graphAdapter.setSelectionCells(col);
     }
 }
