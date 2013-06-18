@@ -27,9 +27,19 @@ import javax.xml.transform.TransformerConfigurationException;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.ContainerListener;
+import java.awt.event.HierarchyEvent;
+import java.awt.event.HierarchyListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -96,12 +106,28 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
                     label = label.replace("[", "");
                     label = label.replace("]", "");
 
-                    LatexLabel labelComponent = new LatexLabel(label);
+                    final LatexLabel labelComponent = new LatexLabel(label);
                     labelComponent.setHorizontalAlignment(SwingConstants
                             .CENTER);
                     labelComponent.setVerticalAlignment(SwingConstants.CENTER);
                     labelComponent.setBackground(new Color(0, 0, 0, 0));
 
+                    labelComponent.addComponentListener(new ComponentListener() {
+                        @Override 
+                        public void componentShown(ComponentEvent e) { }   
+                        @Override 
+                        public void componentMoved(ComponentEvent e) { }
+                        @Override 
+                        public void componentHidden(ComponentEvent e) { }
+                        
+                        @Override
+                        public void componentResized(ComponentEvent e) {
+                            double scale = graphComponent.getGraph().getView().getScale();
+                            
+                            labelComponent.setFont(new Font("Dialog", Font.BOLD, (int) (12 * scale)));
+                        }
+                    });
+                    
                     return new Component[]{labelComponent};
                 }
                 return null;
