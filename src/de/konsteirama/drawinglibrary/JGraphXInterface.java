@@ -30,8 +30,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.HierarchyBoundsListener;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.MouseEvent;
@@ -134,8 +132,7 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
                             
                             labelComponent.setFont(new Font(
                                     "Dialog", Font.BOLD, 
-                                    (int) (DEFAULT_FONT_SIZE * scale)));
-                            
+                                    (int) (DEFAULT_FONT_SIZE * scale))); 
                         }
                         
                         @Override

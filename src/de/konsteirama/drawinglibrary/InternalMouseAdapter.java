@@ -11,24 +11,26 @@ import java.awt.event.MouseWheelEvent;
  */
 class InternalMouseAdapter extends MouseAdapter {
 
+    /** The parent object. */
     private GraphManipulation<?, ?> graphManipulation;
     
+    /** the actual canvas. */
     private mxGraphComponent graphComponent;
 
+    /** a boolean to handle the panning. */
+    private boolean doPan;
+    
     /**
      * Constructor of the InternalMouseAdapter
      * 
-     * @param graphComponent : The actual canvas
-     * @param graphManipulation : The Interface to interact with the canvas
+     * @param pGraphComponent : The actual canvas
+     * @param pGraphManipulation : The Interface to interact with the canvas
      */
-    protected InternalMouseAdapter(mxGraphComponent graphComponent,
-            GraphManipulation<?, ?> graphManipulation) {
-        this.graphComponent = graphComponent;
-        this.graphManipulation = graphManipulation;
+    protected InternalMouseAdapter(mxGraphComponent pGraphComponent,
+            GraphManipulation<?, ?> pGraphManipulation) {
+        this.graphComponent = pGraphComponent;
+        this.graphManipulation = pGraphManipulation;
     }
-
-    private boolean doPan;
-
     @Override
     public void mousePressed(MouseEvent e) {
         super.mousePressed(e);

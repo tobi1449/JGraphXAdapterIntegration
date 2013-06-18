@@ -9,10 +9,16 @@ import java.awt.event.MouseAdapter;
  */
 class GraphEvent implements GraphEventInterface {
 
+    /** The actual canvas. */
     private mxGraphComponent graphComponent;
 
-    protected GraphEvent(mxGraphComponent graphComponent) {
-        this.graphComponent = graphComponent;
+    /**
+     * Gets a canvas and saves it.
+     * 
+     * @param pGraphComponent : The canvas
+     */
+    protected GraphEvent(mxGraphComponent pGraphComponent) {
+        this.graphComponent = pGraphComponent;
     }
 
     /**

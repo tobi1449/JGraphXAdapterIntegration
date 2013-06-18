@@ -21,7 +21,6 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
 /**
  * This class implements the GraphManipulationInterface. It handles
  * manipulations that are done on the JGraphX-graph that
@@ -30,7 +29,6 @@ import java.util.HashMap;
  *
  * @param <V> : vertices of the graph
  * @param <E> : edges of the graph
- * @author Natascha
  */
 class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
 
@@ -40,6 +38,7 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
                     .getProperty("edit"));
         }
     };
+    
     /**
      * GraphComponent is the panel the graph is drawn in.
      */
@@ -58,10 +57,10 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
      * Constructor of the class. Creates an instance of the GraphManipulation
      * class that operates on a given graphComponent.
      *
-     * @param graphComponent : a JGRaphX graphComponent, shown on the panel
+     * @param pGraphComponent : a JGRaphX graphComponent, shown on the panel
      */
-    public GraphManipulation(mxGraphComponent graphComponent) {
-        this.graphComponent = graphComponent;
+    public GraphManipulation(mxGraphComponent pGraphComponent) {
+        this.graphComponent = pGraphComponent;
 
         // initiation of undoManager variable
         this.undoManager = new mxUndoManager();
@@ -81,6 +80,7 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
      *
      * @return The current graph adapter
      */
+    @SuppressWarnings("unchecked")
     private JGraphXAdapter<V, E> getGraphAdapter() {
         return (JGraphXAdapter<V, E>) graphComponent.getGraph();
     }
@@ -152,33 +152,16 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
         return new Point((int) x, (int) y);
     }
 
-    /**
-     * Returns a boolean denoting whether the calling graph is able to perform
-     * a redo-operation.
-     *
-     * @return if false then there was no undoable action performed earlier
-     */
     @Override
     public boolean canRedo() {
         return undoManager.canRedo();
     }
 
-    /**
-     * Returns a boolean denoting whether the calling graph is able to perform
-     * an undo-operation.
-     *
-     * @return if true then there is an action that can be undone
-     */
     @Override
     public boolean canUndo() {
         return undoManager.canUndo();
     }
 
-    /**
-     * Centers the view of the panel on the selected node.
-     *
-     * @param node : a node of the graph
-     */
     @Override
     public void centerNode(V node) {
         mxGraph graph = graphComponent.getGraph();
@@ -190,12 +173,6 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
         graph.getModel().endUpdate();
     }
 
-    /**
-     * Colors a given node in a given color.
-     *
-     * @param nodes : an array of nodes of the graph
-     * @param color : a color-parameter
-     */
     @Override
     public void colorNode(V[] nodes, Color color) {
 
@@ -209,12 +186,6 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
         graph.getModel().endUpdate();
     }
 
-    /**
-     * Marks the edge between two given nodes by adding a small grey arrow and
-     * coloring the edge.
-     *
-     * @param edges : an array of edges of the graph
-     */
     @Override
     public void markEdge(E[] edges) {
 
@@ -228,12 +199,6 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
         graph.getModel().endUpdate();
     }
 
-    /**
-     * Unmarks the edge between two given nodes by removing
-     * the small grey arrow and uncoloring the edge.
-     *
-     * @param edges : an array of edges of the graph
-     */
     @Override
     public void unmarkEdge(E[] edges) {
         mxGraph graph = graphComponent.getGraph();
@@ -246,9 +211,6 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
         graph.getModel().endUpdate();
     }
 
-    /**
-     * Gives a hierarchical order to the displayed graph.
-     */
     @Override
     public void reapplyHierarchicalLayout() {
         mxGraph graph = graphComponent.getGraph();
@@ -261,20 +223,11 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
         graph.getModel().endUpdate();
     }
 
-    /**
-     * Redoes a previously undone action on the graph.
-     */
     @Override
     public void redo() {
         undoManager.redo();
     }
 
-    /**
-     * Removes the given node from the graph. Removal only effects the
-     * JGraphX-graph.
-     *
-     * @param node : a JGraphX-graph node object
-     */
     @Override
     public void removeNode(V node) {
         mxGraph graph = graphComponent.getGraph();
@@ -294,14 +247,6 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
         graph.getModel().endUpdate();
     }
 
-    /**
-     * Highlights a node and if specified its neighbors.
-     * 
-     * @param node : The node to be highlighted
-     * 
-     * @param hightlightNeighbors if checked, neighbors will be highlighted 
-     * as well
-     */
     @Override
     public void highlightNode(V node, boolean hightlightNeighbors) {
 
@@ -350,13 +295,6 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
         graphComponent.getGraph().getModel().endUpdate();
     }
 
-    /**
-     * Alters the attribute name of a given node by replacing it by a given new
-     * name. Renaming only effects the JGraphX-graph.
-     *
-     * @param node    : a node of the graph
-     * @param newName : the name the node is given
-     */
     @Override
     public void renameNode(V node, String newName) {
         mxGraph graph = graphComponent.getGraph();
@@ -370,45 +308,26 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
         graph.getModel().endUpdate();
     }
 
-    /**
-     * Resets the layout of the JGrapgX-graph on the panel to the original
-     * JGraphT-graph.
-     */
     @Override
     public void resetLayout() {
         Graph<V, E> graphT = getGraphAdapter().getGraph();
 
         JGraphXAdapter<V, E> newGraphAdapter = new JGraphXAdapter<V, E>(graphT);
+        
     }
 
-    /**
-     * Undoes a previously performed action on the graph.
-     */
     @Override
     public void undo() {
         undoManager.undo();
     }
 
-    /**
-     * Zooms the panel to the given factor. It will magnify the graph, if the
-     * graph is too big for the panel only a section of the whole graph will be
-     * shown. This method zooms to the center of the panel.
-     *
-     * @param factor : a double that represents the zoom factor
-     *               (ranges from 0 to infinite, 1 is 100%)
-     */
+
     @Override
     public void zoomTo(double factor) {
         graphComponent.zoomTo(factor, true);
     }
 
-    /**
-     * Zooms the panel. It will magnify the graph, if the
-     * graph is too big for the panel only a section of the whole graph will be
-     * shown. This method zooms to the center of the panel.
-     *
-     * @param zoomIn : a boolean to zoom in or out
-     */
+
     @Override
     public void zoom(boolean zoomIn) {
         graphComponent.setCenterZoom(true);
@@ -420,12 +339,7 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
         }
     }
 
-    /**
-     * Zooms the panel, centering on the given coordinates.
-     *
-     * @param zoomIn : a boolean to zoom in or out
-     * @param center : the point zoom centers on
-     */
+
     @Override
     public void zoom(boolean zoomIn, Point center) {
         Point pointOnCanvas = getPointOnGraph(center);
