@@ -32,6 +32,8 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.HierarchyBoundsListener;
+import java.awt.event.HierarchyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -54,14 +56,27 @@ import java.util.List;
  */
 class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
 
-    /** */
+    /** The actual canvas. */
     private mxGraphComponent graphComponent;
-    /** */
+    
+    /** An interface to manipulate the canvas. */
     private GraphManipulation<V, E> graphManipulation;
-    /** */
+    
+    /** An simple interface to register 
+     *  an mouse adapter. 
+     */
     private GraphEvent graphEvent;
-    /** */
+    
+    /** An adapter, which transforms jgraphx in jgrapht 
+     *  and vice versa.
+     */
     private JGraphXAdapter<V, E> graphAdapter;
+    
+    /** The default font size for a latexlabel. */
+    public static final int DEFAULT_FONT_SIZE = 12;
+    
+    /** The Max-Height-Width for the eps export. */
+    public static final float EPS_MAX_HEIGHT_WIDTH = 16384f;
 
     /**
      * The constructor for JGraphXInterface.
@@ -110,23 +125,21 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
                     /* A Listener to resize the font in the latexComponent
                      * when the graphComponent is being zoomed
                      */ 
-                    labelComponent.addComponentListener(
-                            new ComponentListener() {
-                        @Override 
-                        public void componentShown(ComponentEvent e) { }   
-                        @Override 
-                        public void componentMoved(ComponentEvent e) { }
-                        @Override 
-                        public void componentHidden(ComponentEvent e) { }
-                        
+                    labelComponent.addHierarchyBoundsListener(
+                            new HierarchyBoundsListener() {
                         @Override
-                        public void componentResized(ComponentEvent e) {
+                        public void ancestorResized(HierarchyEvent e) {
                             double scale = graphComponent.getGraph().
                                     getView().getScale();
                             
                             labelComponent.setFont(new Font(
-                                    "Dialog", Font.BOLD, (int) (12 * scale)));
+                                    "Dialog", Font.BOLD, 
+                                    (int) (DEFAULT_FONT_SIZE * scale)));
+                            
                         }
+                        
+                        @Override
+                        public void ancestorMoved(HierarchyEvent e) { }
                     });
                     
                     return new Component[]{labelComponent};
@@ -242,14 +255,12 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
         EPSTranscoder transcoder = new EPSTranscoder();
 
         // Add Transcoding hints
-        final float MAX_HEIGHT_WIDTH = 16384f;
-
         transcoder.addTranscodingHint(
                 EPSTranscoder.KEY_PIXEL_UNIT_TO_MILLIMETER, 1.0f);
         transcoder.addTranscodingHint(EPSTranscoder.KEY_MAX_HEIGHT,
-                MAX_HEIGHT_WIDTH);
+                EPS_MAX_HEIGHT_WIDTH);
         transcoder.addTranscodingHint(EPSTranscoder.KEY_MAX_WIDTH,
-                MAX_HEIGHT_WIDTH);
+                EPS_MAX_HEIGHT_WIDTH);
 
         String svgURI;
         try {
