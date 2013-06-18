@@ -50,7 +50,7 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
     private mxUndoManager undoManager;
 
     /**
-     * Currently highlighted cells with their previous color
+     * Currently highlighted cells with their previous color.
      */
     private HashMap<mxICell, Color> markedCells;
 
@@ -77,7 +77,7 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
     }
 
     /**
-     * Returns the current graph adapter
+     * Returns the current graph adapter.
      *
      * @return The current graph adapter
      */
@@ -86,7 +86,7 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
     }
 
     /**
-     * Returns the cell associated with the given node
+     * Returns the cell associated with the given node.
      *
      * @param node
      * @return
@@ -96,7 +96,7 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
     }
 
     /**
-     * Returns the cell associated with the given edge
+     * Returns the cell associated with the given edge.
      *
      * @param edge
      * @return
@@ -106,7 +106,7 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
     }
 
     /**
-     * Returns the cells associated with the given nodes
+     * Returns the cells associated with the given nodes.
      *
      * @param nodes
      * @return
@@ -120,7 +120,7 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
     }
 
     /**
-     * Returns the cells associated with the given edges
+     * Returns the cells associated with the given edges.
      *
      * @param edges
      * @return
@@ -134,10 +134,10 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
     }
 
     /**
-     * Translates a point from graphComponent to graph
+     * Translates a point from graphComponent to graph.
      *
-     * @param p
-     * @return
+     * @param p : the point on the canvas
+     * @return the actual point on graph
      */
     private Point getPointOnGraph(Point p) {
         mxGraph graph = graphComponent.getGraph();
@@ -295,8 +295,12 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
     }
 
     /**
-     * Highlights a node and if specified its neighbors
-     * @param hightlightNeighbors
+     * Highlights a node and if specified its neighbors.
+     * 
+     * @param node : The node to be highlighted
+     * 
+     * @param hightlightNeighbors if checked, neighbors will be highlighted 
+     * as well
      */
     @Override
     public void highlightNode(V node, boolean hightlightNeighbors) {
@@ -305,30 +309,32 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
         mxICell cell = getCellFromNode(node);
         cells.add(cell);
 
-        if(hightlightNeighbors)
-        {
-            for(int i = 0; i < cell.getEdgeCount(); i++)
-            {
-                mxCell edge = (mxCell)cell.getEdgeAt(i);
+        if (hightlightNeighbors) {
+            for (int i = 0; i < cell.getEdgeCount(); i++) {
+                mxCell edge = (mxCell) cell.getEdgeAt(i);
                 markedCells.put(edge, mxUtils.getColor(getGraphAdapter()
                         .getCellStyle(edge), mxConstants.STYLE_STROKECOLOR));
 
                 mxICell source = edge.getSource();
                 mxICell target = edge.getTarget();
 
-                if(!markedCells.containsKey(source))
-                    markedCells.put(source, mxUtils.getColor(getGraphAdapter
-                            ().getCellStyle(source),
+                if (!markedCells.containsKey(source)) {
+                    markedCells.put(source, mxUtils.getColor(getGraphAdapter(
+                            ).getCellStyle(source),
                             mxConstants.STYLE_STROKECOLOR));
-                if(!markedCells.containsKey(target))
-                    markedCells.put(target, mxUtils.getColor(getGraphAdapter
-                            ().getCellStyle(target),
+                }
+                
+                if (!markedCells.containsKey(target)) {
+                    markedCells.put(target, mxUtils.getColor(getGraphAdapter(
+                            ).getCellStyle(target),
                             mxConstants.STYLE_STROKECOLOR));
+                }
             }
         }
 
-        getGraphAdapter().setCellStyles(mxConstants.STYLE_STROKECOLOR, mxUtils.getHexColorString
-                    (Color.yellow), cells.toArray());
+        getGraphAdapter().setCellStyles(mxConstants.STYLE_STROKECOLOR,
+                mxUtils.getHexColorString(
+                        Color.yellow), cells.toArray());
 
     }
 
@@ -336,8 +342,7 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
     public void unHiglightAll() {
         graphComponent.getGraph().getModel().beginUpdate();
 
-        for(mxICell cell : markedCells.keySet())
-        {
+        for (mxICell cell : markedCells.keySet()) {
             getGraphAdapter().setCellStyles(mxConstants.STYLE_STROKECOLOR,
                     mxUtils.getHexColorString(markedCells.get(cell)),
                     new Object[]{cell});
@@ -429,8 +434,8 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
 
         Point newPointOnCanvas = getPointOnGraph(center);
 
-        double zoomFactor = zoomIn ? graphComponent.getZoomFactor() :
-                1 / graphComponent.getZoomFactor();
+        double zoomFactor = zoomIn ? graphComponent.getZoomFactor()
+                : 1 / graphComponent.getZoomFactor();
 
         Rectangle rect = graphComponent.getGraphControl().getVisibleRect();
 
