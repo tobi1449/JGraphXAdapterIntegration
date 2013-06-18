@@ -267,12 +267,14 @@ class GraphManipulation<V, E> implements GraphManipulationInterface<V, E> {
                     markedCells.put(source, mxUtils.getColor(getGraphAdapter(
                             ).getCellStyle(source),
                             mxConstants.STYLE_STROKECOLOR));
+                    cells.add(source);
                 }
                 
                 if (!markedCells.containsKey(target)) {
                     markedCells.put(target, mxUtils.getColor(getGraphAdapter(
                             ).getCellStyle(target),
                             mxConstants.STYLE_STROKECOLOR));
+                    cells.add(target);
                 }
             }
         }

@@ -41,7 +41,7 @@ public class KonTabbedPane extends JTabbedPane {
         /*
          * Adds a tab
          */
-        DrawingLibraryInterface<?, ?> graphInterface =  
+        DrawingLibraryInterface<String, DefaultEdge> graphInterface =
                 DrawingLibraryFactory.createNewInterface(graph);
         
         graphInterfaces.add(graphInterface);
@@ -58,6 +58,10 @@ public class KonTabbedPane extends JTabbedPane {
 
         // Adds the graph to the tab and adds the tab to the pane
         add(graphInterface.getPanel());
+
+        graphInterface.getGraphManipulationInterface().highlightNode(graph
+                .vertexSet().iterator().next(), true);
+
         addTab("Second Tab", graphInterface.getPanel());
     }
 
