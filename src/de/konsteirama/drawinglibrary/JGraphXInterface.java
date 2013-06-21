@@ -103,46 +103,6 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
 
                 return cell == null || cell.isEdge();
             }
-
-            @Override
-            public Component[] createComponents(mxCellState state) {
-                if (getGraph().getModel().isVertex(state.getCell())) {
-                    String label = state.getLabel();
-                    
-                    // get rid of these nasty [] around all labels
-                    label = label.replace("[", "");
-                    label = label.replace("]", "");
-
-                    // Creates a new label and sets properties
-                    final LatexLabel labelComponent = new LatexLabel(label);
-                    labelComponent.setHorizontalAlignment(SwingConstants
-                            .CENTER);
-                    labelComponent.setVerticalAlignment(SwingConstants.CENTER);
-                    labelComponent.setBackground(new Color(0, 0, 0, 0));
-
-                    /* A Listener to resize the font in the latexComponent
-                     * when the graphComponent is being zoomed
-                     */ 
-                    labelComponent.addHierarchyBoundsListener(
-                            new HierarchyBoundsListener() {
-                        @Override
-                        public void ancestorResized(HierarchyEvent e) {
-                            double scale = graphComponent.getGraph().
-                                    getView().getScale();
-                            
-                            labelComponent.setFont(new Font(
-                                    "Dialog", Font.BOLD, 
-                                    (int) (DEFAULT_FONT_SIZE * scale))); 
-                        }
-                        
-                        @Override
-                        public void ancestorMoved(HierarchyEvent e) { }
-                    });
-                    
-                    return new Component[]{labelComponent};
-                }
-                return null;
-            };
         };
 
         graphManipulation =
@@ -158,8 +118,8 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
         graphComponent.getViewport().setOpaque(true);
         graphComponent.getViewport().setBackground(Color.white);
 
-        graphEvent.registerMouseAdapter(
-                new InternalMouseAdapter(graphComponent, graphManipulation));
+        graphEvent.registerMouseAdapter(new InternalMouseAdapter(
+                        graphComponent, graphManipulation));
 
         graphManipulation.reapplyHierarchicalLayout();
 
@@ -211,9 +171,8 @@ class JGraphXInterface<V, E> implements DrawingLibraryInterface<V, E> {
         graphAdapter.setAutoSizeCells(true);
         graphAdapter.setDropEnabled(false);
 
-        graphAdapter.getStylesheet().getDefaultVertexStyle()
-                .put(mxConstants.STYLE_NOLABEL, "1");
-        graphAdapter.setLabelsVisible(false);
+        graphAdapter.setHtmlLabels(true);
+
     }
 
     /**

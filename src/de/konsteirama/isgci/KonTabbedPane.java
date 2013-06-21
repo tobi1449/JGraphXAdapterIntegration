@@ -71,42 +71,42 @@ public class KonTabbedPane extends JTabbedPane {
                 DefaultEdge.class);
 
         // add some sample data (graph manipulated via JGraphT)
-        g.addVertex("v1");
+        g.addVertex("[b]test[/b]");
         g.addVertex("v2");
         g.addVertex("v3");
         g.addVertex("v4");
 
-        g.addEdge("v1", "v2");
+        g.addEdge("[b]test[/b]", "v2");
         g.addEdge("v2", "v3");
-        g.addEdge("v3", "v1");
+        g.addEdge("v3", "[b]test[/b]");
         g.addEdge("v4", "v3");
-        
+
         g.addVertex("v5");
         g.addVertex("v6");
         g.addVertex("v7");
-        
+
         g.addEdge("v5", "v6");
         g.addEdge("v6", "v7");
         g.addEdge("v7", "v5");
         g.addEdge("v4", "v7");
-        
+
         g.addVertex("v8");
         g.addVertex("v9");
         g.addVertex("v10");
-        
+
         g.addEdge("v8", "v9");
         g.addEdge("v9", "v10");
         g.addEdge("v10", "v8");
-        g.addEdge("v4", "v10");  
-        
+        g.addEdge("v4", "v10");
+
         g.addVertex("v11");
         g.addVertex("v12");
         g.addVertex("v13");
-        
+
         g.addEdge("v11", "v12");
         g.addEdge("v12", "v13");
         g.addEdge("v13", "v11");
-        g.addEdge("v4", "v13");  
+        g.addEdge("v4", "v13");
 
         return g;
     }
